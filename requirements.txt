@@ -1,1 +1,3 @@
--e .
+cffi==1.14.0
+PyOpenGL==3.1.5
+pytest==6.1.2
