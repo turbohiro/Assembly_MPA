@@ -23,11 +23,4 @@ setup(
     eager_resources=["*"],
     include_package_data=True,
     python_requires=">=3",
-    description="robosuite: A Modular Simulation Framework and Benchmark for Robot Learning",
-    author="Yuke Zhu, Josiah Wong, Ajay Mandlekar, Roberto Martín-Martín",
-    url="https://github.com/ARISE-Initiative/robosuite",
-    author_email="yukez@cs.utexas.edu",
-    version="1.3.1",
-    long_description=long_description,
-    long_description_content_type="text/markdown",
 )
