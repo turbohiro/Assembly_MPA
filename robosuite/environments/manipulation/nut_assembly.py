@@ -405,11 +405,11 @@ class NutAssembly(SingleArmEnv):
         # Create default (SequentialCompositeSampler) sampler if it has not already been specified
         if self.placement_initializer is None:
             self.placement_initializer = SequentialCompositeSampler(name="ObjectSampler")
-            for nut_name, default_y_range in zip(nut_names, ([0.11, 0.225], [-0.225, -0.11])):
+            for nut_name, default_y_range in zip(nut_names, ([0.05, 0.225], [-0.225, -0.05])):
                 self.placement_initializer.append_sampler(
                     sampler=UniformRandomSampler(
                         name=f"{nut_name}Sampler",
-                        x_range=[-0.115, -0.11],
+                        x_range=[-0.225, 0.05],
                         y_range=default_y_range,
                         rotation=None,
                         rotation_axis="z",

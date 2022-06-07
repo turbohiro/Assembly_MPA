@@ -13,7 +13,7 @@ if __name__ == "__main__":
 
         # create environment with selected grippers
         env = suite.make(
-            "Lift",
+            "Stack",
             robots="Panda",
             gripper_types=gripper,
             has_renderer=True,  # make sure we can render to the screen

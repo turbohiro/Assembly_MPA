@@ -34,8 +34,8 @@ DEFAULT_WIPE_CONFIG = {
     "pressure_threshold": 0.5,  # force threshold (N) to overcome to get increased contact wiping reward
     "pressure_threshold_max": 60.0,  # maximum force allowed (N)
     # misc settings
-    "print_results": False,  # Whether to print results or not
-    "get_info": False,  # Whether to grab info after each env step if not
+    "print_results": False,  # Whether to print results or not   #False
+    "get_info": False,  # Whether to grab info after each env step if not  #Fasle
     "use_robot_obs": True,  # if we use robot observations (proprioception) as input to the policy
     "use_contact_obs": True,  # if we use a binary observation for whether robot is in contact or not
     "early_terminations": True,  # Whether we allow for early terminations or not

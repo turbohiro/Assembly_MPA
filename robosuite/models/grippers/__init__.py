@@ -11,6 +11,7 @@ from .jaco_three_finger_gripper import JacoThreeFingerGripper, JacoThreeFingerDe
 from .robotiq_140_gripper import Robotiq140Gripper
 from .wiping_gripper import WipingGripper
 from .null_gripper import NullGripper
+from .wsg_50_gripper import Wsg50Gripper
 
 
 GRIPPER_MAPPING = {
@@ -24,6 +25,7 @@ GRIPPER_MAPPING = {
     "RobotiqThreeFingerGripper": RobotiqThreeFingerGripper,
     "RobotiqThreeFingerDexterousGripper": RobotiqThreeFingerDexterousGripper,
     None: NullGripper,
+    "Wsg50Gripper": Wsg50Gripper,
 }
 
 ALL_GRIPPERS = GRIPPER_MAPPING.keys()

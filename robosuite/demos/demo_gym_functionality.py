@@ -39,8 +39,8 @@ if __name__ == "__main__":
     # Notice how the environment is wrapped by the wrapper
     env = GymWrapper(
         suite.make(
-            "Lift",
-            robots="Sawyer",  # use Sawyer robot
+            "Wipe",
+            robots="Panda",  # use Sawyer robot
             use_camera_obs=False,  # do not use pixel observations
             has_offscreen_renderer=False,  # not needed since not using pixel obs
             has_renderer=True,  # make sure we can render to the screen

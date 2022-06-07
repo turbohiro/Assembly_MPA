@@ -508,7 +508,7 @@ def postprocess_model_xml(xml_str):
     path_split = path.split("/")
 
     # replace mesh and texture file paths
-    tree = ET.fromstring(xml_str)
+    tree = ET.fromstring(open(xml_str).read())
     root = tree
     asset = root.find("asset")
     meshes = asset.findall("mesh")

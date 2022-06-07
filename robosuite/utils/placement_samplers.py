@@ -193,7 +193,8 @@ class UniformRandomSampler(ObjectPositionSampler):
             ValueError: [Invalid rotation axis]
         """
         if self.rotation is None:
-            rot_angle = np.random.uniform(high=2 * np.pi, low=0)
+            rot_angle = np.random.uniform(high=np.pi/8, low=0)  #rotate a small angle to keep the robot run stabely
+            #print('the object rotate angle is',rot_angle)
         elif isinstance(self.rotation, collections.abc.Iterable):
             rot_angle = np.random.uniform(high=max(self.rotation), low=min(self.rotation))
         else:
@@ -206,6 +207,7 @@ class UniformRandomSampler(ObjectPositionSampler):
             return np.array([np.cos(rot_angle / 2), 0, np.sin(rot_angle / 2), 0])
         elif self.rotation_axis == "z":
             return np.array([np.cos(rot_angle / 2), 0, 0, np.sin(rot_angle / 2)])
+            #return np.array([np.cos(rot_angle / 2), 0, 0, 0])
         else:
             # Invalid axis specified, raise error
             raise ValueError(
