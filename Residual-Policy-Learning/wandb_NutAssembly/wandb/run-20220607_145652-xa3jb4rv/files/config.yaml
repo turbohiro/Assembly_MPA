@@ -1,0 +1,132 @@
+wandb_version: 1
+
+_wandb:
+  desc: null
+  value:
+    cli_version: 0.12.16
+    code_path: code/Residual-Policy-Learning/RL/ddpg/ddpg.py
+    framework: torch
+    is_jupyter_run: false
+    is_kaggle_kernel: false
+    python_version: 3.8.13
+    start_time: 1654606612
+    t:
+      1:
+      - 1
+      - 55
+      3:
+      - 13
+      - 16
+      - 35
+      4: 3.8.13
+      5: 0.12.16
+      8:
+      - 5
+action_l2:
+  desc: null
+  value: 1.0
+activation:
+  desc: null
+  value: relu
+actor_lr:
+  desc: null
+  value: 0.001
+actor_optim:
+  desc: null
+  value: adam
+batch_size:
+  desc: null
+  value: 256
+beta:
+  desc: null
+  value: 1.0
+beta_monitor:
+  desc: null
+  value: critic
+buffer_size:
+  desc: null
+  value: 1000000
+clip_obs:
+  desc: null
+  value: 200
+clip_range:
+  desc: null
+  value: 5
+coin_flipping_prob:
+  desc: null
+  value: 0.5
+critic_lr:
+  desc: null
+  value: 0.001
+critic_optim:
+  desc: null
+  value: adam
+device:
+  desc: null
+  value: cpu
+dryrun:
+  desc: null
+  value: false
+env_name:
+  desc: null
+  value: NutAssemblyHand
+exp_name:
+  desc: null
+  value: res
+gamma:
+  desc: null
+  value: 0.98
+hidden_dims:
+  desc: null
+  value:
+  - 256
+  - 256
+  - 256
+loss_fn:
+  desc: null
+  value: mse
+max_grad_norm:
+  desc: null
+  value: 0.5
+mpi:
+  desc: null
+  value: false
+n_batches:
+  desc: null
+  value: 40
+n_cycles:
+  desc: null
+  value: 50
+n_epochs:
+  desc: null
+  value: 500
+n_test_rollouts:
+  desc: null
+  value: 50
+noise_eps:
+  desc: null
+  value: 0.2
+num_rollouts_per_mpi:
+  desc: null
+  value: 2
+polyak:
+  desc: null
+  value: 0.95
+random_eps:
+  desc: null
+  value: 0.3
+replay_k:
+  desc: null
+  value: 4
+replay_strategy:
+  desc: null
+  value: future
+seed:
+  desc: null
+  value: 1
+torch_deterministic:
+  desc: null
+  value: true
+weight_decay:
+  desc: null
+  value: 0.0
