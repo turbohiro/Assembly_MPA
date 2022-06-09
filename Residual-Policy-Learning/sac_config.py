@@ -13,6 +13,8 @@ parser.add_argument('--policy', default="Gaussian",
                     help='Policy Type: Gaussian | Deterministic (default: Gaussian)')
 parser.add_argument('--eval', type=bool, default=True,
                     help='Evaluates a policy a policy every 10 episode (default: True)')
+
+
 parser.add_argument('--gamma', type=float, default=0.99, metavar='G',
                     help='discount factor for reward (default: 0.99)')
 parser.add_argument('--tau', type=float, default=0.005, metavar='G',
@@ -32,6 +34,7 @@ parser.add_argument('--num_steps', type=int, default=int(1e7), metavar='N',
                     help='maximum number of steps (default: 1000000)')
 parser.add_argument('--hidden_size', type=int, default=256, metavar='N',
                     help='hidden size (default: 256)')
+
 parser.add_argument('--updates_per_step', type=int, default=1, metavar='N',
                     help='model updates per simulator step (default: 1)')
 parser.add_argument('--start_steps', type=int, default=10000, metavar='N',
@@ -44,10 +47,20 @@ parser.add_argument('--num_eval_episodes', type=int, default=10,
                     help='Number of episodes to evaluate the agent')
 parser.add_argument('--buffer_size', type=int, default=1000000, metavar='N',
                     help='size of replay buffer (default: 10000000)')
+
 parser.add_argument('--cuda', action="store_true",
                     help='run on CUDA (default: False)')
 parser.add_argument('--dryrun', type=bool, default=False,
                     help='Whether to use wandb writer or not')
 parser.add_argument('--torch-deterministic', type=lambda x:bool(strtobool(x)), default=True,
                     help='if toggled, `torch.backends.cudnn.deterministic=False`')
+
+parser.add_argument('--beta', type=float, default=1.0,
+                    help='Burn-in parameter for training residues')
+# check https://github.com/k-r-allen/residual-policy-learning/issues/14#issue-747756960
+# turns out that the original authors flipped the actor and critic loss monitoring values
+# so instead of critic-loss being less than beta it is actor-loss less than beta
+# so the original author(@tomsilver) has suggested us to try out both
+parser.add_argument('--beta_monitor', type=str, default='critic', choices=['actor', 'critic'],
+                    help='Which loss to check for burn-in parameter tuning')
 args = parser.parse_args()

@@ -217,7 +217,6 @@ class NutAssemblyDenseHand(gym.Env):
             if np.linalg.norm((object_pos[:2] - gripper_pos[:2])) < 0.01:
                 if take_action:
                     self.object_below_hand = True
-                    #self.gripper_reoriented = 5
 
         elif not self.object_in_hand: # Close gripper
             action = [0,0,-1,0,0,0,-1]

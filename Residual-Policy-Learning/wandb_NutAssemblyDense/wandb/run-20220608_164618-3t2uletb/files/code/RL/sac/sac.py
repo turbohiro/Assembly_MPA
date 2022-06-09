@@ -83,7 +83,6 @@ class SAC_Agent:
         params = {'obs': obs.shape[0],
                 'action': env.action_space.shape[0],
                 'action_space': env.action_space,
-                'action_max': env.action_space.high[0],
                 }
         try:
             params['max_timesteps'] = env._max_episode_steps
@@ -118,7 +117,7 @@ class SAC_Agent:
             verbose: bool
                 To print the change in learning rate
         """
-        lr = self.args.lr
+        lr = self.args.actor_lr
         coin_flipping = False
         # loss is zero only in the first epoch hence do not change lr then
         # and that's why give a large value to diff_loss
@@ -130,7 +129,7 @@ class SAC_Agent:
             elif self.args.exp_name == 'res' and diff_loss <= self.args.beta:
                 if verbose:
                     print('_'*80)
-                    print(f'Burn-in of the critic done. Changing actor_lr from 0.0 to {self.args.lr}')
+                    print(f'Burn-in of the critic done. Changing actor_lr from 0.0 to {self.args.actor_lr}')
                     print('_'*80)
                 self.burn_in_done = True
 
@@ -168,28 +167,21 @@ class SAC_Agent:
             done = False
             state = self.env.reset()
             next_state = copy.deepcopy(state)
-            random_eps = self.args.random_eps
-            noise_eps  = self.args.noise_eps
 
             while not done:                
                 if self.args.start_steps > total_numsteps:
-                    pdb.set_trace()                    
+                    pdb.set_trace()
+                    pi, _, _ = self.actor.sample(state)
                     if self.args.exp_name == 'res':
-                        controller_action = self.get_controller_actions(state)   
-                        state = torch.FloatTensor(state).to(self.device).unsqueeze(0)
-                        pi, _, _ = self.actor.sample(state)                    
+                        controller_action = self.get_controller_actions(next_state)                       
                         action = self.select_actions(pi, controller_action=controller_action)
                     else:
-                        state = torch.FloatTensor(state).to(self.device).unsqueeze(0)
-                        pi, _, _ = self.actor.sample(state)
                         action = self.select_actions(pi, controller_action=None)
 
                 if len(self.buffer) > self.args.batch_size:
                     # Number of updates per step in environment
                     for i in range(self.args.updates_per_step):
                         critic_1_loss, critic_2_loss, actor_loss, ent_loss, alpha = self.update_parameters(self.buffer, self.args.batch_size, updates)
-                        actor_losses.append(actor_loss)
-                        critic_losses.append(critic_1_loss)
 
                         if self.writer:
                             self.writer.add_scalar('Loss/Critic_1', critic_1_loss, updates)
@@ -226,10 +218,9 @@ class SAC_Agent:
                     episode_reward = 0
                     done = False
                     while not done:
-                        state = torch.FloatTensor(state).to(self.device).unsqueeze(0)
-                        pi, _, _ = self.actor.sample(state)  
-                        action = pi.detach().cpu().numpy().squeeze()
+                        action = self.select_action(state, evaluate=True)
                         next_state, reward, done, info = self.env.step(action)
+                        # TODO add info success rate metric
                         episode_reward += reward
 
                         state = next_state
@@ -251,20 +242,15 @@ class SAC_Agent:
         """
             Return the controller action if residual learning
         """
-        return self.env.controller_action(obs, take_action=True)   ###!!!!!!!!!!!!!!!!!True/False
+        return self.env.controller_action(obs, take_action=False)
 
-    def select_action(self, pi, controller_action=None):
-        # transfer action from CUDA to CPU if using GPU and make numpy array out of it
-        action = pi.cpu().numpy().squeeze()
-        # random actions
-        random_actions = np.random.uniform(low=-self.env_params['action_max'], high=self.env_params['action_max'], \
-                                            size=self.env_params['action'])
-        # if residual learning, subtract the controller action so that we don't add it twice
-        if self.args.exp_name == 'res':
-            random_actions = random_actions - controller_action
-        # choose whether to take random actions or not
-        rand = np.random.binomial(1, 0.3, 1)[0]
-        action += rand * (random_actions - action)  # will be equal to either random_actions or actio
+    def select_action(self, state, evaluate=False):
+        # TODO  change here
+        state = torch.FloatTensor(state).to(self.device).unsqueeze(0)
+        if evaluate is False:
+            action, _, _ = self.actor.sample(state)
+        else:
+            _, _, action = self.actor.sample(state)
         return action.detach().cpu().numpy()[0]
 
     def update_parameters(self, memory, batch_size:int, updates:int):
