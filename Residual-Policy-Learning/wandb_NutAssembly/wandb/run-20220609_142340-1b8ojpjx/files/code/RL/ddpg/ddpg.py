@@ -290,7 +290,6 @@ class DDPG_Agent:
         # add the gaussian
         action += noise_eps * self.env_params['action_max'] * np.random.randn(*action.shape)
         action = np.clip(action, -self.env_params['action_max'], self.env_params['action_max'])  #make action values are limited a feasible range
-        #action
 
         # random actions
         random_actions = np.random.uniform(low=-self.env_params['action_max'], high=self.env_params['action_max'], size=self.env_params['action'])

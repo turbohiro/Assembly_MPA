@@ -183,9 +183,9 @@ class DDPG_Agent:
 
                 random_eps = self.args.random_eps
                 noise_eps  = self.args.noise_eps
-                #if coin_flipping:
-                #    deterministic = np.random.random() < self.args.coin_flipping_prob  # NOTE/TODO change here
                 if coin_flipping:
+                    deterministic = np.random.random() < self.args.coin_flipping_prob  # NOTE/TODO change here
+                if deterministic:
                     random_eps = 0.0
                     noise_eps = 0.0
 
@@ -241,7 +241,7 @@ class DDPG_Agent:
                 self.polyak_update_networks(self.critic_target_network, self.critic_network)
                 num_cycles += 1
                 
-            pdb.set_trace()
+                pdb.set_trace()
             # evaluate the agent
             success_rate = self.eval_agent()
             print(f'Epoch Critic: {np.mean(critic_losses):.3f} Epoch Actor:{np.mean(actor_losses):.3f}')
@@ -290,10 +290,10 @@ class DDPG_Agent:
         # add the gaussian
         action += noise_eps * self.env_params['action_max'] * np.random.randn(*action.shape)
         action = np.clip(action, -self.env_params['action_max'], self.env_params['action_max'])  #make action values are limited a feasible range
-        #action
 
         # random actions
-        random_actions = np.random.uniform(low=-self.env_params['action_max'], high=self.env_params['action_max'], size=self.env_params['action'])
+        random_actions = np.random.uniform(low=-self.env_params['action_max'], high=self.env_params['action_max'], \
+                                            size=self.env_params['action'])
         # if residual learning, subtract the controller action so that we don't add it twice
         if self.args.exp_name == 'res':
             random_actions = random_actions - controller_action

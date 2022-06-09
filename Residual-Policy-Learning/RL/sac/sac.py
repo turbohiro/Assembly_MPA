@@ -170,6 +170,11 @@ class SAC_Agent:
             next_state = copy.deepcopy(state)
             random_eps = self.args.random_eps
             noise_eps  = self.args.noise_eps
+            #if coin_flipping:
+            #        deterministic = np.random.random() < self.args.coin_flipping_prob  # NOTE/TODO change here
+            if coin_flipping:
+                random_eps = 0.0
+                noise_eps = 0.0
 
             while not done:                
                 if self.args.start_steps > total_numsteps:
@@ -178,11 +183,11 @@ class SAC_Agent:
                         controller_action = self.get_controller_actions(state)   
                         state = torch.FloatTensor(state).to(self.device).unsqueeze(0)
                         pi, _, _ = self.actor.sample(state)                    
-                        action = self.select_actions(pi, controller_action=controller_action)
+                        action = self.select_action(pi, noise_eps=noise_eps, random_eps= random_eps, controller_action=controller_action)
                     else:
                         state = torch.FloatTensor(state).to(self.device).unsqueeze(0)
                         pi, _, _ = self.actor.sample(state)
-                        action = self.select_actions(pi, controller_action=None)
+                        action = self.select_action(pi, noise_eps=noise_eps, random_eps= random_eps, controller_action=None)
 
                 if len(self.buffer) > self.args.batch_size:
                     # Number of updates per step in environment
@@ -251,9 +256,9 @@ class SAC_Agent:
         """
             Return the controller action if residual learning
         """
-        return self.env.controller_action(obs, take_action=True)   ###!!!!!!!!!!!!!!!!!True/False
+        return self.env.controller_action(obs, take_action=False)   ###!!!!!!!!!!!!!!!!!True/False
 
-    def select_action(self, pi, controller_action=None):
+    def select_action(self, pi, noise_eps, random_eps, controller_action=None):
         # transfer action from CUDA to CPU if using GPU and make numpy array out of it
         action = pi.cpu().numpy().squeeze()
         # random actions
@@ -263,7 +268,7 @@ class SAC_Agent:
         if self.args.exp_name == 'res':
             random_actions = random_actions - controller_action
         # choose whether to take random actions or not
-        rand = np.random.binomial(1, 0.3, 1)[0]
+        rand = np.random.binomial(1, random_eps, 1)[0]
         action += rand * (random_actions - action)  # will be equal to either random_actions or actio
         return action.detach().cpu().numpy()[0]
 

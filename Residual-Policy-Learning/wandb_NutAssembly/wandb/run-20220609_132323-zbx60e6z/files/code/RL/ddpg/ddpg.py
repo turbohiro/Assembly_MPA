@@ -183,9 +183,9 @@ class DDPG_Agent:
 
                 random_eps = self.args.random_eps
                 noise_eps  = self.args.noise_eps
-                #if coin_flipping:
-                #    deterministic = np.random.random() < self.args.coin_flipping_prob  # NOTE/TODO change here
                 if coin_flipping:
+                    deterministic = np.random.random() < self.args.coin_flipping_prob  # NOTE/TODO change here
+                if deterministic:
                     random_eps = 0.0
                     noise_eps = 0.0
 
@@ -198,7 +198,7 @@ class DDPG_Agent:
                             controller_action = self.get_controller_actions(observation_new)
                             action = self.select_actions(pi, noise_eps=noise_eps, random_eps= random_eps, controller_action=controller_action)
                         else:
-                            action = self.select_actions(pi, noise_eps=noise_eps, random_eps= random_eps, controller_action=None)                   
+                            action = self.select_actions(pi, noise_eps=noise_eps, random_eps= random_eps, controller_action=None)
                     # give the action to the environment
                     observation_new, _, _, info = self.env.step(action)
                     self.sim_steps += 1                     # increase the simulation timestep by one
@@ -212,7 +212,6 @@ class DDPG_Agent:
                     # re-assign the observation
                     obs = obs_new
                     ag = ag_new
-                    
                 # append last states in the array, extend the episode chain (state machine)
                 ep_obs.append(obs.copy())
                 ep_ag.append(ag.copy())
@@ -240,8 +239,6 @@ class DDPG_Agent:
                 self.polyak_update_networks(self.actor_target_network, self.actor_network)
                 self.polyak_update_networks(self.critic_target_network, self.critic_network)
                 num_cycles += 1
-                
-            pdb.set_trace()
             # evaluate the agent
             success_rate = self.eval_agent()
             print(f'Epoch Critic: {np.mean(critic_losses):.3f} Epoch Actor:{np.mean(actor_losses):.3f}')
@@ -290,15 +287,16 @@ class DDPG_Agent:
         # add the gaussian
         action += noise_eps * self.env_params['action_max'] * np.random.randn(*action.shape)
         action = np.clip(action, -self.env_params['action_max'], self.env_params['action_max'])  #make action values are limited a feasible range
-        #action
 
         # random actions
-        random_actions = np.random.uniform(low=-self.env_params['action_max'], high=self.env_params['action_max'], size=self.env_params['action'])
+        random_actions = np.random.uniform(low=-self.env_params['action_max'], high=self.env_params['action_max'], \
+                                            size=self.env_params['action'])
         # if residual learning, subtract the controller action so that we don't add it twice
         if self.args.exp_name == 'res':
             random_actions = random_actions - controller_action
         # choose whether to take random actions or not
         rand = np.random.binomial(1, random_eps, 1)[0]
+        pdb.set_trace()
         action += rand * (random_actions - action)  # will be equal to either random_actions or action
         
         return action

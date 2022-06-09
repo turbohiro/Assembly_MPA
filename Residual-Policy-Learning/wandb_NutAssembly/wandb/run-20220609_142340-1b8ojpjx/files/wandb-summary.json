@@ -1,0 +1,1 @@
+{"global_step": 25000, "_timestamp": 1654780355.9124699, "Cycle Losses/Actor Loss": 33.55076599121094, "Cycle Losses/Critic Loss": 0.19960245490074158, "_runtime": 2935, "_step": 100, "Success Rate/Success Rate": 0.6600000262260437, "Epoch Losses/Average Critic Loss": 0.015104805119335651, "Epoch Losses/Average Actor Loss": 0.44662320613861084, "_wandb": {"runtime": 3173}}
