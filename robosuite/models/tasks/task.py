@@ -4,6 +4,8 @@ from robosuite.models.objects import MujocoObject
 from robosuite.models.robots import RobotModel
 from robosuite.models.world import MujocoWorldBase
 from robosuite.utils.mjcf_utils import get_ids
+import pdb
+import mujoco_py
 
 
 class Task(MujocoWorldBase):
@@ -40,11 +42,13 @@ class Task(MujocoWorldBase):
             self.mujoco_objects = []
         else:
             self.mujoco_objects = [mujoco_objects] if isinstance(mujoco_objects, MujocoObject) else mujoco_objects
-
+        
         # Merge all models
         self.merge_arena(self.mujoco_arena)
         for mujoco_robot in self.mujoco_robots:
             self.merge_robot(mujoco_robot)
+           
+            
         self.merge_objects(self.mujoco_objects)
 
         self._instances_to_ids = None

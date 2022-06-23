@@ -16,6 +16,10 @@ from .xml_objects import (
     CanVisualObject,
     PlateWithHoleObject,
     DoorObject,
+    PegSquareObject,
+    PegCircleObject,
+    SquareObject,
+    CircleObject,
 )
 from .primitive import *
 from .composite import *

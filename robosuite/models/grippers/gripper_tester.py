@@ -206,11 +206,13 @@ class GripperTester:
             y_baseline (float): threshold for determining that object is lifted
         """
         seq = [(False, False), (True, False), (True, True), (False, True)]
+       
         for cur_iter in range(total_iters):
             for cur_plan in seq:
                 self.gripper_z_is_low, self.gripper_is_closed = cur_plan
                 for step in range(self.step_time):
                     self.step()
+                    print('sensor data force is:',self.sim.data.sensordata)
             if test_y:
                 if not self.object_height > y_baseline:
                     raise ValueError(

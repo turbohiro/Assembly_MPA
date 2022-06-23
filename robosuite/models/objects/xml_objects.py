@@ -89,6 +89,51 @@ class CerealObject(MujocoXMLObject):
             duplicate_collision_geoms=True,
         )
 
+class SquareObject(MujocoXMLObject):
+
+    def __init__(self, name):
+        super().__init__(
+            xml_path_completion("objects/square.xml"),
+            name=name,
+            joints=[dict(type="free", damping="0.0005")],
+            obj_type="all",
+            duplicate_collision_geoms=True,
+        )
+
+class PegSquareObject(MujocoXMLObject):
+
+    def __init__(self, name):
+        super().__init__(
+            xml_path_completion("objects/peg_square.xml"),
+            name=name,
+            joints=[dict(type="free", damping="0.0005")],
+            obj_type="all",
+            duplicate_collision_geoms=True,
+        )
+
+class CircleObject(MujocoXMLObject):
+
+    def __init__(self, name):
+        super().__init__(
+            xml_path_completion("objects/circle.xml"),
+            name=name,
+            joints=[dict(type="free", damping="0.0005")],
+            obj_type="all",
+            duplicate_collision_geoms=True,
+        )
+
+class PegCircleObject(MujocoXMLObject):
+
+    def __init__(self, name):
+        super().__init__(
+            xml_path_completion("objects/peg_circle.xml"),
+            name=name,
+            joints=[dict(type="free", damping="0.0005")],
+            obj_type="all",
+            duplicate_collision_geoms=True,
+        )
+
+
 
 class SquareNutObject(MujocoXMLObject):
     """
@@ -97,7 +142,7 @@ class SquareNutObject(MujocoXMLObject):
 
     def __init__(self, name):
         super().__init__(
-            xml_path_completion("objects/square-nut.xml"),
+            xml_path_completion("objects/square-nut_cleaned.xml"),
             name=name,
             joints=[dict(type="free", damping="0.0005")],
             obj_type="all",

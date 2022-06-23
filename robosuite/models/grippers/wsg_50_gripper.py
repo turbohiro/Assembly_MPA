@@ -24,7 +24,7 @@ class Wsg50GripperBase(GripperModel):
 
     @property
     def init_qpos(self):
-        return np.array([-0.0, 0.0])
+        return np.array([0.02, -0.02])
 
     @property
     def _important_geoms(self):

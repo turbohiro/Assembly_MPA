@@ -42,7 +42,7 @@ class NutAssembly(gym.Env):
                 use_object_obs = True,
                 use_camera_obs=False,           # do not use pixel observations
                 has_offscreen_renderer=False,   # not needed since not using pixel obs
-                has_renderer=False,              # make sure we can render to the screen
+                has_renderer=True,              # make sure we can render to the screen
                 reward_shaping=False,            # use sparse rewards
                 control_freq=20,                # control should happen fast enough so that simulation looks smooth
             )
@@ -286,7 +286,7 @@ class NutAssemblyHandSticky(gym.Env):
                 use_object_obs = True,
                 use_camera_obs=False,           # do not use pixel observations
                 has_offscreen_renderer=False,   # not needed since not using pixel obs
-                has_renderer=False,              # make sure we can render to the screen
+                has_renderer=True,              # make sure we can render to the screen
                 reward_shaping=False,            # use sparse rewards
                 control_freq=20,                # control should happen fast enough so that simulation looks smooth
             )
@@ -440,7 +440,7 @@ class NutAssemblyHandSticky(gym.Env):
 
 import pdb
 if __name__ == "__main__":
-    env_name = 'NutAssemblyHand'
+    env_name = 'NutAssembly'
     env = globals()[env_name]() # this will initialise the class as per the string env_name
     #env = gym.wrappers.Monitor(env, 'video/' + env_name, force=True)
     successes = []
@@ -449,6 +449,7 @@ if __name__ == "__main__":
     env.action_space.seed(1)
     env.observation_space.seed(1)
     failed_eps = []
+    
     for ep in range(20):
         success = np.zeros(env.max_episode_steps)
         # print('_'*50)
@@ -458,7 +459,9 @@ if __name__ == "__main__":
         # print(obs.keys())
         action = [0,0,0,0,0,0,0]  # give zero action at first time step
         for i in (range(env.max_episode_steps)):
-            #env.render()
+            
+            env.render()
+            pdb.set_trace()
             obs, rew, done, info = env.step(action)
         
             success[i] = info['is_success']

@@ -261,9 +261,12 @@ class SAC_Agent:
     def select_action(self, pi, noise_eps, random_eps, controller_action=None):
         # transfer action from CUDA to CPU if using GPU and make numpy array out of it
         action = pi.cpu().numpy().squeeze()
+        action[3:5] = [0,0]
+        action[5] = 0.3*action[5]
         # random actions
         random_actions = np.random.uniform(low=-self.env_params['action_max'], high=self.env_params['action_max'], \
                                             size=self.env_params['action'])
+        random_actions[3:6] = [0,0,0]
         # if residual learning, subtract the controller action so that we don't add it twice
         if self.args.exp_name == 'res':
             random_actions = random_actions - controller_action

@@ -3,6 +3,7 @@ import numpy as np
 from robosuite.models.base import MujocoXMLModel
 from robosuite.utils.mjcf_utils import ROBOT_COLLISION_COLOR, array_to_string, string_to_array
 from robosuite.utils.transform_utils import euler2mat, mat2quat
+import pdb
 
 REGISTERED_ROBOTS = {}
 
@@ -42,7 +43,7 @@ class RobotModelMeta(type):
         cls = super().__new__(meta, name, bases, class_dict)
 
         # List all environments that should not be registered here.
-        _unregistered_envs = ["RobotModel", "ManipulatorModel"]
+        _unregistered_envs = ["RobotModel", "ManipulatorModel", "ManipulatorModelMe"]
 
         if cls.__name__ not in _unregistered_envs:
             register_robot(cls)
@@ -63,16 +64,27 @@ class RobotModel(MujocoXMLModel, metaclass=RobotModelMeta):
 
         # Define other variables that get filled later
         self.mount = None
+        self.current_action = np.zeros(1)   ###Note: Manipulate_model_me and robot_model has this definition both
 
         # Get camera names for this robot
         self.cameras = self.get_element_names(self.worldbody, "camera")
-
-        # By default, set small frictionloss and armature values
+        
+        # By default, set small frictionloss and armature values   ##Note: I will change from the original robot xml file
         self.set_joint_attribute(attrib="frictionloss", values=0.1 * np.ones(self.dof), force=False)
         self.set_joint_attribute(attrib="damping", values=0.1 * np.ones(self.dof), force=False)
         self.set_joint_attribute(
             attrib="armature", values=np.array([5.0 / (i + 1) for i in range(self.dof)]), force=False
         )
+    
+    def format_action(self, action):
+        """
+        Maps continuous action into binary output
+        -1 => open, 1 => closed
+        """
+        speed = 0.05
+        self.current_action = np.clip(self.current_action + np.array([-1.0, 1.0]) * speed * np.sign(action), -1.0, 1.0 )
+        return self.current_action
+
 
     def set_base_xpos(self, pos):
         """
@@ -111,9 +123,10 @@ class RobotModel(MujocoXMLModel, metaclass=RobotModelMeta):
             "Error setting joint attributes: "
             + "Values must be same size as joint dimension. Got {}, expected {}!".format(values.size, self.dof)
         )
-        for i, joint in enumerate(self._elements["joints"]):
+        for i, joint in enumerate(self._elements["joints"][:7]):
             if force or joint.get(attrib, None) is None:
                 joint.set(attrib, array_to_string(np.array([values[i]])))
+        
 
     def add_mount(self, mount):
         """
@@ -295,4 +308,4 @@ class RobotModel(MujocoXMLModel, metaclass=RobotModelMeta):
         Returns:
             dict: (Default is no sensors; i.e.: empty dict)
         """
-        return {}
+        return {sensor: sensor for sensor in ["force_ee", "torque_ee"]}

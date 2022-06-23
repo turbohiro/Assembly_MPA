@@ -27,13 +27,6 @@ class GripperModel(MujocoXMLModel):
             self.worldbody[0].attrib.get("quat", "1 0 0 0"), dtype=np.float64, sep=" "
         )[[1, 2, 3, 0]]
 
-    def format_action(self, action):
-        """
-        Given (-1,1) abstract control as np-array
-        returns the (-1,1) control signals
-        for underlying actuators as 1-d np array
-        """
-        raise NotImplementedError
 
     # -------------------------------------------------------------------------------------- #
     # Properties: In general, these are the name-adjusted versions from the private          #

@@ -2,7 +2,8 @@ import io
 import os
 import xml.dom.minidom
 import xml.etree.ElementTree as ET
-
+import pdb
+import mujoco_py
 import robosuite.utils.macros as macros
 from robosuite.utils import XMLError
 from robosuite.utils.mjcf_utils import (
@@ -121,6 +122,8 @@ class MujocoXML(object):
                 self.equality.append(one_equality)
             for one_contact in other.contact:
                 self.contact.append(one_contact)
+        
+            
 
     def get_model(self, mode="mujoco_py"):
         """
@@ -663,7 +666,7 @@ class MujocoXMLModel(MujocoXML, MujocoModel):
                 entries in the dict. Note that the mapped geoms should be the RAW sensor names found directly in the
                 XML file -- the naming prefix will be automatically added in the public method call
         """
-        raise NotImplementedError
+        raise {sensor: sensor for sensor in ["force_ee", "torque_ee"]}
 
     @property
     def contact_geom_rgba(self):

@@ -120,7 +120,7 @@ class RobotEnv(MujocoEnv):
         self,
         robots,
         env_configuration="default",
-        mount_types="default",
+        mount_types=None,
         controller_configs=None,
         initialization_noise=None,
         use_camera_obs=True,
@@ -201,7 +201,7 @@ class RobotEnv(MujocoEnv):
             dict(
                 **{
                     "controller_config": controller_configs[idx],
-                    "mount_type": mount_types[idx],
+                #    "mount_type": mount_types[idx],    ###Note:in my enviiorment, this attribute is not needeed!!!
                     "initialization_noise": initialization_noise[idx],
                     "control_freq": control_freq,
                 },
@@ -580,6 +580,7 @@ class RobotEnv(MujocoEnv):
         cutoff = 0
         for idx, robot in enumerate(self.robots):
             robot_action = action[cutoff : cutoff + robot.action_dim]
+            # pdb.set_trace()
             robot.control(robot_action, policy_step=policy_step)
             cutoff += robot.action_dim
 

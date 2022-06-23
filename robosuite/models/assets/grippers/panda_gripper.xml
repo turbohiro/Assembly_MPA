@@ -49,6 +49,8 @@
     </worldbody>
     <sensor>
         <force name="force_ee" site="ft_frame"/>
-        <torque name="torque_ee" site="ft_frame"/>
+        <!-- <torque name="torque_ee" site="ft_frame"/> -->
+        <force name="force_ee_end" site="grip_site_cylinder"/>
+        <!-- <torque name="torque_ee_end" site="grip_site_cylinder"/> -->
     </sensor>
 </mujoco>

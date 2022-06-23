@@ -1,6 +1,8 @@
 from .manipulator import Manipulator
+from .manipulator_me import ManipulatorMe
 from .single_arm import SingleArm
 from .bimanual import Bimanual
+from .lwr_arm import LwrSingleArm
 
 from robosuite.models.robots.robot_model import REGISTERED_ROBOTS
 
@@ -15,7 +17,7 @@ ROBOT_CLASS_MAPPING = {
     "Panda": SingleArm,
     "Sawyer": SingleArm,
     "UR5e": SingleArm,
-    "LWR": SingleArm,
+    "LWR": LwrSingleArm,
     
 }
 

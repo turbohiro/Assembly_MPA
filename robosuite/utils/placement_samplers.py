@@ -193,7 +193,7 @@ class UniformRandomSampler(ObjectPositionSampler):
             ValueError: [Invalid rotation axis]
         """
         if self.rotation is None:
-            rot_angle = np.random.uniform(high=np.pi/8, low=0)  #rotate a small angle to keep the robot run stabely
+            rot_angle = np.random.uniform(high=np.pi/180, low=0)  #rotate a small angle to keep the robot run stabely
             #print('the object rotate angle is',rot_angle)
         elif isinstance(self.rotation, collections.abc.Iterable):
             rot_angle = np.random.uniform(high=max(self.rotation), low=min(self.rotation))
@@ -263,29 +263,30 @@ class UniformRandomSampler(ObjectPositionSampler):
         for obj in self.mujoco_objects:
             # First make sure the currently sampled object hasn't already been sampled
             assert obj.name not in placed_objects, "Object '{}' has already been sampled!".format(obj.name)
-
             horizontal_radius = obj.horizontal_radius
             bottom_offset = obj.bottom_offset
+
             success = False
-            for i in range(5000):  # 5000 retries
+            for i in range(500):  # 5000 retries
                 object_x = self._sample_x(horizontal_radius) + base_offset[0]
                 object_y = self._sample_y(horizontal_radius) + base_offset[1]
                 object_z = self.z_offset + base_offset[2]
                 if on_top:
                     object_z -= bottom_offset[-1]
 
-                # objects cannot overlap
-                location_valid = True
-                if self.ensure_valid_placement:
-                    for (x, y, z), _, other_obj in placed_objects.values():
-                        if (
-                            np.linalg.norm((object_x - x, object_y - y))
-                            <= other_obj.horizontal_radius + horizontal_radius
-                        ) and (object_z - z <= other_obj.top_offset[-1] - bottom_offset[-1]):
-                            location_valid = False
-                            break
+                # # objects cannot overlap
+                # location_valid = True
+                # if self.ensure_valid_placement:
+                #     for (x, y, z), _, other_obj in placed_objects.values():
+                #         if (
+                #             np.linalg.norm((object_x - x, object_y - y))
+                #             <= other_obj.horizontal_radius + horizontal_radius
+                #         ) and (object_z - z <= other_obj.top_offset[-1] - bottom_offset[-1]):
+                #             location_valid = False
+                #             break
 
-                if location_valid:
+                #if location_valid:
+                if True:
                     # random rotation
                     quat = self._sample_quat()
 
@@ -298,7 +299,8 @@ class UniformRandomSampler(ObjectPositionSampler):
                     placed_objects[obj.name] = (pos, quat, obj)
                     success = True
                     break
-
+            import pdb
+            #pdb.set_trace()                
             if not success:
                 raise RandomizationError("Cannot place all objects ):")
 
@@ -438,6 +440,7 @@ class SequentialCompositeSampler(ObjectPositionSampler):
             # Run sampler
             new_placements = sampler.sample(fixtures=placed_objects, **s_args)
             # Update placements
+            
             placed_objects.update(new_placements)
 
         return placed_objects

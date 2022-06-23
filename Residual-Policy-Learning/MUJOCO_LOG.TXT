@@ -4,3 +4,9 @@ ERROR: GLEW initalization error: Missing GL version
 Tue Jun  7 15:15:04 2022
 ERROR: GLEW initalization error: Missing GL version
 
+Sun Jun 19 18:42:50 2022
+ERROR: mjvScene frustum_near too small in mjr_render
+
+Sun Jun 19 18:43:20 2022
+ERROR: Track body id is outside valid range
+
