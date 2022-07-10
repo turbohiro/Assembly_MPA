@@ -32,13 +32,13 @@
                                     <body name="gripper_left" pos="9.1e-05 -0.008086 0.015" quat="0.707107 0 0 -0.707107">
                                         <inertial pos="-0.0045 0 0.0408" quat="0.998492 0 -0.0548974 0" mass="0.2" diaginertia="2.00034 2.00034 2" />
                                         <joint name="finger_joint1" pos="0 0 0" axis="1 0 0" type="slide" limited="true" range="-0.055 -0.0027" damping="100" frictionloss="100" />
-                                        <geom type="mesh" rgba="0 0 0 1" name = 'left_finger_collision' mesh="GUIDE_WSG50_110" />
+                                        <geom type="mesh" rgba="0 0 0 1" name = 'left_finger_collision' friction="1 0.005 1" mesh="GUIDE_WSG50_110" />
                                         <geom pos="-0.009 0 0.0816" type="mesh" rgba="0 0 0 1" name ='left_finger_pad' mesh="WSG-DSA" />
                                     </body>
                                     <body name="gripper_right" pos="9.1e-05 -0.008086 0.015" quat="0.707107 0 0 0.707107">
                                         <inertial pos="-0.0045 0 0.0408" quat="0.998492 0 -0.0548974 0" mass="0.2" diaginertia="2.00034 2.00034 2" />
                                         <joint name="finger_joint2" pos="0 0 0" axis="-1 0 0" type="slide" limited="true" range="0.0027 0.055" damping="100" frictionloss="100" />
-                                        <geom type="mesh" rgba="0 0 0 1" name = 'right_finger_collision' mesh="GUIDE_WSG50_110" />
+                                        <geom type="mesh" rgba="0 0 0 1" name = 'right_finger_collision' friction="1 0.005 1" mesh="GUIDE_WSG50_110" />
                                         <geom pos="-0.009 0 0.0816" type="mesh" rgba="0 0 0 1" name ='right_finger_pad' mesh="WSG-DSA" />
                                     </body>
                                 </body>

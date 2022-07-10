@@ -110,7 +110,7 @@ class NutAssemblyDenseHand(gym.Env):
     """
     def __init__(self, kp:float=20, *args, **kwargs):
         options = {}
-        controller_name = 'OSC_POSE'
+        controller_name = 'JOINT_POSITION'
         options["controller_configs"] = suite.load_controller_config(default_controller=controller_name)
 
         self.env = GymWrapper(

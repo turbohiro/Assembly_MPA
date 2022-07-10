@@ -30,7 +30,9 @@ class LWR(ManipulatorModelMe):
     @property
     def init_qpos(self):
         #return np.array([0.000, 0.650, 0.000, -1.89, 0.000, 0.60, 0.000, -0.03, 0.03])  #-1.89
-        return np.array([-0.04046219,  0.40818753, -0.00541576, -1.92359491,  0.0294731 , 0.7873837 ,  0.03453075,  -0.03, 0.03    ])
+        return np.array([0.0,  0.44512, 0, -1.866547, 0,  0.8299238, 0, -0.025, 0.025   ])
+        #return np.array([0.00487328,  0.43207766,  0.00637799, -1.88706874,  0.02917416, 0.79099126,  0.03468684,  -0.025, 0.025    ])
+
 
     @property
     def base_xpos_offset(self):
@@ -57,6 +59,6 @@ class LWR(ManipulatorModelMe):
         Maps continuous action into binary output
         -1 => open, 1 => closed
         """
-        speed = 0.05
+        speed = 0.5
         self.current_action = np.clip(self.current_action + np.array([-1.0, 1.0]) * speed * np.sign(action), -1.0, 1.0 )
         return self.current_action

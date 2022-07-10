@@ -132,6 +132,32 @@ class PegCircleObject(MujocoXMLObject):
             obj_type="all",
             duplicate_collision_geoms=True,
         )
+    
+    @property
+    def important_site1(self):
+        """
+        Returns:
+            dict: In addition to any default sites for this object, also provides the following entries
+
+                :`'handle'`: Name of nut handle location site
+        """
+        # Get dict from super call and add to it
+        dic = super().important_sites
+        dic.update({"handle1": self.naming_prefix + "handle1_site"})
+        return dic
+    
+    @property
+    def important_site2(self):
+        """
+        Returns:
+            dict: In addition to any default sites for this object, also provides the following entries
+
+                :`'handle'`: Name of nut handle location site
+        """
+        # Get dict from super call and add to it
+        dic = super().important_sites
+        dic.update({"handle2": self.naming_prefix + "handle2_site"})
+        return dic
 
 
 

@@ -90,6 +90,7 @@ class ManipulatorModelMe(RobotModel):
         """
         return {
             "ft_frame": "ft_frame",
+            "grip_site": "grip_site",
             "grip_site_cylinder": "grip_site_cylinder",
             "ee": "ee",
             "ee_x": "ee_x",

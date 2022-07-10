@@ -146,7 +146,7 @@ class RobotMe(object):
         self.robot_joints = self.robot_model.joints
         self._ref_joint_pos_indexes = [self.sim.model.get_joint_qpos_addr(x) for x in self.robot_joints]
         self._ref_joint_vel_indexes = [self.sim.model.get_joint_qvel_addr(x) for x in self.robot_joints]
-
+   
         # indices for joint indexes
         self._ref_joint_indexes = [self.sim.model.joint_name2id(joint) for joint in self.robot_model.joints]
 
@@ -224,7 +224,7 @@ class RobotMe(object):
         """
         tolerance = 0.1
         for (qidx, (q, q_limits)) in enumerate(
-            zip(self.sim.data.qpos[self._ref_joint_pos_indexes], self.sim.model.jnt_range[self._ref_joint_indexes])
+            zip(self.sim.data.qpos[self._ref_joint_pos_indexes[:7]], self.sim.model.jnt_range[self._ref_joint_indexes[:7]])
         ):
             if q_limits[0] != q_limits[1] and not (q_limits[0] + tolerance < q < q_limits[1] - tolerance):
                 print("Joint limit reached in joint " + str(qidx))
@@ -319,7 +319,7 @@ class RobotMe(object):
         Args:
             jpos (np.array): Joint positions to manually set the robot to
         """
-        self.sim.data.qpos[self._ref_joint_pos_indexes] = jpos
+        self.sim.data.qpos[self._ref_joint_pos_indexes[:7]] = jpos
         self.sim.forward()
 
     @property

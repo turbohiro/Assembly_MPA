@@ -32,6 +32,7 @@ class ManipulatorMe(RobotMe):
         weight = 0.5 * (ctrl_range[:, 1] - ctrl_range[:, 0])
         applied_gripper_action = bias + weight * gripper_action_actual
         self.sim.data.ctrl[actuator_idxs] = applied_gripper_action
+        #print('grip action is,',applied_gripper_action)
 
     def visualize(self, vis_settings):
         """

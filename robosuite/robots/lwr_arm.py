@@ -122,7 +122,7 @@ class LwrSingleArm(ManipulatorMe):
         super().setup_references()
 
         # IDs of sites for eef visualization
-        #self.eef_site_id = self.sim.model.site_name2id(self.robot_model.important_sites["grip_site"])
+        self.grip_site_id = self.sim.model.site_name2id(self.robot_model.important_sites["grip_site"])
         
         self.eef_site_id = self.sim.model.site_name2id(self.robot_model.important_sites["ft_frame"])
         self.eef_cylinder_id = self.sim.model.site_name2id(self.robot_model.important_sites["grip_site_cylinder"])
@@ -168,7 +168,9 @@ class LwrSingleArm(ManipulatorMe):
         self.grip_action(robot=self.robot_model, gripper_action=gripper_action)
 
         # Apply joint torque control
-        self.sim.data.ctrl[self._ref_joint_actuator_indexes[:7]] = self.torques   ##Note:only for the arm 
+        self.sim.data.ctrl[self._ref_joint_actuator_indexes[:7]] = self.torques   ##Note:only for the arm
+
+        #print(arm_action,self._joint_positions[:7])
 
         # If this is a policy step, also update buffers holding recent values of interest
         if policy_step:

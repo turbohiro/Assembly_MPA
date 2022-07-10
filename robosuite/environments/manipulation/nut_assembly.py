@@ -479,6 +479,10 @@ class NutAssembly(SingleArmEnv):
             OrderedDict: Dictionary mapping observable names to its corresponding Observable object
         """
         observables = super()._setup_observables()
+        self.show_model_info()
+        import pdb
+        pdb.set_trace()
+
 
         # low-level object information
         if self.use_object_obs:
@@ -678,6 +682,50 @@ class NutAssembly(SingleArmEnv):
             )
 
 
+    def show_model_info(self):
+        """
+        Displays relevant model info for the user, namely bodies, joints, actuators, as well as their IDs and ranges.
+        Also gives info on which actuators control which joints and which joints are included in the kinematic chain,
+        as well as the PID controller info for each actuator.
+        """
+
+        print("\nNumber of bodies: {}".format(self.sim.model.nbody))
+        for i in range(self.sim.model.nbody):
+            print("Body ID: {}, Body Name: {}".format(i, self.sim.model.body_id2name(i)))
+
+        print("\nNumber of joints: {}".format(self.sim.model.njnt))
+        for i in range(self.sim.model.njnt):
+            print(
+                "Joint ID: {}, Joint Name: {}, Limits: {}".format(
+                    i, self.sim.model.joint_id2name(i), self.sim.model.jnt_range[i]
+                )
+            )
+
+        print("\nNumber of Actuators: {}".format(len(self.sim.data.ctrl)))
+        for i in range(len(self.sim.data.ctrl)):
+            print(
+                "Actuator ID: {}, Actuator Name: {}, Control Range: {}".format(
+                    i,
+                    self.sim.model.actuator_id2name(i),
+                    #self.actuators[i][3],
+                    self.sim.model.actuator_ctrlrange[i],
+                )
+            )
+
+        #print("\nJoints in kinematic chain: {}".format([i.name for i in self.ee_chain.links]))
+
+        print("\n Camera Info: \n")
+        for i in range(self.sim.model.ncam):
+            print(
+                "Camera ID: {}, Camera Name: {}, Camera FOV (y, degrees): {}, Position: {}, Orientation: {}".format(
+                    i,
+                    self.sim.model.camera_id2name(i),
+                    self.sim.model.cam_fovy[i],
+                    self.sim.model.cam_pos0[i],
+                    self.sim.model.cam_mat0[i],
+                )
+            )
+        
 class NutAssemblySingle(NutAssembly):
     """
     Easier version of task - place either one round nut or one square nut into its peg.
@@ -706,3 +754,4 @@ class NutAssemblyRound(NutAssembly):
     def __init__(self, **kwargs):
         assert "single_object_mode" not in kwargs and "nut_type" not in kwargs, "invalid set of arguments"
         super().__init__(single_object_mode=2, nut_type="round", **kwargs)
+

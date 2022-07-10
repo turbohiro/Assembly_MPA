@@ -479,6 +479,8 @@ class NutAssembly(SingleArmEnv):
             OrderedDict: Dictionary mapping observable names to its corresponding Observable object
         """
         observables = super()._setup_observables()
+        import pdb
+        pdb.set_trace()
 
         # low-level object information
         if self.use_object_obs:
@@ -534,7 +536,7 @@ class NutAssembly(SingleArmEnv):
                     enabled=enabled,
                     active=active,
                 )
-
+            pdb.set_trace()
         return observables
 
     def _create_nut_sensors(self, nut_name, modality="object"):

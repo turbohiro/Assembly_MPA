@@ -1,16 +1,81 @@
 <mujoco model="peg_circle">
   <asset>
-    <mesh file="meshes/peg_circle3.stl" name="peg_circle_mesh" scale="1.0 1.0 1.0"/>
-    <texture file="../textures/steel-scratched.png" type="cube" name="steel-metal"/>
-    <material name="smetal" reflectance="1.0" shininess="1.0" specular="1.0" texrepeat="1 1" texture="steel-metal" texuniform="true"/>
+    <mesh name="peg_circle_visual" file="meshes/peg_circle.stl"/>
+    <mesh name="peg_circle_collision_0" file="meshes/peg_circle_collision_0.stl"/>
+    <mesh name="peg_circle_collision_1" file="meshes/peg_circle_collision_1.stl"/>
+    <mesh name="peg_circle_collision_2" file="meshes/peg_circle_collision_2.stl"/>
+    <mesh name="peg_circle_collision_3" file="meshes/peg_circle_collision_3.stl"/>
+    <mesh name="peg_circle_collision_4" file="meshes/peg_circle_collision_4.stl"/>
+    <mesh name="peg_circle_collision_5" file="meshes/peg_circle_collision_5.stl"/>
+    <mesh name="peg_circle_collision_6" file="meshes/peg_circle_collision_6.stl"/>
+    <mesh name="peg_circle_collision_7" file="meshes/peg_circle_collision_7.stl"/>
+    <mesh name="peg_circle_collision_8" file="meshes/peg_circle_collision_8.stl"/>
+    <mesh name="peg_circle_collision_9" file="meshes/peg_circle_collision_9.stl"/>
+    <mesh name="peg_circle_collision_10" file="meshes/peg_circle_collision_10.stl"/>
+    <mesh name="peg_circle_collision_11" file="meshes/peg_circle_collision_11.stl"/>
+    <mesh name="peg_circle_collision_12" file="meshes/peg_circle_collision_12.stl"/>
+    <mesh name="peg_circle_collision_13" file="meshes/peg_circle_collision_13.stl"/>
+    <mesh name="peg_circle_collision_14" file="meshes/peg_circle_collision_14.stl"/>
+    <mesh name="peg_circle_collision_15" file="meshes/peg_circle_collision_15.stl"/>
+    <mesh name="peg_circle_collision_16" file="meshes/peg_circle_collision_16.stl"/>
+    <mesh name="peg_circle_collision_17" file="meshes/peg_circle_collision_17.stl"/>
+    <mesh name="peg_circle_collision_18" file="meshes/peg_circle_collision_18.stl"/>
+    <mesh name="peg_circle_collision_19" file="meshes/peg_circle_collision_19.stl"/>
+    <mesh name="peg_circle_collision_20" file="meshes/peg_circle_collision_20.stl"/>
+    <mesh name="peg_circle_collision_21" file="meshes/peg_circle_collision_21.stl"/>
+    <mesh name="peg_circle_collision_22" file="meshes/peg_circle_collision_22.stl"/>
+    <mesh name="peg_circle_collision_23" file="meshes/peg_circle_collision_23.stl"/>
+    <mesh name="peg_circle_collision_24" file="meshes/peg_circle_collision_24.stl"/>
+    <mesh name="peg_circle_collision_25" file="meshes/peg_circle_collision_25.stl"/>
+    <mesh name="peg_circle_collision_26" file="meshes/peg_circle_collision_26.stl"/>
+    <mesh name="peg_circle_collision_27" file="meshes/peg_circle_collision_27.stl"/>
+    <mesh name="peg_circle_collision_28" file="meshes/peg_circle_collision_28.stl"/>
+    <mesh name="peg_circle_collision_29" file="meshes/peg_circle_collision_29.stl"/>
+    <mesh name="peg_circle_collision_30" file="meshes/peg_circle_collision_30.stl"/>
+    <!-- <mesh name="peg_circle_collision_31" file="peg_circle_collision_31.obj"/> -->
   </asset>
   <worldbody>
     <body>
-      <body name="object">
-        <geom pos="0 0 0" quat="0.707107 0.707107 0 0" mesh="peg_circle_mesh" type="mesh" solimp="0.998 0.998 0.001" solref="0.001 1" density="100" friction="0.95 0.3 0.9"  group="0" condim="4" material='smetal'/>
+      <body name="object" pos="0 0 0" >
+        <geom quat="0.707107 0.707107 0 0" mesh="peg_circle_visual" type="mesh" contype="0" conaffinity="0"  rgba ='0 0 1 1' solref="0.02 1" density="100" friction="0.99 0.3 0.1" group="0"/>
+        <geom quat="0.707107 0.707107 0 0" mesh="peg_circle_collision_0" type="mesh" solimp="0.998 0.998 0.001" solref="0.02 1" density="100" friction="0.95 0.3 0.1" group="1" condim="4"/>
+        <geom quat="0.707107 0.707107 0 0" mesh="peg_circle_collision_1" type="mesh" solimp="0.998 0.998 0.001" solref="0.02 1" density="100" friction="0.95 0.3 0.1" condim="4" group="1"/>
+        <geom quat="0.707107 0.707107 0 0" mesh="peg_circle_collision_2" type="mesh" solimp="0.998 0.998 0.001" solref="0.02 1" density="100" friction="0.95 0.3 0.1" condim="4" group="1"/>
+        <geom quat="0.707107 0.707107 0 0" mesh="peg_circle_collision_3" type="mesh" solimp="0.998 0.998 0.001" solref="0.02 1" density="100" friction="0.95 0.3 0.1" condim="4" group="1"/>
+        <geom quat="0.707107 0.707107 0 0" mesh="peg_circle_collision_4" type="mesh" solimp="0.998 0.998 0.001" solref="0.02 1" density="100" friction="0.95 0.3 0.1" condim="4" group="1"/>
+        <geom quat="0.707107 0.707107 0 0" mesh="peg_circle_collision_5" type="mesh" solimp="0.998 0.998 0.001" solref="0.02 1" density="100" friction="0.95 0.3 0.1" condim="4" group="1"/>
+        <geom quat="0.707107 0.707107 0 0" mesh="peg_circle_collision_6" type="mesh" solimp="0.998 0.998 0.001" solref="0.02 1" density="100" friction="0.95 0.3 0.1" condim="4" group="1"/>
+        <geom quat="0.707107 0.707107 0 0" mesh="peg_circle_collision_7" type="mesh" solimp="0.998 0.998 0.001" solref="0.02 1" density="100" friction="0.95 0.3 0.1" condim="4" group="1"/>
+        <geom quat="0.707107 0.707107 0 0" mesh="peg_circle_collision_8" type="mesh" solimp="0.998 0.998 0.001" solref="0.02 1" density="100" friction="0.95 0.3 0.1" condim="4" group="1"/>
+        <geom quat="0.707107 0.707107 0 0" mesh="peg_circle_collision_9" type="mesh" solimp="0.998 0.998 0.001" solref="0.02 1" density="100" friction="0.95 0.3 0.1" condim="4" group="1"/>
+        <geom quat="0.707107 0.707107 0 0" mesh="peg_circle_collision_10" type="mesh" solimp="0.998 0.998 0.001" solref="0.02 1" density="100" friction="0.95 0.3 0.1" condim="4" group="1"/>
+        <geom quat="0.707107 0.707107 0 0" mesh="peg_circle_collision_11" type="mesh" solimp="0.998 0.998 0.001" solref="0.02 1" density="100" friction="0.95 0.3 0.1" condim="4" group="1"/>
+        <geom quat="0.707107 0.707107 0 0" mesh="peg_circle_collision_12" type="mesh" solimp="0.998 0.998 0.001" solref="0.02 1" density="100" friction="0.95 0.3 0.1" condim="4" group="1"/>
+        <geom quat="0.707107 0.707107 0 0" mesh="peg_circle_collision_13" type="mesh" solimp="0.998 0.998 0.001" solref="0.02 1" density="100" friction="0.95 0.3 0.1" condim="4" group="1"/>
+        <geom quat="0.707107 0.707107 0 0" mesh="peg_circle_collision_14" type="mesh" solimp="0.998 0.998 0.001" solref="0.02 1" density="100" friction="0.95 0.3 0.1" condim="4" group="1"/>
+        <geom quat="0.707107 0.707107 0 0" mesh="peg_circle_collision_15" type="mesh" solimp="0.998 0.998 0.001" solref="0.02 1" density="100" friction="0.95 0.3 0.1" condim="4" group="1"/>
+        <geom quat="0.707107 0.707107 0 0" mesh="peg_circle_collision_16" type="mesh" solimp="0.998 0.998 0.001" solref="0.02 1" density="100" friction="0.95 0.3 0.1" condim="4" group="1"/>
+        <geom quat="0.707107 0.707107 0 0" mesh="peg_circle_collision_17" type="mesh" solimp="0.998 0.998 0.001" solref="0.02 1" density="100" friction="0.95 0.3 0.1" condim="4" group="1"/>
+        <geom quat="0.707107 0.707107 0 0" mesh="peg_circle_collision_18" type="mesh" solimp="0.998 0.998 0.001" solref="0.02 1" density="100" friction="0.95 0.3 0.1" condim="4" group="1"/>
+        <geom quat="0.707107 0.707107 0 0" mesh="peg_circle_collision_19" type="mesh" solimp="0.998 0.998 0.001" solref="0.02 1" density="100" friction="0.95 0.3 0.1" condim="4" group="1"/>
+        <geom quat="0.707107 0.707107 0 0" mesh="peg_circle_collision_20" type="mesh" solimp="0.998 0.998 0.001" solref="0.02 1" density="100" friction="0.95 0.3 0.1" condim="4" group="1"/>
+        <geom quat="0.707107 0.707107 0 0" mesh="peg_circle_collision_21" type="mesh" solimp="0.998 0.998 0.001" solref="0.02 1" density="100" friction="0.95 0.3 0.1" condim="4" group="1"/>
+        <geom quat="0.707107 0.707107 0 0" mesh="peg_circle_collision_22" type="mesh" solimp="0.998 0.998 0.001" solref="0.02 1" density="100" friction="0.95 0.3 0.1" condim="4" group="1"/>
+        <geom quat="0.707107 0.707107 0 0" mesh="peg_circle_collision_23" type="mesh" solimp="0.998 0.998 0.001" solref="0.02 1" density="100" friction="0.95 0.3 0.1" condim="4" group="1"/>
+        <geom quat="0.707107 0.707107 0 0" mesh="peg_circle_collision_24" type="mesh" solimp="0.998 0.998 0.001" solref="0.02 1" density="100" friction="0.95 0.3 0.1" condim="4" group="1"/>
+        <geom quat="0.707107 0.707107 0 0" mesh="peg_circle_collision_25" type="mesh" solimp="0.998 0.998 0.001" solref="0.02 1" density="100" friction="0.95 0.3 0.1" condim="4" group="1"/>
+        <geom quat="0.707107 0.707107 0 0" mesh="peg_circle_collision_26" type="mesh" solimp="0.998 0.998 0.001" solref="0.02 1" density="100" friction="0.95 0.3 0.1" condim="4" group="1"/>
+        <geom quat="0.707107 0.707107 0 0" mesh="peg_circle_collision_27" type="mesh" solimp="0.998 0.998 0.001" solref="0.02 1" density="100" friction="0.95 0.3 0.1" condim="4" group="1"/>
+        <geom quat="0.707107 0.707107 0 0" mesh="peg_circle_collision_28" type="mesh" solimp="0.998 0.998 0.001" solref="0.02 1" density="100" friction="0.95 0.3 0.1" condim="4" group="1"/>
+        <geom quat="0.707107 0.707107 0 0" mesh="peg_circle_collision_29" type="mesh" solimp="0.998 0.998 0.001" solref="0.02 1" density="100" friction="0.95 0.3 0.1" condim="4" group="1"/>
+        <geom quat="0.707107 0.707107 0 0" mesh="peg_circle_collision_30" type="mesh" solimp="0.998 0.998 0.001" solref="0.02 1" density="100" friction="0.95 0.3 0.1" condim="4" group="1"/>
+        <!-- <geom mesh="peg_circle_collision_31" type="mesh" group="3"/> -->
+
+        <site rgba="1 0 0 1" size="0.005" pos="0.03 0 0.0" name="handle1_site"/>
+        <site rgba="1 0 0 1" size="0.005" pos="-0.03 0 0.0" name="handle2_site"/>  
       </body>
       <site rgba="1 0 0 1" size="0.005" pos="0 0 -0.03" name="bottom_site"/>
-      <site rgba="1 0 0 1" size="0.005" pos="0 0 0.072" name="top_site"/>
+      <site rgba="1 0 0 1" size="0.005" pos="0 0 0.092" name="top_site"/>
       <site rgba="1 0 0 1" size="0.005" pos="0.075 0.075 0" name="horizontal_radius_site"/> 
     </body>
   </worldbody>
