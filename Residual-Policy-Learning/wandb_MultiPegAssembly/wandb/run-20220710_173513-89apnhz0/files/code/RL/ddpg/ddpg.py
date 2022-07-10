@@ -293,7 +293,6 @@ class DDPG_Agent:
         # choose whether to take random actions or not
         rand = np.random.binomial(1, random_eps, 1)[0]
         action += rand * (random_actions - action)  # will be equal to either random_actions or action
-        action[6] = -1
         return action
 
     def preprocess_og(self, o:np.ndarray, g:np.ndarray) -> Tuple[np.ndarray, np.ndarray]:

@@ -1,0 +1,29 @@
+{
+    "os": "Linux-5.4.0-97-generic-x86_64-with-glibc2.17",
+    "python": "3.8.12",
+    "heartbeatAt": "2022-07-10T15:27:45.009193",
+    "startedAt": "2022-07-10T15:27:43.987650",
+    "docker": null,
+    "gpu": "GeForce GTX 1050 Ti",
+    "gpu_count": 1,
+    "cpu_count": 6,
+    "cuda": "10.1.243",
+    "args": [
+        "--seed=66",
+        "--n_epochs=500",
+        "--exp_name=rl",
+        "--env_name=MultiPegAssembly"
+    ],
+    "state": "running",
+    "program": "RL/ddpg/ddpg.py",
+    "codePath": "RL/ddpg/ddpg.py",
+    "git": {
+        "remote": "https://github.com/nsidn98/Residual-Policy-Learning.git",
+        "commit": "d5a1fa327fe35f3a45f0a1b9361b45d044f87560"
+    },
+    "email": "cwkturbo@sjtu.edu.cn",
+    "root": "/data/robosuite_manipulation/robosuite/Residual-Policy-Learning",
+    "host": "tams99",
+    "username": "wchen",
+    "executable": "/homeL/wchen/anaconda3/envs/robosuite/bin/python"
+}

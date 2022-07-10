@@ -1,0 +1,1782 @@
+diff --git a/.gitignore b/.gitignore
+deleted file mode 100644
+index 9345cea..0000000
+--- a/.gitignore
++++ /dev/null
+@@ -1,135 +0,0 @@
+-# Byte-compiled / optimized / DLL files
+-__pycache__/
+-*.py[cod]
+-*$py.class
+-
+-# C extensions
+-*.so
+-
+-# Distribution / packaging
+-.DS_Store
+-wandb/
+-mujoco-py/
+-.Python
+-build/
+-develop-eggs/
+-dist/
+-downloads/
+-eggs/
+-.eggs/
+-lib/
+-lib64/
+-parts/
+-sdist/
+-var/
+-wheels/
+-pip-wheel-metadata/
+-share/python-wheels/
+-*.egg-info/
+-.installed.cfg
+-*.egg
+-MANIFEST
+-*.ckpt
+-run_scripts_final/
+-RL/test.py
+-
+-# PyInstaller
+-#  Usually these files are written by a python script from a template
+-#  before PyInstaller builds the exe, so as to inject date/other infos into it.
+-*.manifest
+-*.spec
+-
+-# Installer logs
+-pip-log.txt
+-pip-delete-this-directory.txt
+-
+-# Unit test / coverage reports
+-htmlcov/
+-.tox/
+-.nox/
+-.coverage
+-.coverage.*
+-.cache
+-nosetests.xml
+-coverage.xml
+-*.cover
+-*.py,cover
+-.hypothesis/
+-.pytest_cache/
+-
+-# Translations
+-*.mo
+-*.pot
+-
+-# Django stuff:
+-*.log
+-local_settings.py
+-db.sqlite3
+-db.sqlite3-journal
+-
+-# Flask stuff:
+-instance/
+-.webassets-cache
+-
+-# Scrapy stuff:
+-.scrapy
+-
+-# Sphinx documentation
+-docs/_build/
+-
+-# PyBuilder
+-target/
+-
+-# Jupyter Notebook
+-.ipynb_checkpoints
+-
+-# IPython
+-profile_default/
+-ipython_config.py
+-
+-# pyenv
+-.python-version
+-
+-# pipenv
+-#   According to pypa/pipenv#598, it is recommended to include Pipfile.lock in version control.
+-#   However, in case of collaboration, if having platform-specific dependencies or dependencies
+-#   having no cross-platform support, pipenv may install dependencies that don't work, or not
+-#   install all needed dependencies.
+-#Pipfile.lock
+-
+-# PEP 582; used by e.g. github.com/David-OConnor/pyflow
+-__pypackages__/
+-
+-# Celery stuff
+-celerybeat-schedule
+-celerybeat.pid
+-
+-# SageMath parsed files
+-*.sage.py
+-
+-# Environments
+-.env
+-.venv
+-env/
+-venv/
+-ENV/
+-env.bak/
+-venv.bak/
+-
+-# Spyder project settings
+-.spyderproject
+-.spyproject
+-
+-# Rope project settings
+-.ropeproject
+-
+-# mkdocs documentation
+-/site
+-
+-# mypy
+-.mypy_cache/
+-.dmypy.json
+-dmypy.json
+-
+-# Pyre type checker
+-.pyre/
+diff --git a/README.md b/README.md
+deleted file mode 100644
+index b0a4484..0000000
+--- a/README.md
++++ /dev/null
+@@ -1,40 +0,0 @@
+-# Residual-Policy-Learning
+-
+-6.881 Robotic Manipulation Course Project, MIT Fall 2020 - Implementation of Residual Policy Learning
+-
+-## Results:
+-### Push Task
+-![Push](https://raw.githubusercontent.com/nsidn98/Residual-Policy-Learning/main/results/Push%20Final.png)
+-
+-### Pick And Place Task
+-![PickPlace](https://raw.githubusercontent.com/nsidn98/Residual-Policy-Learning/main/results/Pick%20and%20Place%20Final.png)
+-
+-### Slide Task
+-![Slide](https://raw.githubusercontent.com/nsidn98/Residual-Policy-Learning/main/results/Slide%20Final.png)
+-
+-## Usage:
+-
+-### First install the requirements using:
+-
+-`pip install -r requirements.txt` or `pip3 install -r requirements.txt`
+-
+-### Make a wandb account:
+-
+-All the experiments will be logged with a library called "[Wandb](https://www.wandb.com/)". So make sure that you first make an account in wandb [here](https://app.wandb.ai/login?signup=true) and login your terminal using `wandb login`
+-
+-### Non-MPI version:
+-`python RL/ddpg/ddpg.py --n_cycles=10 --env_name='FetchReach'`
+-
+-### MPI version:
+-`mpirun -np 1 python -u RL/ddpg/ddpg_mpi.py --env_name='FetchReach' --n_cycles=10`
+-
+-### SAC
+-`python RL/sac/sac.py --env_name="robosuiteNutAssemblyDense`
+-
+-## TODO:
+-* Improve README with more plots and project information.
+-* Add information about all files.
+-* Make SAC modular.
+-* Add report, video links.
+-* If possible add wandb report and link to network weights.
+-
+diff --git a/RL/baseline.py b/RL/baseline.py
+index 538d61f..ec95a51 100644
+--- a/RL/baseline.py
++++ b/RL/baseline.py
+@@ -79,7 +79,10 @@ class Agent:
+             obs = observation['observation']
+             g = observation['desired_goal']
+             for i in range(self.env_params['max_timesteps']):
+-                actions = np.array([0,0,0,0])
++                if 'Nut' in args.env_name:
++                    actions = np.array([0,0,0,0,0,0,0])
++                else:
++                    actions = np.array([0,0,0,0])
+                 observation_new, _, _, info = self.env.step(actions)
+                 obs = observation_new['observation']
+                 g = observation_new['desired_goal']
+@@ -131,7 +134,7 @@ if __name__ == "__main__":
+         wandb_save_dir = os.path.join(os.path.abspath(os.getcwd()),f"wandb_{args.env_name}")
+         if not os.path.exists(wandb_save_dir):
+             os.makedirs(wandb_save_dir)
+-        wandb.init(project='Residual Policy Learning', entity='6-881_project',\
++        wandb.init(project='Residual Policy Learning', entity='turbohiro',\
+                    sync_tensorboard=True, config=vars(args), name=experiment_name,\
+                    save_code=True, dir=wandb_save_dir, group=f"{args.env_name}")
+         writer = SummaryWriter(f"{wandb.run.dir}/{experiment_name}")
+diff --git a/RL/ddpg/ddpg.py b/RL/ddpg/ddpg.py
+index 0611a42..60c5ca9 100644
+--- a/RL/ddpg/ddpg.py
++++ b/RL/ddpg/ddpg.py
+@@ -11,6 +11,7 @@ import os
+ from datetime import datetime
+ import numpy as np
+ from typing import Tuple
++import pdb
+ 
+ from RL.ddpg.models import actor, critic
+ from RL.ddpg.replay_buffer import replay_buffer
+@@ -157,8 +158,8 @@ class DDPG_Agent:
+         actor_losses = [0.0]    # to store actor losses for burn-in
+         critic_losses = [0.0]   # to store critic losses for burn-in
+         prev_losses = [0.0]
+-        coin_flipping = False   # choose whether we want deterministic or not
+-        deterministic = False   # whether the whole episode should be noise and randomness free
++        coin_flipping = False   # whether the whole episode should be noise and randomness free
++        deterministic = False   # choose whether we want deterministic or not  
+         for epoch in range(self.args.n_epochs):
+ 
+             # change the actor learning rate from zero to actor_lr by checking burn-in
+@@ -182,9 +183,9 @@ class DDPG_Agent:
+ 
+                 random_eps = self.args.random_eps
+                 noise_eps  = self.args.noise_eps
++                #if coin_flipping:
++                #    deterministic = np.random.random() < self.args.coin_flipping_prob  # NOTE/TODO change here
+                 if coin_flipping:
+-                    deterministic = np.random.random() < self.args.coin_flipping_prob  # NOTE/TODO change here
+-                if deterministic:
+                     random_eps = 0.0
+                     noise_eps = 0.0
+ 
+@@ -197,7 +198,7 @@ class DDPG_Agent:
+                             controller_action = self.get_controller_actions(observation_new)
+                             action = self.select_actions(pi, noise_eps=noise_eps, random_eps= random_eps, controller_action=controller_action)
+                         else:
+-                            action = self.select_actions(pi, noise_eps=noise_eps, random_eps= random_eps, controller_action=None)
++                            action = self.select_actions(pi, noise_eps=noise_eps, random_eps= random_eps, controller_action=None)                   
+                     # give the action to the environment
+                     observation_new, _, _, info = self.env.step(action)
+                     self.sim_steps += 1                     # increase the simulation timestep by one
+@@ -211,7 +212,8 @@ class DDPG_Agent:
+                     # re-assign the observation
+                     obs = obs_new
+                     ag = ag_new
+-                # append last states in the array
++                    
++                # append last states in the array, extend the episode chain (state machine)
+                 ep_obs.append(obs.copy())
+                 ep_ag.append(ag.copy())
+                 # convert to np arrays
+@@ -238,6 +240,8 @@ class DDPG_Agent:
+                 self.polyak_update_networks(self.actor_target_network, self.actor_network)
+                 self.polyak_update_networks(self.critic_target_network, self.critic_network)
+                 num_cycles += 1
++                
++            pdb.set_trace()
+             # evaluate the agent
+             success_rate = self.eval_agent()
+             print(f'Epoch Critic: {np.mean(critic_losses):.3f} Epoch Actor:{np.mean(actor_losses):.3f}')
+@@ -256,7 +260,7 @@ class DDPG_Agent:
+             and then transfer them to either CPU of GPU
+         """
+         # concatenate the stuffs
+-        inputs = np.concatenate([obs, g])
++        inputs = np.concatenate([obs, g])   #observation input (state) and goal label (ground truth)
+         inputs = torch.tensor(inputs, dtype=torch.float32).unsqueeze(0)
+         inputs = inputs.to(self.device)
+         return inputs
+@@ -285,12 +289,15 @@ class DDPG_Agent:
+         action = pi.cpu().numpy().squeeze()
+         # add the gaussian
+         action += noise_eps * self.env_params['action_max'] * np.random.randn(*action.shape)
+-        action = np.clip(action, -self.env_params['action_max'], self.env_params['action_max'])
++        action = np.clip(action, -self.env_params['action_max'], self.env_params['action_max'])  #make action values are limited a feasible range
++        #action
++        action[3:5] = [0,0]
++        action[5] = 0.3*action[5]
+ 
+         # random actions
+-        random_actions = np.random.uniform(low=-self.env_params['action_max'], high=self.env_params['action_max'], \
+-                                            size=self.env_params['action'])
+-        # if residual learning, subtract the conroller action so that we don't add it twice
++        random_actions = np.random.uniform(low=-self.env_params['action_max'], high=self.env_params['action_max'], size=self.env_params['action'])
++        random_actions[3:6] = [0,0,0]
++        # if residual learning, subtract the controller action so that we don't add it twice
+         if self.args.exp_name == 'res':
+             random_actions = random_actions - controller_action
+         # choose whether to take random actions or not
+@@ -353,7 +360,7 @@ class DDPG_Agent:
+ 
+         # actor loss
+         actions_pred = self.actor_network(states)
+-        actor_loss = -self.critic_network(states, actions_pred).mean()
++        actor_loss = -self.critic_network(states, actions_pred).mean()   #the max of q values, the better of actor(policy)
+         actor_loss = actor_loss + self.args.action_l2 * (actions_pred / self.env_params['action_max']).pow(2).mean()
+ 
+         # backpropagate
+@@ -430,6 +437,7 @@ if __name__ == "__main__":
+ 
+     from ddpg_config import args
+     from utils import connected_to_internet, make_env, get_pretty_env_name
++    import pdb
+ 
+     # check whether GPU is available or not
+     use_cuda = torch.cuda.is_available()
+@@ -442,8 +450,8 @@ if __name__ == "__main__":
+     #####################################
+ 
+     env = make_env(args.env_name)   # initialise the environment
+-    # env = gym.make(args.env_name)   # initialise the environment
+-
++    #env = gym.make(args.env_name)   # initialise the environment
++    
+     # set the random seeds for everything
+     # random.seed(args.seed)
+     np.random.seed(args.seed)
+@@ -481,7 +489,7 @@ if __name__ == "__main__":
+         wandb_save_dir = os.path.join(os.path.abspath(os.getcwd()),f"wandb_{pretty_env_name}")
+         if not os.path.exists(wandb_save_dir):
+             os.makedirs(wandb_save_dir)
+-        wandb.init(project='Residual Policy Learning', entity='6-881_project',\
++        wandb.init(project='Residual Policy Learning', entity='turbohiro',\
+                    sync_tensorboard=True, config=vars(args), name=experiment_name,\
+                    save_code=True, dir=wandb_save_dir, group=f"{pretty_env_name}")
+         writer = SummaryWriter(f"{wandb.run.dir}/{experiment_name}")
+diff --git a/RL/ddpg/ddpg_mpi.py b/RL/ddpg/ddpg_mpi.py
+index b8c415b..1fab578 100644
+--- a/RL/ddpg/ddpg_mpi.py
++++ b/RL/ddpg/ddpg_mpi.py
+@@ -557,7 +557,7 @@ if __name__ == "__main__":
+             wandb_save_dir = os.path.join(os.path.abspath(os.getcwd()),f"wandb_{pretty_env_name}")
+             if not os.path.exists(wandb_save_dir):
+                 os.makedirs(wandb_save_dir)
+-            wandb.init(project='Residual Policy Learning', entity='6-881_project',\
++            wandb.init(project='Residual Policy Learning', entity='turbohiro',\
+                        sync_tensorboard=True, config=vars(args), name=experiment_name,\
+                        save_code=True, dir=wandb_save_dir, group=f"{pretty_env_name}")
+             writer = SummaryWriter(f"{wandb.run.dir}/{experiment_name}")
+diff --git a/RL/ddpg/models.py b/RL/ddpg/models.py
+index 78a77c1..350c0e9 100644
+--- a/RL/ddpg/models.py
++++ b/RL/ddpg/models.py
+@@ -39,7 +39,7 @@ class actor(nn.Module):
+                     'goal': obs['desired_goal'].shape[0],
+                     'action': env.action_space.shape[0],
+                     'action_max': env.action_space.high[0],
+-                    'max_timesteps': env._max_episode_steps
++                    'max_timesteps': env._max_episode_steps #fetchGet 50
+                 }
+         """
+     def __init__(self, args:argparse.Namespace, env_params:Dict):
+@@ -67,7 +67,7 @@ class actor(nn.Module):
+         for layer in self.layers:
+             x = self.activation(layer(x))
+         actions = self.max_action * torch.tanh(self.action_out(x))
+-        return actions
++        return actions   #actor: policy function---> predict the next action
+ 
+ class critic(nn.Module):
+     def __init__(self, args:argparse.Namespace, env_params:Dict):
+@@ -110,7 +110,7 @@ class critic(nn.Module):
+         for layer in self.layers:
+             x = self.activation(layer(x))
+         q_value = self.q_out(x)
+-        return q_value
++        return q_value  #critic: Q (action-value) function ---> get the q_values  
+ 
+ # import torch
+ # import torch.nn as nn
+diff --git a/RL/sac/sac.py b/RL/sac/sac.py
+index a35ca78..5b9be7a 100644
+--- a/RL/sac/sac.py
++++ b/RL/sac/sac.py
+@@ -6,6 +6,7 @@ import math
+ import numpy as np
+ import itertools
+ import argparse
++import copy
+ 
+ import torch
+ import torch.nn.functional as F
+@@ -14,6 +15,7 @@ from torch.optim import Adam
+ from sac_config import args
+ from RL.sac.replay_buffer import replay_buffer
+ from RL.sac.models import GaussianActor, DeterministicActor, Critic
++import pdb
+ 
+ 
+ class SAC_Agent:
+@@ -56,7 +58,7 @@ class SAC_Agent:
+         if self.policy_type == "Gaussian":
+             # Target Entropy = −dim(A) (e.g. , -6 for HalfCheetah-v2) as given in the paper
+             if self.automatic_entropy_tuning is True:
+-                self.target_entropy = -torch.prod(torch.Tensor(action_space.shape).to(self.device)).item()
++                self.target_entropy = -torch.prod(torch.Tensor(self.env.action_space.shape).to(self.device)).item()
+                 self.log_alpha = torch.zeros(1, requires_grad=True, device=self.device)
+                 self.alpha_optim = Adam([self.log_alpha], lr=args.lr)
+ 
+@@ -81,6 +83,7 @@ class SAC_Agent:
+         params = {'obs': obs.shape[0],
+                 'action': env.action_space.shape[0],
+                 'action_space': env.action_space,
++                'action_max': env.action_space.high[0],
+                 }
+         try:
+             params['max_timesteps'] = env._max_episode_steps
+@@ -94,6 +97,47 @@ class SAC_Agent:
+         print('_'*50)
+         return params
+ 
++    def set_actor_lr(self, loss:float, prev_loss:float ,verbose:bool=True):
++        """
++            Set the learning rate of the actor network
++            to either the original learning rate
++            or zero depending on the burn-in parameter
++            diff_loss = |loss - prev_loss|
++            if rl:
++                actor_lr = original_actor_lr
++            if residual learning and diff_loss < beta:
++                actor_lr = original_actor_lr
++            elif residual learning and diff_loss > beta:
++                actor_lr = 0
++            Parameters:
++            -----------
++            loss: float
++                Mean of the losses till the current epoch
++            prev_loss: float
++                Mean of losses till the last epoch
++            verbose: bool
++                To print the change in learning rate
++        """
++        lr = self.args.lr
++        coin_flipping = False
++        # loss is zero only in the first epoch hence do not change lr then
++        # and that's why give a large value to diff_loss
++        diff_loss = 100 if loss == 0 else abs(loss - prev_loss)
++        if not self.burn_in_done:
++            if self.args.exp_name == 'res' and diff_loss > self.args.beta:
++                lr = 0.0
++                coin_flipping = True
++            elif self.args.exp_name == 'res' and diff_loss <= self.args.beta:
++                if verbose:
++                    print('_'*80)
++                    print(f'Burn-in of the critic done. Changing actor_lr from 0.0 to {self.args.lr}')
++                    print('_'*80)
++                self.burn_in_done = True
++
++        for param_group in self.actor_optim.param_groups:
++            param_group['lr'] = lr
++        return coin_flipping
++
+     def train(self):
+         print('_'*50)
+         print('Beginning Training')
+@@ -101,24 +145,56 @@ class SAC_Agent:
+         # Training Loop
+         total_numsteps = 0
+         updates = 0
++
++        actor_losses = [0.0]    # to store actor losses for burn-in
++        critic_losses = [0.0]   # to store critic losses for burn-in
++        prev_losses = [0.0]
++        coin_flipping = False   # whether the whole episode should be noise and randomness free
++        deterministic = False   # choose whether we want deterministic or not 
++
+         for i_episode in itertools.count(1):
++
++             # change the actor learning rate from zero to actor_lr by checking burn-in
++            # check config.py for more information on args.beta_monitor
++            if self.args.beta_monitor == 'actor':
++                coin_flipping = self.set_actor_lr(np.mean(actor_losses), np.mean(prev_losses))
++                prev_losses = actor_losses.copy()
++            elif self.args.beta_monitor == 'critic':
++                coin_flipping = self.set_actor_lr(np.mean(critic_losses), np.mean(prev_losses))
++                prev_losses = critic_losses.copy()
++
+             episode_reward = 0
+             episode_steps = 0
+             done = False
+             state = self.env.reset()
+-
+-            while not done:
+-                if self.args.exp_name == 'rl':
+-                    if self.args.start_steps > total_numsteps:
+-                        # TODO add random actions depending on res/rl
+-                        action = self.env.action_space.sample()
+-                else:
+-                    action = self.select_action(state)  # sample action policy
++            next_state = copy.deepcopy(state)
++            random_eps = self.args.random_eps
++            noise_eps  = self.args.noise_eps
++            #if coin_flipping:
++            #        deterministic = np.random.random() < self.args.coin_flipping_prob  # NOTE/TODO change here
++            if coin_flipping:
++                random_eps = 0.0
++                noise_eps = 0.0
++
++            while not done:                
++                if self.args.start_steps > total_numsteps:
++                    pdb.set_trace()                    
++                    if self.args.exp_name == 'res':
++                        controller_action = self.get_controller_actions(state)   
++                        state = torch.FloatTensor(state).to(self.device).unsqueeze(0)
++                        pi, _, _ = self.actor.sample(state)                    
++                        action = self.select_action(pi, noise_eps=noise_eps, random_eps= random_eps, controller_action=controller_action)
++                    else:
++                        state = torch.FloatTensor(state).to(self.device).unsqueeze(0)
++                        pi, _, _ = self.actor.sample(state)
++                        action = self.select_action(pi, noise_eps=noise_eps, random_eps= random_eps, controller_action=None)
+ 
+                 if len(self.buffer) > self.args.batch_size:
+                     # Number of updates per step in environment
+                     for i in range(self.args.updates_per_step):
+                         critic_1_loss, critic_2_loss, actor_loss, ent_loss, alpha = self.update_parameters(self.buffer, self.args.batch_size, updates)
++                        actor_losses.append(actor_loss)
++                        critic_losses.append(critic_1_loss)
+ 
+                         if self.writer:
+                             self.writer.add_scalar('Loss/Critic_1', critic_1_loss, updates)
+@@ -155,9 +231,10 @@ class SAC_Agent:
+                     episode_reward = 0
+                     done = False
+                     while not done:
+-                        action = self.select_action(state, evaluate=True)
++                        state = torch.FloatTensor(state).to(self.device).unsqueeze(0)
++                        pi, _, _ = self.actor.sample(state)  
++                        action = pi.detach().cpu().numpy().squeeze()
+                         next_state, reward, done, info = self.env.step(action)
+-                        # TODO add info success rate metric
+                         episode_reward += reward
+ 
+                         state = next_state
+@@ -174,13 +251,28 @@ class SAC_Agent:
+                 print(f"Reward: {avg_reward:.2}, Success Rate: {avg_success:.3}")
+                 print("_"*50)
+ 
+-    def select_action(self, state, evaluate=False):
+-        # TODO  change here
+-        state = torch.FloatTensor(state).to(self.device).unsqueeze(0)
+-        if evaluate is False:
+-            action, _, _ = self.actor.sample(state)
+-        else:
+-            _, _, action = self.actor.sample(state)
++
++    def get_controller_actions(self, obs:dict):
++        """
++            Return the controller action if residual learning
++        """
++        return self.env.controller_action(obs, take_action=False)   ###!!!!!!!!!!!!!!!!!True/False
++
++    def select_action(self, pi, noise_eps, random_eps, controller_action=None):
++        # transfer action from CUDA to CPU if using GPU and make numpy array out of it
++        action = pi.cpu().numpy().squeeze()
++        action[3:5] = [0,0]
++        action[5] = 0.3*action[5]
++        # random actions
++        random_actions = np.random.uniform(low=-self.env_params['action_max'], high=self.env_params['action_max'], \
++                                            size=self.env_params['action'])
++        random_actions[3:6] = [0,0,0]
++        # if residual learning, subtract the controller action so that we don't add it twice
++        if self.args.exp_name == 'res':
++            random_actions = random_actions - controller_action
++        # choose whether to take random actions or not
++        rand = np.random.binomial(1, random_eps, 1)[0]
++        action += rand * (random_actions - action)  # will be equal to either random_actions or actio
+         return action.detach().cpu().numpy()[0]
+ 
+     def update_parameters(self, memory, batch_size:int, updates:int):
+@@ -323,7 +415,7 @@ if __name__ == "__main__":
+         wandb_save_dir = os.path.join(os.path.abspath(os.getcwd()),f"wandb_{pretty_env_name}")
+         if not os.path.exists(wandb_save_dir):
+             os.makedirs(wandb_save_dir)
+-        wandb.init(project='Residual Policy Learning', entity='6-881_project',\
++        wandb.init(project='Residual Policy Learning', entity='turbohiro',\
+                    sync_tensorboard=True, config=vars(args), name=experiment_name,\
+                    save_code=True, dir=wandb_save_dir, group=f"{pretty_env_name}")
+         writer = SummaryWriter(f"{wandb.run.dir}/{experiment_name}")
+diff --git a/controllers/fetchEnvs/basic_controller.py b/controllers/fetchEnvs/basic_controller.py
+index 179a860..a8fd185 100644
+--- a/controllers/fetchEnvs/basic_controller.py
++++ b/controllers/fetchEnvs/basic_controller.py
+@@ -3,11 +3,13 @@
+     1: pick and place: 'FetchPickAndPlace-v1'
+     2: slide: 'FetchSlide-v1'
+ """
++import pdb
+ import gym
+ import numpy as np
+ import time
+ from tqdm import tqdm
+ from typing import Dict
++from gym.utils import seeding
+ """
+     Observation Dictionary:
+     -----------------------
+@@ -49,23 +51,27 @@ def pick_place_controller(obs:Dict, object_in_hand:bool):
+     height_threshold = 0.003
+     kp = 2
+     action_pos =  list(kp * obs['observation'][6:9])  # vector joining gripper and object 
++    print(obs['observation'][6:9])
+ 
+     if not object_in_hand:
+         # try to hover above the object
+         if np.linalg.norm(action_pos[:2])>dist_threshold:
+-            action = action_pos[:2] + [0,0]
++            action = action_pos[:2] + [0,0]     ##single-step action
+         # once above the object, move down while opening the gripper
+         else:
++            print('the gripper is above the puck and the gripper is opening!!')
+             action = action_pos[:3] + [1]   # open the gripper
+             # if we are close to the object close the gripper
+             if np.linalg.norm(action_pos) < height_threshold:
++                print('the gripper is moving down and the gripper is closing!!')
+                 action = action_pos[:3] + [-1]  # close the gripper
+                 object_in_hand = True
+     # once object is in hand, move towards goal
+     else:
++        print('the gripper is moving the object to the goal position!!')
+         p_rel = obs['desired_goal'] - obs['achieved_goal']
+         action_pos =  list(kp * p_rel)
+-        action = action_pos + [-1]
++        action = action_pos + [-1]  ###single-step action
+     return action, object_in_hand
+ 
+ def imperfect_slide_controller(obs:Dict, hand_higher:bool, hand_above:bool, hand_behind:bool, hand_down:bool):
+@@ -116,7 +122,7 @@ def imperfect_slide_controller(obs:Dict, hand_higher:bool, hand_above:bool, hand
+         goal_object_vec = obs['observation'][3:6] - obs['desired_goal'] # vector pointing towards object from goal
+         action_pos = list(kp*goal_object_vec)
+         action = action_pos + [0]
+-        if np.linalg.norm(obs['observation'][:2]-obs['observation'][3:5]) > 0.1:
++        if np.linalg.norm(obs['observation'][:2]-obs['observation'][3:5]) > 0.05:
+         # if np.linalg.norm(obs['observation'][:3]-obs['observation'][3:6]) > 0.001:
+             hand_behind = True
+             print('Hand Behind')
+@@ -135,23 +141,58 @@ def imperfect_slide_controller(obs:Dict, hand_higher:bool, hand_above:bool, hand
+ 
+     return action, hand_higher, hand_above, hand_behind, hand_down
+ 
++class FetchPickAndPlace(gym.Env):
++    """
++        FetchSlide:
++    """
++    def __init__(self, *args, **kwargs):
++        self.fetch_env = gym.make('FetchPickAndPlace-v1')
++        self.metadata = self.fetch_env.metadata
++        self.max_episode_steps = self.fetch_env._max_episode_steps
++        self.action_space = self.fetch_env.action_space
++        self.observation_space = self.fetch_env.observation_space
++    
++    def step(self, action):
++        observation, reward, done, info = self.fetch_env.step(action)
++        return observation, reward, done, info
++
++    def reset(self):
++        observation = self.fetch_env.reset()
++        self.fetch_env.env.goal = np.array([1,1, 0.41401894])   # change goal location HERE; z=0.414 because it is table surface
++        return observation
+ 
++    def seed(self, seed=0):
++        self.np_random, seed = seeding.np_random(seed)
++        return self.fetch_env.seed(seed=seed)
++
++    def render(self, mode="human", *args, **kwargs):
++        return self.fetch_env.render(mode, *args, **kwargs)
++    
++    def close(self):
++        return self.fetch_env.close()
++    
++    def compute_reward(self, *args, **kwargs):
++        return self.fetch_env.compute_reward(*args, **kwargs)
+ 
+ # time.sleep(5)
+ 
+ if __name__ == "__main__":
+-    env_name = 'FetchPickAndPlace-v1'
+-    env_name = 'FetchSlide-v1'
++    #env_name = 'FetchPickAndPlace-v1'
++    #env_name = 'FetchSlide-v1'
++    env_name = 'FetchPush-v1'
+     env = gym.make(env_name)
++    #env = FetchPickAndPlace()
+     # env = gym.wrappers.Monitor(env,'video/'+env_name, force=True) # can be used to record videos but this does not work properly
+     obs = env.reset()
+ 
++    
+     hand_above = False
+     hand_behind = False
+     hand_higher = False
+     hand_down = False
+     object_in_hand = False
+     action = [0,0,0,0]   # give zero action at first time step
++    pdb.set_trace()
+     # time.sleep(5)
+     for i in tqdm(range(1000)):
+         obs, rew, done, info = env.step(action)
+@@ -159,8 +200,10 @@ if __name__ == "__main__":
+             action, object_in_hand = pick_place_controller(obs, object_in_hand)
+         elif env_name == 'FetchSlide-v1':
+             action, hand_higher, hand_above, hand_behind, hand_down = imperfect_slide_controller(obs, hand_higher, hand_above, hand_behind, hand_down)
+-        env.sim.render(mode='window')
+-        # if info['is_success']:
+-        #     break
++        #env.sim.render(mode='window')
++        env.render(mode='human')
++        time.sleep(0.1)
++        if info['is_success']:
++             break
+ 
+     print('Done')
+diff --git a/controllers/fetchEnvs/pickAndPlaceEnv.py b/controllers/fetchEnvs/pickAndPlaceEnv.py
+index b0a6c9b..4747ca7 100644
+--- a/controllers/fetchEnvs/pickAndPlaceEnv.py
++++ b/controllers/fetchEnvs/pickAndPlaceEnv.py
+@@ -199,7 +199,7 @@ class FetchPickAndPlaceSticky(gym.Env):
+ 
+     def render(self, mode:str="human", *args, **kwargs):
+         return self.fetch_env.render(mode, *args, **kwargs)
+-
++        
+     def close(self):
+         return self.fetch_env.close()
+ 
+diff --git a/controllers/fetchEnvs/pushEnv.py b/controllers/fetchEnvs/pushEnv.py
+index 3978110..82a5faf 100644
+--- a/controllers/fetchEnvs/pushEnv.py
++++ b/controllers/fetchEnvs/pushEnv.py
+@@ -160,14 +160,14 @@ class FetchPushImperfect(gym.Env):
+                     self.hand_down = True
+                 if DEBUG:
+                     print('Ready to HIT')
+-        # now move the hand down
+-        if self.hand_behind and not self.hand_down:
+-            action = [0,0,-1,0]
+-            if grip_pos[2]-object_pos[2]<0.01:
+-                if take_action:
+-                    self.hand_down = True
+-                if DEBUG:
+-                    print('Ready to HIT')
++        # # now move the hand down
++        # if self.hand_behind and not self.hand_down:
++        #     action = [0,0,-1,0]
++        #     if grip_pos[2]-object_pos[2]<0.01:
++        #         if take_action:
++        #             self.hand_down = True
++        #         if DEBUG:
++        #             print('Ready to HIT')
+         # now give impulse
+         if self.hand_down:
+             action_pos = list(self.push * (goal_pos[:2]-grip_pos[:2]))
+@@ -285,14 +285,14 @@ class FetchPushSlippery(gym.Env):
+                     self.hand_down = True
+                 if DEBUG:
+                     print('Ready to HIT')
+-        # now move the hand down
+-        if self.hand_behind and not self.hand_down:
+-            action = [0,0,-1,0]
+-            if grip_pos[2]-object_pos[2]<0.01:
+-                if take_action:
+-                    self.hand_down = True
+-                if DEBUG:
+-                    print('Ready to HIT')
++        # # now move the hand down
++        # if self.hand_behind and not self.hand_down:
++        #     action = [0,0,-1,0]
++        #     if grip_pos[2]-object_pos[2]<0.01:
++        #         if take_action:
++        #             self.hand_down = True
++        #         if DEBUG:
++        #             print('Ready to HIT')
+         # now give impulse
+         if self.hand_down:
+             action_pos = list(self.push * (goal_pos[:2]-grip_pos[:2]))
+diff --git a/controllers/fetchEnvs/slideEnv.py b/controllers/fetchEnvs/slideEnv.py
+index 9bc4d11..ac2dfef 100644
+--- a/controllers/fetchEnvs/slideEnv.py
++++ b/controllers/fetchEnvs/slideEnv.py
+@@ -19,6 +19,7 @@
+         Action taken as:
+             Pi_theta(s) = f(s) + pi_theta(s)
+ """
++from pickle import TRUE
+ import gym
+ from gym.utils import seeding
+ import numpy as np
+@@ -253,7 +254,7 @@ class FetchSlideFrictionControl(gym.Env):
+         # change friction between all possible contacts
+         # NOTE can only change to the last two indices to only change object and table friction
+         # as of now we'll work with the original friction
+-        # for i in range(len(self.fetch_env.env.sim.model.geom_friction)):
++        #for i in range(len(self.fetch_env.env.sim.model.geom_friction)):
+         #     self.fetch_env.env.sim.model.geom_friction[i] = [18e-2, 5.e-3, 1e-4]
+         ###############################################
+ 
+@@ -563,29 +564,57 @@ class FetchSlideSlapControl(gym.Env):
+             action = action_pos[:2] + [0,0]
+             if DEBUG:
+                 print('commanded action = ' + str(np.linalg.norm(action[0:2])))
+-
++        import pdb
++        pdb.set_trace()
+         # added clipping here
+         return np.clip(action, -1, 1)
+ 
++# if __name__ == "__main__":
++#     #env_name = 'FetchSlideSlapControl'
++#     env_name = 'FetchSlideFrictionControl'
++#     #env_name = 'FetchSlideImperfectControl'
++#     env = globals()[env_name]() # this will initialise the class as per the string env_name
++#     #env = gym.wrappers.Monitor(env, 'video/' + env_name, force=True)
++#     successes = []
++#     # set the seeds
++#     env.seed(1)
++#     env.action_space.seed(1)
++#     env.observation_space.seed(1)
++#     for ep in range(10):
++#         success = np.zeros(env.max_episode_steps)
++#         obs = env.reset()
++#         action = [0,0,0,0]  # give zero action at first time step
++#         for i in (range(env.max_episode_steps)):
++#             env.render(mode='human')
++#             obs, rew, done, info = env.step(action)
++#             success[i] = info['is_success']
++#         successes.append(success)
++#     successes = np.array(successes)
++#     env.close()
++
++import tqdm
+ if __name__ == "__main__":
+     env_name = 'FetchSlideSlapControl'
+-    # env_name = 'FetchSlideFrictionControl'
+-    # env_name = 'FetchSlideImperfectControl'
++    #env_name = 'FetchSlideFrictionControl'
++    #env_name = 'FetchSlideImperfectControl'
+     env = globals()[env_name]() # this will initialise the class as per the string env_name
+-    #env = gym.wrappers.Monitor(env, 'video/' + env_name, force=True)
+-    successes = []
+-    # set the seeds
+-    env.seed(1)
+-    env.action_space.seed(1)
+-    env.observation_space.seed(1)
+-    for ep in range(10):
+-        success = np.zeros(env.max_episode_steps)
+-        obs = env.reset()
+-        action = [0,0,0,0]  # give zero action at first time step
+-        for i in (range(env.max_episode_steps)):
+-            env.render(mode='human')
+-            obs, rew, done, info = env.step(action)
+-            success[i] = info['is_success']
+-        successes.append(success)
+-    successes = np.array(successes)
+-    env.close()
++    # env = gym.wrappers.Monitor(env,'video/'+env_name, force=True) # can be used to record videos but this does not work properly
++    obs = env.reset()
++
++    
++    hand_above = False
++    hand_behind = False
++    hand_higher = False
++    hand_down = False
++    object_in_hand = False
++    action = [0,0,0,0]   # give zero action at first time step
++    # time.sleep(5)
++    for i in range(300):
++        obs, rew, done, info = env.step(action)
++        #env.sim.render(mode='window')
++        env.render(mode='human')
++        #time.sleep(0.1)
++        if info['is_success']:
++             break
++
++    print('Done')
+diff --git a/controllers/robosuite/robosuiteDoorOpening.py b/controllers/robosuite/robosuiteDoorOpening.py
+index 72fd900..7f16a3c 100644
+--- a/controllers/robosuite/robosuiteDoorOpening.py
++++ b/controllers/robosuite/robosuiteDoorOpening.py
+@@ -74,9 +74,9 @@ for i_episode in range(2):
+         # Temporarily set action to all 0s in lieu of a real controller currently
+         action = [0,0,0,0]
+         observation, reward, done, info = env.step(action)
+-        if t % skip_frame == 0:
+-            frame = observation[cameraName + "_image"][::-1]
+-            writer.append_data(frame)
++        #if t % skip_frame == 0:
++        #    frame = observation[cameraName + "_image"][::-1]
++        #    writer.append_data(frame)
+ 
+         if reward == 1:
+             print("Episode finished after {} timesteps".format(t + 1))
+diff --git a/controllers/robosuite/robosuiteNutAssemblyDenseEnv.py b/controllers/robosuite/robosuiteNutAssemblyDenseEnv.py
+deleted file mode 100644
+index 364099b..0000000
+--- a/controllers/robosuite/robosuiteNutAssemblyDenseEnv.py
++++ /dev/null
+@@ -1,312 +0,0 @@
+-"""
+-    Robosuite environment for the nut assembly task with a controller
+-    This is the same as robosuiteNutAssembly but with a dense reward structure
+-"""
+-import gym
+-from gym.utils import seeding
+-import numpy as np
+-from typing import Dict
+-import os
+-
+-# Additional libraries needed for robosuite
+-import robosuite as suite
+-from robosuite.wrappers import GymWrapper
+-from robosuite.controllers import load_controller_config
+-
+-import robosuite.utils.transform_utils as T
+-
+-import platform
+-
+-from math import pi
+-
+-# for OpenMP error on MacOS with dylib files
+-# check https://stackoverflow.com/questions/53014306/error-15-initializing-libiomp5-dylib-but-found-libiomp5-dylib-already-initial
+-if 'Darwin' in platform.platform():
+-    os.environ['KMP_DUPLICATE_LIB_OK']='True'
+-
+-class NutAssemblyDense(gym.Env):
+-    """
+-        NutAssembly:
+-        NutAssembly task from robosuite with no controller. Can be used for learning from scratch.
+-    """
+-    def __init__(self, horizon=500, *args, **kwargs):
+-        options = {}
+-        controller_name = 'OSC_POSE'
+-        options["controller_configs"] = suite.load_controller_config(default_controller=controller_name)
+-        
+-        self.env = GymWrapper(
+-            suite.make(
+-                "NutAssemblyRound",             # Nut Assembly task with the round peg
+-                robots="IIWA",                  # use IIWA robot
+-                **options,                      # controller options
+-                use_object_obs = True,
+-                use_camera_obs=False,           # do not use pixel observations
+-                has_offscreen_renderer=False,   # not needed since not using pixel obs
+-                has_renderer=False,              # make sure we can render to the screen
+-                reward_shaping=True,            # use dense rewards
+-                reward_scale=1.0,
+-                control_freq=20,                # control should happen fast enough so that simulation looks smooth
+-                horizon=horizon,                # number of timesteps for ending episode
+-            )
+-        )
+-        self.max_episode_steps = horizon
+-        self.action_space = self.env.action_space
+-        self.observation_space = self.env.observation_space
+-        self.reward_type = 'sparse'
+-        self.distance_threshold = 0.065
+-
+-    def step(self, action):
+-        ob, reward, done, info = self.env.step(action)
+-        ob = self.env.env._get_observation()
+-        peg_pos = np.array(self.env.sim.data.body_xpos[self.env.peg2_body_id])
+-        observation = np.hstack((ob['robot0_eef_pos'], ob['robot0_eef_quat'], ob['RoundNut0_pos'], ob['RoundNut0_quat'], peg_pos))
+-        # info['is_success'] = self.get_success(ob['RoundNut0_pos'], peg_pos)
+-        info['is_success'] = self.env.env._check_success()
+-        return observation, reward, done, info
+-
+-    def reset(self):
+-        ob = self.env.reset()
+-        ob = self.env.env._get_observation()
+-        peg_pos = np.array(self.env.sim.data.body_xpos[self.env.peg2_body_id])
+-        observation = np.hstack((ob['robot0_eef_pos'], ob['robot0_eef_quat'], ob['RoundNut0_pos'], ob['RoundNut0_quat'], peg_pos))
+-        return observation
+-
+-    def seed(self, seed=0):
+-        self.np_random, seed = seeding.np_random(seed)
+-        return self.env.seed(seed=seed)
+-
+-    def render(self, mode="human", *args, **kwargs):
+-        return self.env.render()
+-
+-    def close(self):
+-        return self.env.close()
+-
+-    def goal_distance(self, achieved_goal,desired_goal):
+-        return np.linalg.norm(achieved_goal-desired_goal)
+-    
+-    def get_success(self, object_pos, goal):
+-        # Compute distance between goal and the achieved goal.
+-        d = self.goal_distance(object_pos, goal)
+-        return (d < self.distance_threshold).astype(np.float32)
+-
+-
+-class NutAssemblyDenseHand(gym.Env):
+-    """
+-        TODO: change obs and reward setting
+-        NutAssemblyHand:
+-            'FetchPickAndPlace-v1' with a perfect controller
+-            Action taken as:
+-                pi_theta(s) = pi(s) + f_theta(s)
+-        Parameters:
+-        -----------
+-        kp: float
+-            Scaling factor for position control
+-    """
+-    def __init__(self, kp:float=20, *args, **kwargs):
+-        options = {}
+-        controller_name = 'OSC_POSE'
+-        options["controller_configs"] = suite.load_controller_config(default_controller=controller_name)
+-
+-        self.env = GymWrapper(
+-            suite.make(
+-                "NutAssemblyRound",             # Nut Assembly task with the round peg
+-                robots="IIWA",                  # use IIWA robot
+-                **options,                      # controller options
+-                use_object_obs = True,
+-                use_camera_obs=False,           # do not use pixel observations
+-                has_offscreen_renderer=False,   # not needed since not using pixel obs
+-                has_renderer=False,              # make sure we can render to the screen
+-                reward_shaping=False,            # use dense rewards
+-                control_freq=20,                # control should happen fast enough so that simulation looks smooth
+-            )
+-        )
+-
+-        self.max_episode_steps = 500
+-        self.action_space = self.env.action_space
+-        self.observation_space = self.env.observation_space
+-        self.reward_type = 'sparse'
+-        self.distance_threshold = 0.065
+-
+-    def step(self, residual_action:np.ndarray):
+-        controller_action = np.array(self.controller_action(self.last_observation))
+-        if (controller_action>1).any() or (controller_action<-1).any():
+-            print(controller_action)
+-        action = np.add(controller_action, residual_action)
+-        action = np.clip(action, -1, 1)
+-        ob, reward, done, info = self.env.step(action)
+-        ob = self.env.env._get_observation()
+-        observation = {}
+-        observation['observation'] = np.hstack((ob['robot0_eef_pos'], ob['robot0_eef_quat'], ob['RoundNut0_pos'], ob['RoundNut0_quat']))
+-        observation['desired_goal'] = np.array(self.env.sim.data.body_xpos[self.env.peg2_body_id])
+-        observation['achieved_goal'] = ob['RoundNut0_pos']
+-        self.last_observation = observation.copy()
+-        info['is_success'] = reward
+-        return observation, reward, done, info
+-
+-    def reset(self):
+-        self.env.reset() # reset according to task defaults
+-        ob = self.env.env._get_observation()
+-        observation = {}
+-        observation['observation'] = np.hstack((ob['robot0_eef_pos'], ob['robot0_eef_quat'], ob['RoundNut0_pos'], ob['RoundNut0_quat']))
+-        observation['desired_goal'] = np.array(self.env.sim.data.body_xpos[self.env.peg2_body_id])
+-        observation['achieved_goal'] = ob['RoundNut0_pos']
+-        self.last_observation = observation.copy()
+-        self.object_in_hand = False
+-        self.object_below_hand = False
+-        self.gripper_reoriented = 0
+-        return observation
+-
+-    def seed(self, seed:int=0):
+-        self.np_random, seed = seeding.np_random(seed)
+-        return self.env.seed(seed=seed)
+-
+-    def render(self, mode:str="human", *args, **kwargs):
+-        return self.env.render()
+-
+-    def close(self):
+-        return self.env.close()
+-
+-    def goal_distance(self, achieved_goal, desired_goal):
+-        return np.linalg.norm(achieved_goal-desired_goal, axis = 1)
+-
+-    def compute_reward(self, achieved_goal, goal, info):
+-        # Compute distance between goal and the achieved goal.
+-        d = self.goal_distance(achieved_goal, goal)
+-        if self.reward_type == 'sparse':
+-            return -(d > self.distance_threshold).astype(np.float32)
+-        else:
+-            return -d
+-
+-    def controller_action(self, obs:dict, take_action:bool=True, DEBUG:bool=False):
+-        observation = obs['observation']
+-        goal_pos = obs['desired_goal']
+-        achieved_goal = obs['achieved_goal']
+-
+-        gripper_pos = observation[:3]
+-        gripper_quat = observation[3:7]
+-        object_pos  = observation[7:10]
+-        object_quat = observation[10:]
+-
+-        z_table = 0.8610982
+-
+-        object_axang = T.quat2axisangle(object_quat)
+-        if abs(object_axang[-1] - 1.24) < 0.2:
+-            object_axang_touse = [0,0,object_axang[-1]%(2*pi/8) + (2*pi/8)]
+-        else:
+-            object_axang_touse = [0,0,object_axang[-1]%(2*pi/8)]
+-        gripper_axang = T.quat2axisangle(gripper_quat)
+-        # print('object axang to use ' + str(object_axang_touse))
+-
+-        if self.gripper_reoriented ==0:
+-            self.gripper_init_quat = gripper_quat
+-            self.gripper_reoriented = 1
+-
+-        init_inv = T.quat_inverse(self.gripper_init_quat)
+-        changing_wf = T.quat_multiply(init_inv,gripper_quat)
+-        changing_wf_axang = T.quat2axisangle(changing_wf)
+-
+-        # gripper_quat_inv = T.quat_inverse(gripper_quat)
+-        # changing_wf = T.quat_multiply(gripper_quat_inv,self.gripper_init_quat)
+-        # changing_wf_axang = T.quat2axisangle(changing_wf)
+-
+-        # print('changing wf axis ' +str(changing_wf_axang))
+-
+-        if not self.object_below_hand or self.gripper_reoriented < 5:
+-            self.nut_p = T.quat2axisangle(object_quat)[-1]
+-            # print(self.nut_p)
+-            if not self.object_below_hand:
+-                action = 20 * (object_pos[:2] - gripper_pos[:2])
+-            else:
+-                action = [0,0]
+-
+-            action = 20 * (object_pos[:2] - gripper_pos[:2])
+-
+-            # frac = 0.2 # Rate @ which to rotate gripper about z.
+-            # ang_goal = frac*self.nut_p # Nut p is the nut's random intial pertubation about z.
+-            
+-            # if self.gripper_reoriented == 0:
+-            #     self.gripper_init_quat = gripper_quat
+-            # if self.gripper_reoriented < 5: # Gripper should be aligned with nut after 5 action steps
+-            #     action_angle= [0,0,ang_goal]
+-
+-            #     #print('object ' + str(object_axang))
+-            #     #print('gripper ' + str(gripper_axang))
+-
+-            #     init_inv = T.quat_inverse(self.gripper_init_quat)
+-            #     init_inv_mat = T.quat2mat(init_inv)
+-
+-            #     rel = T.quat_multiply(gripper_quat,init_inv)
+-            #     rel_axang = T.quat2axisangle(rel)
+-            #     #print('rel_axang ' +str(rel_axang))
+-
+-            #     rel_axang_WF = np.matmul(init_inv_mat,rel_axang)
+-
+-            #     #print('rel_axang_WF ' +str(rel_axang_WF))
+-
+-            #     if take_action:
+-            #         self.gripper_reoriented+=1
+-            # else: # After 5 action steps, don't rotate gripper any more
+-            #     action_angle=[0,0,0]
+-
+-            action_angle = 0.2*(object_axang_touse - changing_wf_axang)
+-            action_angle = [0,0,action_angle[-1]]
+-            #action_angle = [0,0,0]
+-            #print('action angle ' +str(action_angle))
+-
+-            if np.linalg.norm(object_axang_touse - changing_wf_axang) <0.1:
+-                if take_action:
+-                    self.gripper_reoriented = 5
+-
+-            action = np.hstack((action, [0], action_angle, [-1]))
+-            if np.linalg.norm((object_pos[:2] - gripper_pos[:2])) < 0.01:
+-                if take_action:
+-                    self.object_below_hand = True
+-                    #self.gripper_reoriented = 5
+-
+-        elif not self.object_in_hand: # Close gripper
+-            action = [0,0,-1,0,0,0,-1]
+-            if np.linalg.norm((object_pos[2] - gripper_pos[2])) < 0.01:
+-                action = [0,0,0,0,0,0,1]
+-                if take_action:
+-                    self.object_in_hand = True
+-        
+-        else: # Move gripper up and toward goal position
+-            action = [0,0,1,0,0,0,1]
+-            if object_pos[2] - z_table > 0.1:
+-                action = 20 * (goal_pos[:2] - object_pos[:2])
+-                action = np.hstack((action,[0,0,0,0,1]))
+-                if np.linalg.norm((goal_pos[:2] - object_pos[:2])) < 0.0225:
+-                    action = [0,0,0,0,0,0,-1] # Drop nut once it's close enough to the peg
+-
+-        action = np.clip(action, -1, 1)
+-        return action
+-
+-if __name__ == "__main__":
+-    env_name = 'NutAssemblyDenseHand'
+-    env = globals()[env_name]() # this will initialise the class as per the string env_name
+-    # env = gym.wrappers.Monitor(env, 'video/' + env_name, force=True)
+-    successes = []
+-    # set the seeds
+-    env.seed(1)
+-    env.action_space.seed(1)
+-    env.observation_space.seed(1)
+-    failed_eps = []
+-    for ep in range(10):
+-        success = np.zeros(env.max_episode_steps)
+-        # print('_'*50)
+-        obs = env.reset()
+-        # print(obs.keys())
+-        action = [0,0,0,0,0,0,0]  # give zero action at first time step
+-        for i in (range(env.max_episode_steps)):
+-            # env.render()
+-            obs, rew, done, info = env.step(action)
+-            success[i] = info['is_success']
+-        ep_success = info['is_success']
+-        if not ep_success:
+-            failed_eps.append(ep)
+-        successes.append(ep_success)
+-        print('this is successes ' + str(successes))
+-        # print(f'Episode:{ep} Success:{success}')
+-    print(f'Success Rate:{sum(successes)/len(successes)}')
+-    print(f'Failed Episodes:{failed_eps}')
+-    env.close()
+diff --git a/controllers/robosuite/robosuiteNutAssemblyEnv.py b/controllers/robosuite/robosuiteNutAssemblyEnv.py
+index b87b7c4..b8b121f 100644
+--- a/controllers/robosuite/robosuiteNutAssemblyEnv.py
++++ b/controllers/robosuite/robosuiteNutAssemblyEnv.py
+@@ -42,8 +42,8 @@ class NutAssembly(gym.Env):
+                 use_object_obs = True,
+                 use_camera_obs=False,           # do not use pixel observations
+                 has_offscreen_renderer=False,   # not needed since not using pixel obs
+-                has_renderer=False,              # make sure we can render to the screen
+-                reward_shaping=False,            # use dense rewards
++                has_renderer=True,              # make sure we can render to the screen
++                reward_shaping=False,            # use sparse rewards
+                 control_freq=20,                # control should happen fast enough so that simulation looks smooth
+             )
+         )
+@@ -55,21 +55,21 @@ class NutAssembly(gym.Env):
+ 
+     def step(self, action):
+         ob, reward, done, info = self.env.step(action)
+-        ob = self.env.env._get_observation()
++        ob = self.env.observation_spec()
+         observation = {}
+-        observation['observation'] = np.hstack((ob['robot0_eef_pos'], ob['robot0_eef_quat'], ob['RoundNut0_pos'], ob['RoundNut0_quat']))
++        observation['observation'] = np.hstack((ob['robot0_eef_pos'], ob['robot0_eef_quat'], ob['RoundNut_pos'], ob['RoundNut_quat']))
+         observation['desired_goal'] = np.array(self.env.sim.data.body_xpos[self.env.peg2_body_id])
+-        observation['achieved_goal'] = ob['RoundNut0_pos']
++        observation['achieved_goal'] = ob['RoundNut_pos']
+         info['is_success'] = reward
+         return observation, reward, done, info
+ 
+     def reset(self):
+         ob = self.env.reset()
+-        ob = self.env.env._get_observation()
++        ob = self.env.observation_spec()
+         observation = {}
+-        observation['observation'] = np.hstack((ob['robot0_eef_pos'], ob['robot0_eef_quat'], ob['RoundNut0_pos'], ob['RoundNut0_quat']))
++        observation['observation'] = np.hstack((ob['robot0_eef_pos'], ob['robot0_eef_quat'], ob['RoundNut_pos'], ob['RoundNut_quat']))
+         observation['desired_goal'] = np.array(self.env.sim.data.body_xpos[self.env.peg2_body_id])
+-        observation['achieved_goal'] = ob['RoundNut0_pos']
++        observation['achieved_goal'] = ob['RoundNut_pos']
+         return observation
+ 
+     def seed(self, seed=0):
+@@ -119,7 +119,7 @@ class NutAssemblyHand(gym.Env):
+                 use_camera_obs=False,           # do not use pixel observations
+                 has_offscreen_renderer=False,   # not needed since not using pixel obs
+                 has_renderer=False,              # make sure we can render to the screen
+-                reward_shaping=False,            # use dense rewards
++                reward_shaping=False,            # use sparse rewards
+                 control_freq=20,                # control should happen fast enough so that simulation looks smooth
+             )
+         )
+@@ -127,6 +127,8 @@ class NutAssemblyHand(gym.Env):
+         self.max_episode_steps = 500
+         self.action_space = self.env.action_space
+         self.observation_space = self.env.observation_space
++        self.active_observables = self.env.active_observables
++        self.modalities = self.env.observation_modalities
+         self.reward_type = 'sparse'
+         self.distance_threshold = 0.065
+ 
+@@ -137,34 +139,35 @@ class NutAssemblyHand(gym.Env):
+         action = np.add(controller_action, residual_action)
+         action = np.clip(action, -1, 1)
+         ob, reward, done, info = self.env.step(action)
+-        ob = self.env.env._get_observation()
++        ob = self.env.observation_spec()
+         observation = {}
+-        observation['observation'] = np.hstack((ob['robot0_eef_pos'], ob['robot0_eef_quat'], ob['RoundNut0_pos'], ob['RoundNut0_quat']))
++        observation['observation'] = np.hstack((ob['robot0_eef_pos'], ob['robot0_eef_quat'], ob['RoundNut_pos'], ob['RoundNut_quat']))
+         observation['desired_goal'] = np.array(self.env.sim.data.body_xpos[self.env.peg2_body_id])
+-        observation['achieved_goal'] = ob['RoundNut0_pos']
++        observation['achieved_goal'] = ob['RoundNut_pos']
+         self.last_observation = observation.copy()
+         info['is_success'] = reward
+         return observation, reward, done, info
+ 
+     def reset(self):
+         self.env.reset() # reset according to task defaults
+-        ob = self.env.env._get_observation()
++        ob = self.env.observation_spec()
+         observation = {}
+-        observation['observation'] = np.hstack((ob['robot0_eef_pos'], ob['robot0_eef_quat'], ob['RoundNut0_pos'], ob['RoundNut0_quat']))
++        observation['observation'] = np.hstack((ob['robot0_eef_pos'], ob['robot0_eef_quat'], ob['RoundNut_pos'], ob['RoundNut_quat']))
+         observation['desired_goal'] = np.array(self.env.sim.data.body_xpos[self.env.peg2_body_id])
+-        observation['achieved_goal'] = ob['RoundNut0_pos']
++        observation['achieved_goal'] = ob['RoundNut_pos']
+         self.last_observation = observation.copy()
+         self.object_in_hand = False
+         self.object_below_hand = False
+         self.gripper_reoriented = 0
++        self.ori_adjust_num = 0
+         return observation
+ 
+     def seed(self, seed:int=0):
+         self.np_random, seed = seeding.np_random(seed)
+         return self.env.seed(seed=seed)
+ 
+-    def render(self, mode:str="human", *args, **kwargs):
+-        return self.env.render()
++    def render(self, mode:str="human",**kwargs):
++        return self.env.render(**kwargs)
+ 
+     def close(self):
+         return self.env.close()
+@@ -191,13 +194,16 @@ class NutAssemblyHand(gym.Env):
+         object_quat = observation[10:]
+ 
+         z_table = 0.8610982     # the z-coordinate of the table surface
+-
++        
+         object_axang = T.quat2axisangle(object_quat)
+-        if abs(object_axang[-1] - 1.24) < 0.2:
+-            object_axang_touse = [0,0,object_axang[-1]%(2*pi/8) + (2*pi/8)]
+-        else:
+-            object_axang_touse = [0,0,object_axang[-1]%(2*pi/8)]
++        #print('&&&&&&&&&&',object_axang[-1])
++        #if abs(object_axang[-1] - 1.24) < 0.2:
++        #    object_axang_touse = [0,0,object_axang[-1]%(2*pi/8) + (2*pi/8)]
++        #else:
++        #    object_axang_touse = [0,0,object_axang[-1]%(2*pi/8)]
++        object_axang_touse = [0,0,object_axang[-1]]
+         gripper_axang = T.quat2axisangle(gripper_quat)
++        #print('!!!!!!',gripper_axang[-1])
+ 
+         if self.gripper_reoriented == 0:
+             self.gripper_init_quat = gripper_quat
+@@ -206,10 +212,12 @@ class NutAssemblyHand(gym.Env):
+         init_inv = T.quat_inverse(self.gripper_init_quat)
+         changing_wf = T.quat_multiply(init_inv,gripper_quat)
+         changing_wf_axang = T.quat2axisangle(changing_wf)
+-
++        #print('!!!!!!&&&',changing_wf_axang[-1])
++        
+         # reorient the gripper to match the nut faces and move above the nut
+         if not self.object_below_hand or self.gripper_reoriented < 5:
+             self.nut_p = T.quat2axisangle(object_quat)[-1]
++            self.gripper_p = T.quat2axisangle(gripper_quat)[-1]
+             if not self.object_below_hand:
+                 action = 20 * (object_pos[:2] - gripper_pos[:2])
+             else:
+@@ -219,15 +227,192 @@ class NutAssemblyHand(gym.Env):
+ 
+             action_angle = 0.2*(object_axang_touse - changing_wf_axang)
+             action_angle = [0,0,action_angle[-1]]
+-
+-            if np.linalg.norm(object_axang_touse - changing_wf_axang) <0.1:
++            
++            #print('!!!!!!&&&',action_angle[-1],self.gripper_p,self.nut_p)
++            if np.linalg.norm(object_axang_touse - changing_wf_axang) <0.1 or self.ori_adjust_num>8:
+                 if take_action:
+                     self.gripper_reoriented = 5
++                    #print('successful action angle is:',action_angle)
++                    
++            #action_angle =[0, 0, 0]
++            self.ori_adjust_num +=1
++            #print(self.ori_adjust_num)
++            action = np.hstack((action, [0], action_angle, [-1]))
++            if np.linalg.norm((object_pos[:2] - gripper_pos[:2])) < 0.01:
++                if take_action:
++                    self.object_below_hand = True
++                    #self.gripper_reoriented = 5
++        # close the gripper and pick the nut
++        elif not self.object_in_hand: # Close gripper
++            action = [0,0,-1,0,0,0,-1]
++            if np.linalg.norm((object_pos[2] - gripper_pos[2])) < 0.01:
++                action = [0,0,0,0,0,0,1]
++                if take_action:
++                    self.object_in_hand = True
++        
++        else: # Move gripper up and toward goal position
++            action = [0,0,1,0,0,0,1]
++            if object_pos[2] - z_table > 0.1:
++                action = 20 * (goal_pos[:2] - object_pos[:2])
++                action = np.hstack((action,[0,0,0,0,1]))
++                if np.linalg.norm((goal_pos[:2] - object_pos[:2])) < 0.0225:
++                    action = [0,0,0,0,0,0,-1] # Drop nut once it's close enough to the peg
++
++        action = np.clip(action, -1, 1)
++        return action
++
++class NutAssemblyHandSticky(gym.Env):
++    """
++        NutAssemblyHand:
++            'NutAssemblyHand' with an imperfect controller
++            Pose control for controller mode in robosuite
++            Action taken as:
++                Pi_theta(s) = pi_theta(s) + f(s)
++        Parameters:
++        -----------
++        kp: float
++            Scaling factor for position control
++    """
++    def __init__(self, kp:float=20, *args, **kwargs):
++        options = {}
++        controller_name = 'OSC_POSE'
++        options["controller_configs"] = suite.load_controller_config(default_controller=controller_name)
++
++        self.env = GymWrapper(
++            suite.make(
++                "NutAssemblyRound",             # Nut Assembly task with the round peg
++                robots="IIWA",                  # use IIWA robot
++                **options,                      # controller options
++                use_object_obs = True,
++                use_camera_obs=False,           # do not use pixel observations
++                has_offscreen_renderer=False,   # not needed since not using pixel obs
++                has_renderer=True,              # make sure we can render to the screen
++                reward_shaping=False,            # use sparse rewards
++                control_freq=20,                # control should happen fast enough so that simulation looks smooth
++            )
++        )
++
++        self.max_episode_steps = 500
++        self.action_space = self.env.action_space
++        self.observation_space = self.env.observation_space
++        self.active_observables = self.env.active_observables
++        self.modalities = self.env.observation_modalities
++        self.reward_type = 'sparse'
++        self.distance_threshold = 0.065
++        self.sticky_prob = 0.5
++
++    def step(self, residual_action:np.ndarray):
++        controller_action = np.array(self.controller_action(self.last_observation))
++        if (controller_action>1).any() or (controller_action<-1).any():
++            print(controller_action)
++        action = np.add(controller_action, residual_action)
++        action = np.clip(action, -1, 1)
++        ob, reward, done, info = self.env.step(action)
++        ob = self.env.observation_spec()
++        observation = {}
++        observation['observation'] = np.hstack((ob['robot0_eef_pos'], ob['robot0_eef_quat'], ob['RoundNut_pos'], ob['RoundNut_quat']))
++        observation['desired_goal'] = np.array(self.env.sim.data.body_xpos[self.env.peg2_body_id])
++        observation['achieved_goal'] = ob['RoundNut_pos']
++        self.last_observation = observation.copy()
++        info['is_success'] = reward
++        return observation, reward, done, info
++
++    def reset(self):
++        self.env.reset() # reset according to task defaults
++        ob = self.env.observation_spec()
++        observation = {}
++        observation['observation'] = np.hstack((ob['robot0_eef_pos'], ob['robot0_eef_quat'], ob['RoundNut_pos'], ob['RoundNut_quat']))
++        observation['desired_goal'] = np.array(self.env.sim.data.body_xpos[self.env.peg2_body_id])
++        observation['achieved_goal'] = ob['RoundNut_pos']
++        self.last_observation = observation.copy()
++        self.object_in_hand = False
++        self.object_below_hand = False
++        self.gripper_reoriented = 0
++        self.ori_adjust_num = 0
++        self.prev_action = [0,0,0,0,0,0,0]
++       
++        return observation
++
++    def seed(self, seed:int=0):
++        self.np_random, seed = seeding.np_random(seed)
++        return self.env.seed(seed=seed)
++
++    def render(self, mode:str="human",**kwargs):
++        return self.env.render(**kwargs)
++
++    def close(self):
++        return self.env.close()
++
++    def goal_distance(self, achieved_goal, desired_goal):
++        return np.linalg.norm(achieved_goal-desired_goal, axis = 1)
++
++    def compute_reward(self, achieved_goal, goal, info):
++        # Compute distance between goal and the achieved goal.
++        d = self.goal_distance(achieved_goal, goal)
++        if self.reward_type == 'sparse':
++            return -(d > self.distance_threshold).astype(np.float32)
++        else:
++            return -d
++
++    def controller_action(self, obs:dict, take_action:bool=True, DEBUG:bool=False):
++        observation = obs['observation']
++        goal_pos = obs['desired_goal']
++        achieved_goal = obs['achieved_goal']
+ 
++        gripper_pos = observation[:3]
++        gripper_quat = observation[3:7]
++        object_pos  = observation[7:10]
++        object_quat = observation[10:]
++
++        z_table = 0.8610982     # the z-coordinate of the table surface
++        
++        object_axang = T.quat2axisangle(object_quat)
++        #print('&&&&&&&&&&',object_axang[-1])
++        #if abs(object_axang[-1] - 1.24) < 0.2:
++        #    object_axang_touse = [0,0,object_axang[-1]%(2*pi/8) + (2*pi/8)]
++        #else:
++        #    object_axang_touse = [0,0,object_axang[-1]%(2*pi/8)]
++        object_axang_touse = [0,0,object_axang[-1]]
++        gripper_axang = T.quat2axisangle(gripper_quat)
++        #print('!!!!!!',gripper_axang[-1])
++
++        if self.gripper_reoriented == 0:
++            self.gripper_init_quat = gripper_quat
++            self.gripper_reoriented = 1
++
++        init_inv = T.quat_inverse(self.gripper_init_quat)
++        changing_wf = T.quat_multiply(init_inv,gripper_quat)
++        changing_wf_axang = T.quat2axisangle(changing_wf)
++        #print('!!!!!!&&&',changing_wf_axang[-1])
++        
++        # reorient the gripper to match the nut faces and move above the nut
++        if not self.object_below_hand or self.gripper_reoriented < 5:
++            self.nut_p = T.quat2axisangle(object_quat)[-1]
++            self.gripper_p = T.quat2axisangle(gripper_quat)[-1]
++            if not self.object_below_hand:
++                action = 20 * (object_pos[:2] - gripper_pos[:2])
++            else:
++                action = [0,0]
++
++            action = 20 * (object_pos[:2] - gripper_pos[:2])
++
++            action_angle = 0.2*(object_axang_touse - changing_wf_axang)
++            action_angle = [0,0,action_angle[-1]]
++            
++            #print('!!!!!!&&&',action_angle[-1],self.gripper_p,self.nut_p)
++            if np.linalg.norm(object_axang_touse - changing_wf_axang) <0.1 or self.ori_adjust_num>8:
++                if take_action:
++                    self.gripper_reoriented = 5
++                    #print('successful action angle is:',action_angle)
++                    
++            #action_angle =[0, 0, 0]
++            self.ori_adjust_num +=1
++            #print(self.ori_adjust_num)
+             action = np.hstack((action, [0], action_angle, [-1]))
+             if np.linalg.norm((object_pos[:2] - gripper_pos[:2])) < 0.01:
+                 if take_action:
+                     self.object_below_hand = True
++                    #self.gripper_reoriented = 5
+         # close the gripper and pick the nut
+         elif not self.object_in_hand: # Close gripper
+             action = [0,0,-1,0,0,0,-1]
+@@ -244,28 +429,41 @@ class NutAssemblyHand(gym.Env):
+                 if np.linalg.norm((goal_pos[:2] - object_pos[:2])) < 0.0225:
+                     action = [0,0,0,0,0,0,-1] # Drop nut once it's close enough to the peg
+ 
++        if np.random.random() < self.sticky_prob:
++            action = np.array(self.prev_action)
++        else:
++            self.prev_action = action
++        
+         action = np.clip(action, -1, 1)
+         return action
+ 
++
++import pdb
+ if __name__ == "__main__":
+-    env_name = 'NutAssemblyHand'
++    env_name = 'NutAssembly'
+     env = globals()[env_name]() # this will initialise the class as per the string env_name
+-    # env = gym.wrappers.Monitor(env, 'video/' + env_name, force=True)
++    #env = gym.wrappers.Monitor(env, 'video/' + env_name, force=True)
+     successes = []
+     # set the seeds
+     env.seed(1)
+     env.action_space.seed(1)
+     env.observation_space.seed(1)
+     failed_eps = []
+-    for ep in range(10):
++    
++    for ep in range(20):
+         success = np.zeros(env.max_episode_steps)
+         # print('_'*50)
+         obs = env.reset()
++        # import pdb
++        # pdb.set_trace()
+         # print(obs.keys())
+         action = [0,0,0,0,0,0,0]  # give zero action at first time step
+         for i in (range(env.max_episode_steps)):
+-            # env.render()
++            
++            env.render()
++            pdb.set_trace()
+             obs, rew, done, info = env.step(action)
++        
+             success[i] = info['is_success']
+         ep_success = info['is_success']
+         if not ep_success:
+@@ -276,3 +474,4 @@ if __name__ == "__main__":
+     print(f'Success Rate:{sum(successes)/len(successes)}')
+     print(f'Failed Episodes:{failed_eps}')
+     env.close()
++
+diff --git a/controllers/robosuite/robosuitePickAndPlace.py b/controllers/robosuite/robosuitePickAndPlace.py
+index aeab89f..68438cc 100644
+--- a/controllers/robosuite/robosuitePickAndPlace.py
++++ b/controllers/robosuite/robosuitePickAndPlace.py
+@@ -39,7 +39,7 @@ def controller(obs:dict, object_in_hand:bool=False):
+     try:
+         object_pos  = obs['Can0_pos']
+     except:
+-        object_pos  = obs['Milk0_pos']
++        object_pos  = obs['Milk_pos']
+     z_table = 0.86109826
+     # print(object_pos)
+     if not object_in_hand:
+@@ -61,12 +61,14 @@ def controller(obs:dict, object_in_hand:bool=False):
+ 
+ for i_episode in range(20):
+     observation = env.reset()
++    # import pdb
++    # pdb.set_trace()
+     object_in_hand = False
+-    goal_pos = np.array(env.env.bin2_pos) - np.array(env.env.bin_size)/4    # robosuite doesn't have a goal definition in observation
++    goal_pos = np.array(env.bin2_pos) - np.array(env.bin_size)/4    # robosuite doesn't have a goal definition in observation
+     for t in range(500):
+         env.render()
+         # action = env.action_space.sample()
+-        action, object_in_hand = controller(env.env._get_observation(), object_in_hand)
++        action, object_in_hand = controller(env.observation_spec(), object_in_hand)
+         observation, reward, done, info = env.step(action)
+         if reward == 1:
+             print("Episode finished after {} timesteps".format(t + 1))
+diff --git a/ddpg_config.py b/ddpg_config.py
+index ead3c18..a2518f5 100644
+--- a/ddpg_config.py
++++ b/ddpg_config.py
+@@ -68,7 +68,7 @@ parser.add_argument('--clip_range', type=float, default=5,
+ 
+ 
+ # seed related stuff
+-parser.add_argument('--seed', type=int, default=0,
++parser.add_argument('--seed', type=int, default=66,
+                     help='seed of the experiment')
+ parser.add_argument('--torch-deterministic', type=lambda x:bool(strtobool(x)), default=True,
+                     help='if toggled, `torch.backends.cudnn.deterministic=False`')
+diff --git a/requirements.txt b/requirements.txt
+index f593cdb..700015d 100644
+--- a/requirements.txt
++++ b/requirements.txt
+@@ -1,17 +1,3 @@
+ cffi==1.14.0
+-mpi4py==3.0.3
+-imageio==2.8.0
+-tqdm==4.44.1
+-torch==1.6.0
+-gym==0.17.3
+-numpy==1.18.1
+-glfw==2.0.0
+-Cython==0.29.15
+-pycparser==2.20
+-fasteners==0.15
+-imagehash==4.1.0
+-ipdb==0.13.4
+-openvr==1.14.1501
+-Pillow==8.0.1
+ PyOpenGL==3.1.5
+ pytest==6.1.2
+diff --git a/results/Pick and Place Final.png b/results/Pick and Place Final.png
+deleted file mode 100644
+index aa4c6e7..0000000
+Binary files a/results/Pick and Place Final.png and /dev/null differ
+diff --git a/results/Push Final.png b/results/Push Final.png
+deleted file mode 100644
+index 2b66313..0000000
+Binary files a/results/Push Final.png and /dev/null differ
+diff --git a/results/Slide Final.png b/results/Slide Final.png
+deleted file mode 100644
+index 9839b93..0000000
+Binary files a/results/Slide Final.png and /dev/null differ
+diff --git a/sac_config.py b/sac_config.py
+index 85bb86a..7e7a9de 100644
+--- a/sac_config.py
++++ b/sac_config.py
+@@ -13,6 +13,8 @@ parser.add_argument('--policy', default="Gaussian",
+                     help='Policy Type: Gaussian | Deterministic (default: Gaussian)')
+ parser.add_argument('--eval', type=bool, default=True,
+                     help='Evaluates a policy a policy every 10 episode (default: True)')
++
++
+ parser.add_argument('--gamma', type=float, default=0.99, metavar='G',
+                     help='discount factor for reward (default: 0.99)')
+ parser.add_argument('--tau', type=float, default=0.005, metavar='G',
+@@ -24,7 +26,7 @@ parser.add_argument('--alpha', type=float, default=0.2, metavar='G',
+                             term against the reward (default: 0.2)')
+ parser.add_argument('--automatic_entropy_tuning', type=bool, default=False, metavar='G',
+                     help='Automaically adjust α (default: False)')
+-parser.add_argument('--seed', type=int, default=0, metavar='N',
++parser.add_argument('--seed', type=int, default=66, metavar='N',
+                     help='random seed (default: 0)')
+ parser.add_argument('--batch_size', type=int, default=256, metavar='N',
+                     help='batch size (default: 256)')
+@@ -32,6 +34,7 @@ parser.add_argument('--num_steps', type=int, default=int(1e7), metavar='N',
+                     help='maximum number of steps (default: 1000000)')
+ parser.add_argument('--hidden_size', type=int, default=256, metavar='N',
+                     help='hidden size (default: 256)')
++
+ parser.add_argument('--updates_per_step', type=int, default=1, metavar='N',
+                     help='model updates per simulator step (default: 1)')
+ parser.add_argument('--start_steps', type=int, default=10000, metavar='N',
+@@ -44,10 +47,20 @@ parser.add_argument('--num_eval_episodes', type=int, default=10,
+                     help='Number of episodes to evaluate the agent')
+ parser.add_argument('--buffer_size', type=int, default=1000000, metavar='N',
+                     help='size of replay buffer (default: 10000000)')
++
+ parser.add_argument('--cuda', action="store_true",
+                     help='run on CUDA (default: False)')
+ parser.add_argument('--dryrun', type=bool, default=False,
+                     help='Whether to use wandb writer or not')
+ parser.add_argument('--torch-deterministic', type=lambda x:bool(strtobool(x)), default=True,
+                     help='if toggled, `torch.backends.cudnn.deterministic=False`')
++
++parser.add_argument('--beta', type=float, default=1.0,
++                    help='Burn-in parameter for training residues')
++# check https://github.com/k-r-allen/residual-policy-learning/issues/14#issue-747756960
++# turns out that the original authors flipped the actor and critic loss monitoring values
++# so instead of critic-loss being less than beta it is actor-loss less than beta
++# so the original author(@tomsilver) has suggested us to try out both
++parser.add_argument('--beta_monitor', type=str, default='critic', choices=['actor', 'critic'],
++                    help='Which loss to check for burn-in parameter tuning')
+ args = parser.parse_args()
+\ No newline at end of file
+diff --git a/utils.py b/utils.py
+index 5046325..15822f3 100644
+--- a/utils.py
++++ b/utils.py
+@@ -7,6 +7,7 @@ import controllers.fetchEnvs.pushEnv as pushEnv
+ import controllers.fetchEnvs.pickAndPlaceEnv as pickPlaceEnv
+ import controllers.robosuite.robosuiteNutAssemblyEnv as robosuiteNutAssemblyEnv
+ import controllers.robosuite.nutAssemblyDenseEnv as nutAssemblyDenseEnv
++import controllers.robosuite.MultiPegAssembly as multiPegAssemblyEnv
+ import requests
+ from mpi4py import MPI
+ 
+@@ -75,6 +76,14 @@ def make_env(env_name:str):
+         return env
+     except:
+         pass
++    try:
++        env = getattr(multiPegAssemblyEnv, env_name)()
++        print_dash()
++        print(f'Making Environment: {env_name}')
++        print_dash()
++        return env
++    except:
++        pass
+     try:
+         env = getattr(nutAssemblyDenseEnv, env_name)()
+         print_dash()
+@@ -108,10 +117,14 @@ def get_pretty_env_name(env_name:str):
+         return "NutAssembly"
+     if 'Nut' in env_name and 'Dense' in env_name:
+         return "NutAssemblyDense"
++    if 'Multi' in env_name and 'Dense' not in env_name:
++        return "MultiPegAssembly"
++    if 'Multi' in env_name and 'Dense' in env_name:
++        return "MultiPegAssemblyDense"
+     
+ 
+ if __name__ == "__main__":
+-    env_names = ['FetchSlide-v1','FetchSlide','FetchPickAndPlacePerfect', 'FetchPushImperfect', 'NutAssembly']
++    env_names = ['FetchSlide-v1','FetchSlide','FetchPickAndPlacePerfect', 'FetchPushImperfect', 'NutAssembly','MultiPegAssembly']
+     for name in env_names:
+         env = make_env(name)
+         # print(f"{name}: {env.reset()}")
+\ No newline at end of file

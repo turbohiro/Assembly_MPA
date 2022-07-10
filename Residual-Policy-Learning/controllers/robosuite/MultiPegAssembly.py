@@ -41,7 +41,7 @@ class MultiPegAssembly(gym.Env):
                 use_object_obs = True,
                 use_camera_obs=False,           # do not use pixel observations
                 has_offscreen_renderer=False,   # not needed since not using pixel obs
-                has_renderer=True,              # make sure we can render to the screen
+                has_renderer=False,              # make sure we can render to the screen
                 reward_shaping=False,            # use sparse rewards
                 control_freq=20,                # control should happen fast enough so that simulation looks smooth
             )
@@ -57,8 +57,8 @@ class MultiPegAssembly(gym.Env):
         ob = self.env.observation_spec()
         observation = {}
         observation['observation'] = np.hstack((ob['robot0_eef_pos'], ob['robot0_eef_quat'],ob['robot0_eef_force'], ob['robot0_eef_torque'], ob['PegCircle_pos'], ob['PegCircle_quat']))
-        observation['desired_goal'] = np.array(self.env.sim.data.body_xpos[self.env.hole_body_id]) +[0,0,0.03]
-        observation['achieved_goal'] = ob['PegCircle_pos']
+        observation['desired_goal'] = np.array(self.env.sim.data.body_xpos[self.env.hole_body_id]) 
+        observation['achieved_goal'] = ob['robot0_eef_pos']
         info['is_success'] = reward
         #print(self.env.sim.data.qpos[:7])
 
@@ -71,8 +71,8 @@ class MultiPegAssembly(gym.Env):
         ob = self.env.observation_spec()
         observation = {}
         observation['observation'] = np.hstack((ob['robot0_eef_pos'], ob['robot0_eef_quat'],ob['robot0_eef_force'], ob['robot0_eef_torque'], ob['PegCircle_pos'], ob['PegCircle_quat']))
-        observation['desired_goal'] = np.array(self.env.sim.data.body_xpos[self.env.hole_body_id]) +[0,0,0.03]
-        observation['achieved_goal'] = ob['PegCircle_pos']
+        observation['desired_goal'] = np.array(self.env.sim.data.body_xpos[self.env.hole_body_id]) 
+        observation['achieved_goal'] = ob['robot0_eef_pos']
         
         return observation
 

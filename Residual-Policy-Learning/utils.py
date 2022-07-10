@@ -7,6 +7,7 @@ import controllers.fetchEnvs.pushEnv as pushEnv
 import controllers.fetchEnvs.pickAndPlaceEnv as pickPlaceEnv
 import controllers.robosuite.robosuiteNutAssemblyEnv as robosuiteNutAssemblyEnv
 import controllers.robosuite.nutAssemblyDenseEnv as nutAssemblyDenseEnv
+import controllers.robosuite.MultiPegAssembly as multiPegAssemblyEnv
 import requests
 from mpi4py import MPI
 
@@ -76,6 +77,14 @@ def make_env(env_name:str):
     except:
         pass
     try:
+        env = getattr(multiPegAssemblyEnv, env_name)()
+        print_dash()
+        print(f'Making Environment: {env_name}')
+        print_dash()
+        return env
+    except:
+        pass
+    try:
         env = getattr(nutAssemblyDenseEnv, env_name)()
         print_dash()
         print(f'Making Environment: {env_name}')
@@ -108,10 +117,14 @@ def get_pretty_env_name(env_name:str):
         return "NutAssembly"
     if 'Nut' in env_name and 'Dense' in env_name:
         return "NutAssemblyDense"
+    if 'Multi' in env_name and 'Dense' not in env_name:
+        return "MultiPegAssembly"
+    if 'Multi' in env_name and 'Dense' in env_name:
+        return "MultiPegAssemblyDense"
     
 
 if __name__ == "__main__":
-    env_names = ['FetchSlide-v1','FetchSlide','FetchPickAndPlacePerfect', 'FetchPushImperfect', 'NutAssembly']
+    env_names = ['FetchSlide-v1','FetchSlide','FetchPickAndPlacePerfect', 'FetchPushImperfect', 'NutAssembly','MultiPegAssembly']
     for name in env_names:
         env = make_env(name)
         # print(f"{name}: {env.reset()}")

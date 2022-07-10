@@ -1,3 +1,6 @@
+"""
+    DDPG with HER
+"""
 import copy
 import gym
 import argparse
@@ -8,6 +11,7 @@ import os
 from datetime import datetime
 import numpy as np
 from typing import Tuple
+import pdb
 
 from RL.ddpg.models import actor, critic
 from RL.ddpg.replay_buffer import replay_buffer
@@ -154,8 +158,8 @@ class DDPG_Agent:
         actor_losses = [0.0]    # to store actor losses for burn-in
         critic_losses = [0.0]   # to store critic losses for burn-in
         prev_losses = [0.0]
-        coin_flipping = False   # choose whether we want deterministic or not
-        deterministic = False   # whether the whole episode should be noise and randomness free
+        coin_flipping = False   # whether the whole episode should be noise and randomness free
+        deterministic = False   # choose whether we want deterministic or not  
         for epoch in range(self.args.n_epochs):
 
             # change the actor learning rate from zero to actor_lr by checking burn-in
@@ -179,9 +183,9 @@ class DDPG_Agent:
 
                 random_eps = self.args.random_eps
                 noise_eps  = self.args.noise_eps
+                #if coin_flipping:
+                #    deterministic = np.random.random() < self.args.coin_flipping_prob  # NOTE/TODO change here
                 if coin_flipping:
-                    deterministic = np.random.random() < self.args.coin_flipping_prob  # NOTE/TODO change here
-                if deterministic:
                     random_eps = 0.0
                     noise_eps = 0.0
 
@@ -194,7 +198,7 @@ class DDPG_Agent:
                             controller_action = self.get_controller_actions(observation_new)
                             action = self.select_actions(pi, noise_eps=noise_eps, random_eps= random_eps, controller_action=controller_action)
                         else:
-                            action = self.select_actions(pi, noise_eps=noise_eps, random_eps= random_eps, controller_action=None)
+                            action = self.select_actions(pi, noise_eps=noise_eps, random_eps= random_eps, controller_action=None)                   
                     # give the action to the environment
                     observation_new, _, _, info = self.env.step(action)
                     self.sim_steps += 1                     # increase the simulation timestep by one
@@ -208,7 +212,8 @@ class DDPG_Agent:
                     # re-assign the observation
                     obs = obs_new
                     ag = ag_new
-                # append last states in the array
+                    
+                # append last states in the array, extend the episode chain (state machine)
                 ep_obs.append(obs.copy())
                 ep_ag.append(ag.copy())
                 # convert to np arrays
@@ -235,6 +240,8 @@ class DDPG_Agent:
                 self.polyak_update_networks(self.actor_target_network, self.actor_network)
                 self.polyak_update_networks(self.critic_target_network, self.critic_network)
                 num_cycles += 1
+                
+            pdb.set_trace()
             # evaluate the agent
             success_rate = self.eval_agent()
             print(f'Epoch Critic: {np.mean(critic_losses):.3f} Epoch Actor:{np.mean(actor_losses):.3f}')
@@ -253,7 +260,7 @@ class DDPG_Agent:
             and then transfer them to either CPU of GPU
         """
         # concatenate the stuffs
-        inputs = np.concatenate([obs, g])
+        inputs = np.concatenate([obs, g])   #observation input (state) and goal label (ground truth)
         inputs = torch.tensor(inputs, dtype=torch.float32).unsqueeze(0)
         inputs = inputs.to(self.device)
         return inputs
@@ -282,18 +289,20 @@ class DDPG_Agent:
         action = pi.cpu().numpy().squeeze()
         # add the gaussian
         action += noise_eps * self.env_params['action_max'] * np.random.randn(*action.shape)
-        action = np.clip(action, -self.env_params['action_max'], self.env_params['action_max'])
+        action = np.clip(action, -self.env_params['action_max'], self.env_params['action_max'])  #make action values are limited a feasible range
+        #action
+        action[3:5] = [0,0]
+        action[5] = 0.3*action[5]
 
         # random actions
-        random_actions = np.random.uniform(low=-self.env_params['action_max'], high=self.env_params['action_max'], \
-                                            size=self.env_params['action'])
-        # if residual learning, subtract the conroller action so that we don't add it twice
+        random_actions = np.random.uniform(low=-self.env_params['action_max'], high=self.env_params['action_max'], size=self.env_params['action'])
+        random_actions[3:6] = [0,0,0]
+        # if residual learning, subtract the controller action so that we don't add it twice
         if self.args.exp_name == 'res':
             random_actions = random_actions - controller_action
         # choose whether to take random actions or not
         rand = np.random.binomial(1, random_eps, 1)[0]
         action += rand * (random_actions - action)  # will be equal to either random_actions or action
-        action[6] = -1
         return action
 
     def preprocess_og(self, o:np.ndarray, g:np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
@@ -351,7 +360,7 @@ class DDPG_Agent:
 
         # actor loss
         actions_pred = self.actor_network(states)
-        actor_loss = -self.critic_network(states, actions_pred).mean()
+        actor_loss = -self.critic_network(states, actions_pred).mean()   #the max of q values, the better of actor(policy)
         actor_loss = actor_loss + self.args.action_l2 * (actions_pred / self.env_params['action_max']).pow(2).mean()
 
         # backpropagate
@@ -428,6 +437,7 @@ if __name__ == "__main__":
 
     from ddpg_config import args
     from utils import connected_to_internet, make_env, get_pretty_env_name
+    import pdb
 
     # check whether GPU is available or not
     use_cuda = torch.cuda.is_available()
@@ -440,8 +450,8 @@ if __name__ == "__main__":
     #####################################
 
     env = make_env(args.env_name)   # initialise the environment
-    # env = gym.make(args.env_name)   # initialise the environment
-
+    #env = gym.make(args.env_name)   # initialise the environment
+    
     # set the random seeds for everything
     # random.seed(args.seed)
     np.random.seed(args.seed)
@@ -479,7 +489,7 @@ if __name__ == "__main__":
         wandb_save_dir = os.path.join(os.path.abspath(os.getcwd()),f"wandb_{pretty_env_name}")
         if not os.path.exists(wandb_save_dir):
             os.makedirs(wandb_save_dir)
-        wandb.init(project='Assembly_RL', entity='turbohiro',\
+        wandb.init(project='Residual Policy Learning', entity='turbohiro',\
                    sync_tensorboard=True, config=vars(args), name=experiment_name,\
                    save_code=True, dir=wandb_save_dir, group=f"{pretty_env_name}")
         writer = SummaryWriter(f"{wandb.run.dir}/{experiment_name}")
