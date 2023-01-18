@@ -5,5 +5,5 @@
 - **Quick Demos**
 
 <div align=center>
-<video src="assets/image_folder/video_assembly.mp4" align="center" width="600"/>
+<video src="assets/image_folder/video_assembly.mp4" align="center" width="600"></video>
 </div>
