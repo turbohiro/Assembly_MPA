@@ -1,0 +1,1 @@
+{"global_step": 49, "_timestamp": 1654776355.984896, "Cycle Losses/Actor Loss": 25.104568481445312, "Cycle Losses/Critic Loss": 0.24623535573482513, "_runtime": 602, "_step": 49, "_wandb": {"runtime": 1657}}

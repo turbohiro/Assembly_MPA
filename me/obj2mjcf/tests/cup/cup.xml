@@ -1,0 +1,74 @@
+<mujoco model="cup">
+  <asset>
+    <mesh name="cup" file="cup.obj"/>
+    <mesh name="cup_collision_0" file="cup_collision_0.obj"/>
+    <mesh name="cup_collision_1" file="cup_collision_1.obj"/>
+    <mesh name="cup_collision_2" file="cup_collision_2.obj"/>
+    <mesh name="cup_collision_3" file="cup_collision_3.obj"/>
+    <mesh name="cup_collision_4" file="cup_collision_4.obj"/>
+    <mesh name="cup_collision_5" file="cup_collision_5.obj"/>
+    <mesh name="cup_collision_6" file="cup_collision_6.obj"/>
+    <mesh name="cup_collision_7" file="cup_collision_7.obj"/>
+    <mesh name="cup_collision_8" file="cup_collision_8.obj"/>
+    <mesh name="cup_collision_9" file="cup_collision_9.obj"/>
+    <mesh name="cup_collision_10" file="cup_collision_10.obj"/>
+    <mesh name="cup_collision_11" file="cup_collision_11.obj"/>
+    <mesh name="cup_collision_12" file="cup_collision_12.obj"/>
+    <mesh name="cup_collision_13" file="cup_collision_13.obj"/>
+    <mesh name="cup_collision_14" file="cup_collision_14.obj"/>
+    <mesh name="cup_collision_15" file="cup_collision_15.obj"/>
+    <mesh name="cup_collision_16" file="cup_collision_16.obj"/>
+    <mesh name="cup_collision_17" file="cup_collision_17.obj"/>
+    <mesh name="cup_collision_18" file="cup_collision_18.obj"/>
+    <mesh name="cup_collision_19" file="cup_collision_19.obj"/>
+    <mesh name="cup_collision_20" file="cup_collision_20.obj"/>
+    <mesh name="cup_collision_21" file="cup_collision_21.obj"/>
+    <mesh name="cup_collision_22" file="cup_collision_22.obj"/>
+    <mesh name="cup_collision_23" file="cup_collision_23.obj"/>
+    <mesh name="cup_collision_24" file="cup_collision_24.obj"/>
+    <mesh name="cup_collision_25" file="cup_collision_25.obj"/>
+    <mesh name="cup_collision_26" file="cup_collision_26.obj"/>
+    <mesh name="cup_collision_27" file="cup_collision_27.obj"/>
+    <mesh name="cup_collision_28" file="cup_collision_28.obj"/>
+    <mesh name="cup_collision_29" file="cup_collision_29.obj"/>
+    <mesh name="cup_collision_30" file="cup_collision_30.obj"/>
+    <mesh name="cup_collision_31" file="cup_collision_31.obj"/>
+  </asset>
+  <worldbody>
+    <body name="cup">
+      <geom mesh="cup" type="mesh" contype="0" conaffinity="0" group="2"/>
+      <geom mesh="cup_collision_0" type="mesh" group="3"/>
+      <geom mesh="cup_collision_1" type="mesh" group="3"/>
+      <geom mesh="cup_collision_2" type="mesh" group="3"/>
+      <geom mesh="cup_collision_3" type="mesh" group="3"/>
+      <geom mesh="cup_collision_4" type="mesh" group="3"/>
+      <geom mesh="cup_collision_5" type="mesh" group="3"/>
+      <geom mesh="cup_collision_6" type="mesh" group="3"/>
+      <geom mesh="cup_collision_7" type="mesh" group="3"/>
+      <geom mesh="cup_collision_8" type="mesh" group="3"/>
+      <geom mesh="cup_collision_9" type="mesh" group="3"/>
+      <geom mesh="cup_collision_10" type="mesh" group="3"/>
+      <geom mesh="cup_collision_11" type="mesh" group="3"/>
+      <geom mesh="cup_collision_12" type="mesh" group="3"/>
+      <geom mesh="cup_collision_13" type="mesh" group="3"/>
+      <geom mesh="cup_collision_14" type="mesh" group="3"/>
+      <geom mesh="cup_collision_15" type="mesh" group="3"/>
+      <geom mesh="cup_collision_16" type="mesh" group="3"/>
+      <geom mesh="cup_collision_17" type="mesh" group="3"/>
+      <geom mesh="cup_collision_18" type="mesh" group="3"/>
+      <geom mesh="cup_collision_19" type="mesh" group="3"/>
+      <geom mesh="cup_collision_20" type="mesh" group="3"/>
+      <geom mesh="cup_collision_21" type="mesh" group="3"/>
+      <geom mesh="cup_collision_22" type="mesh" group="3"/>
+      <geom mesh="cup_collision_23" type="mesh" group="3"/>
+      <geom mesh="cup_collision_24" type="mesh" group="3"/>
+      <geom mesh="cup_collision_25" type="mesh" group="3"/>
+      <geom mesh="cup_collision_26" type="mesh" group="3"/>
+      <geom mesh="cup_collision_27" type="mesh" group="3"/>
+      <geom mesh="cup_collision_28" type="mesh" group="3"/>
+      <geom mesh="cup_collision_29" type="mesh" group="3"/>
+      <geom mesh="cup_collision_30" type="mesh" group="3"/>
+      <geom mesh="cup_collision_31" type="mesh" group="3"/>
+    </body>
+  </worldbody>
+</mujoco>

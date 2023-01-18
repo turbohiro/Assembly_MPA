@@ -1,0 +1,55 @@
+____________________
+Device: cpu
+____________________
+__________________________________________________
+Making Environment: NutAssemblyHandSticky
+__________________________________________________
+__________________________________________________
+Making Environment: NutAssemblyHandSticky
+__________________________________________________
+__________________________________________________
+Making Environment: NutAssemblyHandSticky
+__________________________________________________
+__________________________________________________
+Making Environment: NutAssemblyHandSticky
+__________________________________________________
+__________________________________________________
+Making Environment: NutAssemblyHandSticky
+__________________________________________________
+__________________________________________________
+Making Environment: NutAssemblyHandSticky
+__________________________________________________
+__________________________________________________
+Making Environment: NutAssemblyHandSticky
+__________________________________________________
+__________________________________________________
+Making Environment: NutAssemblyHandSticky
+__________________________________________________
+__________________________________________________
+Making Environment: NutAssemblyHandSticky
+__________________________________________________
+__________________________________________________
+Making Environment: NutAssemblyHandSticky
+__________________________________________________
+__________________________________________________
+Making Environment: NutAssemblyHandSticky
+__________________________________________________
+__________________________________________________
+Making Environment: NutAssemblyHandSticky
+__________________________________________________
+__________________________________________________
+Creating wandboard...
+__________________________________________________
+/homeL/wchen/anaconda3/envs/RPL/lib/python3.8/site-packages/torch/utils/tensorboard/__init__.py:3: DeprecationWarning: distutils Version classes are deprecated. Use packaging.version instead.
+  if not hasattr(tensorboard, '__version__') or LooseVersion(tensorboard.__version__) < LooseVersion('1.15'):
+/homeL/wchen/anaconda3/envs/RPL/lib/python3.8/site-packages/numba/np/arraymath.py:3845: DeprecationWarning: `np.MachAr` is deprecated (NumPy 1.22).
+  @overload(np.MachAr)
+/homeL/wchen/anaconda3/envs/RPL/lib/python3.8/site-packages/gym/spaces/box.py:84: UserWarning: [33mWARN: Box bound precision lowered by casting to float32[0m
+  logger.warn(f"Box bound precision lowered by casting to {self.dtype}")
+wandb: Currently logged in as: turbohiro. Use `wandb login --relogin` to force relogin
+[tamsGPU2:14504] *** Process received signal ***
+[tamsGPU2:14504] Signal: Segmentation fault (11)
+[tamsGPU2:14504] Signal code: Invalid permissions (2)
+[tamsGPU2:14504] Failing at address: 0x555b74987530
+/homeL/wchen/anaconda3/envs/RPL/lib/python3.8/multiprocessing/resource_tracker.py:216: UserWarning: resource_tracker: There appear to be 6 leaked semaphore objects to clean up at shutdown
+  warnings.warn('resource_tracker: There appear to be %d '

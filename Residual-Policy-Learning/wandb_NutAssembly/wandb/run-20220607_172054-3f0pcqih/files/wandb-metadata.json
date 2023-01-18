@@ -1,0 +1,32 @@
+{
+    "os": "Linux-5.4.0-100-generic-x86_64-with-glibc2.17",
+    "python": "3.8.13",
+    "heartbeatAt": "2022-06-07T15:20:54.976290",
+    "startedAt": "2022-06-07T15:20:54.105349",
+    "docker": null,
+    "gpu": "NVIDIA GeForce RTX 2080 Ti",
+    "gpu_count": 2,
+    "cpu_count": 24,
+    "cuda": null,
+    "args": [
+        "--env_name=NutAssemblyHand",
+        "--exp_name=res",
+        "--beta=0.005",
+        "--beta_monitor=critic",
+        "--n_epochs",
+        "500",
+        "--seed=1"
+    ],
+    "state": "running",
+    "program": "RL/ddpg/ddpg_mpi.py",
+    "codePath": "Residual-Policy-Learning/RL/ddpg/ddpg_mpi.py",
+    "git": {
+        "remote": "https://github.com/turbohiro/Assembly_RPL",
+        "commit": "57769111097c70fc522f3c051ef234a5d053c7f6"
+    },
+    "email": null,
+    "root": "/homeL/wchen/Assembly_RPL",
+    "host": "tamsGPU2",
+    "username": "wchen",
+    "executable": "/homeL/wchen/anaconda3/envs/RPL/bin/python"
+}

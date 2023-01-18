@@ -1,0 +1,284 @@
+<?xml version="1.0" ?>
+<mujoco model="base">
+    <compiler angle="radian" meshdir="meshes/"/>
+    <option impratio="20" density="1.2" viscosity="2e-05" cone="elliptic"/>
+    <size njmax="5000" nconmax="5000"/>
+    <visual>
+        <map znear="0.001"/>
+    </visual>
+    <asset>
+        <texture type="skybox" builtin="gradient" rgb1="0.9 0.9 1" rgb2="0.2 0.3 0.4" width="256" height="1536"/>
+        <texture type="2d" name="texplane" file="/data/robosuite_manipulation/robosuite/robosuite/models/assets/arenas/../textures/wood-tiles.png"/>
+        <texture type="cube" name="textable" builtin="flat" rgb1="0.5 0.5 0.5" width="512" height="3072"/>
+        <texture type="cube" name="steel-metal" file="/data/robosuite_manipulation/robosuite/robosuite/models/assets/arenas/../textures/steel-scratched.png"/>
+        <material name="floorplane" texture="texplane" texuniform="true" texrepeat="2 2" specular="0" shininess="0" reflectance="0.01"/>
+        <material name="table_mat" texture="textable"/>
+        <material name="smetal" texture="steel-metal" texuniform="true" specular="1" shininess="1" reflectance="1"/>
+        <mesh name="circle_visual" file="/data/robosuite_manipulation/robosuite/robosuite/models/assets/arenas/meshes/circle.stl"/>
+        <mesh name="circle_collision_0" file="/data/robosuite_manipulation/robosuite/robosuite/models/assets/arenas/meshes/circle_collision_0.stl"/>
+        <mesh name="circle_collision_1" file="/data/robosuite_manipulation/robosuite/robosuite/models/assets/arenas/meshes/circle_collision_1.stl"/>
+        <mesh name="circle_collision_2" file="/data/robosuite_manipulation/robosuite/robosuite/models/assets/arenas/meshes/circle_collision_2.stl"/>
+        <mesh name="circle_collision_3" file="/data/robosuite_manipulation/robosuite/robosuite/models/assets/arenas/meshes/circle_collision_3.stl"/>
+        <mesh name="circle_collision_4" file="/data/robosuite_manipulation/robosuite/robosuite/models/assets/arenas/meshes/circle_collision_4.stl"/>
+        <mesh name="circle_collision_5" file="/data/robosuite_manipulation/robosuite/robosuite/models/assets/arenas/meshes/circle_collision_5.stl"/>
+        <mesh name="circle_collision_6" file="/data/robosuite_manipulation/robosuite/robosuite/models/assets/arenas/meshes/circle_collision_6.stl"/>
+        <mesh name="circle_collision_7" file="/data/robosuite_manipulation/robosuite/robosuite/models/assets/arenas/meshes/circle_collision_7.stl"/>
+        <mesh name="circle_collision_8" file="/data/robosuite_manipulation/robosuite/robosuite/models/assets/arenas/meshes/circle_collision_8.stl"/>
+        <mesh name="circle_collision_9" file="/data/robosuite_manipulation/robosuite/robosuite/models/assets/arenas/meshes/circle_collision_9.stl"/>
+        <mesh name="circle_collision_10" file="/data/robosuite_manipulation/robosuite/robosuite/models/assets/arenas/meshes/circle_collision_10.stl"/>
+        <mesh name="circle_collision_11" file="/data/robosuite_manipulation/robosuite/robosuite/models/assets/arenas/meshes/circle_collision_11.stl"/>
+        <mesh name="circle_collision_12" file="/data/robosuite_manipulation/robosuite/robosuite/models/assets/arenas/meshes/circle_collision_12.stl"/>
+        <mesh name="circle_collision_13" file="/data/robosuite_manipulation/robosuite/robosuite/models/assets/arenas/meshes/circle_collision_13.stl"/>
+        <mesh name="circle_collision_14" file="/data/robosuite_manipulation/robosuite/robosuite/models/assets/arenas/meshes/circle_collision_14.stl"/>
+        <mesh name="circle_collision_15" file="/data/robosuite_manipulation/robosuite/robosuite/models/assets/arenas/meshes/circle_collision_15.stl"/>
+        <mesh name="circle_collision_16" file="/data/robosuite_manipulation/robosuite/robosuite/models/assets/arenas/meshes/circle_collision_16.stl"/>
+        <mesh name="circle_collision_17" file="/data/robosuite_manipulation/robosuite/robosuite/models/assets/arenas/meshes/circle_collision_17.stl"/>
+        <mesh name="circle_collision_18" file="/data/robosuite_manipulation/robosuite/robosuite/models/assets/arenas/meshes/circle_collision_18.stl"/>
+        <mesh name="circle_collision_19" file="/data/robosuite_manipulation/robosuite/robosuite/models/assets/arenas/meshes/circle_collision_19.stl"/>
+        <mesh name="circle_collision_20" file="/data/robosuite_manipulation/robosuite/robosuite/models/assets/arenas/meshes/circle_collision_20.stl"/>
+        <mesh name="circle_collision_21" file="/data/robosuite_manipulation/robosuite/robosuite/models/assets/arenas/meshes/circle_collision_21.stl"/>
+        <mesh name="circle_collision_22" file="/data/robosuite_manipulation/robosuite/robosuite/models/assets/arenas/meshes/circle_collision_22.stl"/>
+        <mesh name="circle_collision_23" file="/data/robosuite_manipulation/robosuite/robosuite/models/assets/arenas/meshes/circle_collision_23.stl"/>
+        <mesh name="circle_collision_24" file="/data/robosuite_manipulation/robosuite/robosuite/models/assets/arenas/meshes/circle_collision_24.stl"/>
+        <mesh name="circle_collision_25" file="/data/robosuite_manipulation/robosuite/robosuite/models/assets/arenas/meshes/circle_collision_25.stl"/>
+        <mesh name="circle_collision_26" file="/data/robosuite_manipulation/robosuite/robosuite/models/assets/arenas/meshes/circle_collision_26.stl"/>
+        <mesh name="circle_collision_27" file="/data/robosuite_manipulation/robosuite/robosuite/models/assets/arenas/meshes/circle_collision_27.stl"/>
+        <mesh name="circle_collision_28" file="/data/robosuite_manipulation/robosuite/robosuite/models/assets/arenas/meshes/circle_collision_28.stl"/>
+        <mesh name="circle_collision_29" file="/data/robosuite_manipulation/robosuite/robosuite/models/assets/arenas/meshes/circle_collision_29.stl"/>
+        <mesh name="circle_collision_30" file="/data/robosuite_manipulation/robosuite/robosuite/models/assets/arenas/meshes/circle_collision_30.stl"/>
+        <mesh name="circle_collision_31" file="/data/robosuite_manipulation/robosuite/robosuite/models/assets/arenas/meshes/circle_collision_31.stl"/>
+        <mesh name="robot0_arm_base" file="/data/robosuite_manipulation/robosuite/robosuite/models/assets/robots/lwr/meshes/arm_base.stl"/>
+        <mesh name="robot0_arm_segment_a" file="/data/robosuite_manipulation/robosuite/robosuite/models/assets/robots/lwr/meshes/arm_segment_a.stl"/>
+        <mesh name="robot0_arm_segment_b" file="/data/robosuite_manipulation/robosuite/robosuite/models/assets/robots/lwr/meshes/arm_segment_b.stl"/>
+        <mesh name="robot0_arm_wrist" file="/data/robosuite_manipulation/robosuite/robosuite/models/assets/robots/lwr/meshes/arm_wrist.stl"/>
+        <mesh name="robot0_arm_segment_last" file="/data/robosuite_manipulation/robosuite/robosuite/models/assets/robots/lwr/meshes/arm_segment_last.stl"/>
+        <mesh name="robot0_WSG50_110" file="/data/robosuite_manipulation/robosuite/robosuite/models/assets/robots/lwr/meshes/WSG50_110.stl"/>
+        <mesh name="robot0_GUIDE_WSG50_110" file="/data/robosuite_manipulation/robosuite/robosuite/models/assets/robots/lwr/meshes/GUIDE_WSG50_110.stl" scale="0.001 0.001 0.001"/>
+        <mesh name="robot0_WSG-DSA" file="/data/robosuite_manipulation/robosuite/robosuite/models/assets/robots/lwr/meshes/WSG-DSA.stl" scale="0.001 0.001 0.001"/>
+        <mesh name="PegCircle_peg_circle_visual" file="/data/robosuite_manipulation/robosuite/robosuite/models/assets/objects/meshes/peg_circle.stl"/>
+        <mesh name="PegCircle_peg_circle_collision_0" file="/data/robosuite_manipulation/robosuite/robosuite/models/assets/objects/meshes/peg_circle_collision_0.stl"/>
+        <mesh name="PegCircle_peg_circle_collision_1" file="/data/robosuite_manipulation/robosuite/robosuite/models/assets/objects/meshes/peg_circle_collision_1.stl"/>
+        <mesh name="PegCircle_peg_circle_collision_2" file="/data/robosuite_manipulation/robosuite/robosuite/models/assets/objects/meshes/peg_circle_collision_2.stl"/>
+        <mesh name="PegCircle_peg_circle_collision_3" file="/data/robosuite_manipulation/robosuite/robosuite/models/assets/objects/meshes/peg_circle_collision_3.stl"/>
+        <mesh name="PegCircle_peg_circle_collision_4" file="/data/robosuite_manipulation/robosuite/robosuite/models/assets/objects/meshes/peg_circle_collision_4.stl"/>
+        <mesh name="PegCircle_peg_circle_collision_5" file="/data/robosuite_manipulation/robosuite/robosuite/models/assets/objects/meshes/peg_circle_collision_5.stl"/>
+        <mesh name="PegCircle_peg_circle_collision_6" file="/data/robosuite_manipulation/robosuite/robosuite/models/assets/objects/meshes/peg_circle_collision_6.stl"/>
+        <mesh name="PegCircle_peg_circle_collision_7" file="/data/robosuite_manipulation/robosuite/robosuite/models/assets/objects/meshes/peg_circle_collision_7.stl"/>
+        <mesh name="PegCircle_peg_circle_collision_8" file="/data/robosuite_manipulation/robosuite/robosuite/models/assets/objects/meshes/peg_circle_collision_8.stl"/>
+        <mesh name="PegCircle_peg_circle_collision_9" file="/data/robosuite_manipulation/robosuite/robosuite/models/assets/objects/meshes/peg_circle_collision_9.stl"/>
+        <mesh name="PegCircle_peg_circle_collision_10" file="/data/robosuite_manipulation/robosuite/robosuite/models/assets/objects/meshes/peg_circle_collision_10.stl"/>
+        <mesh name="PegCircle_peg_circle_collision_11" file="/data/robosuite_manipulation/robosuite/robosuite/models/assets/objects/meshes/peg_circle_collision_11.stl"/>
+        <mesh name="PegCircle_peg_circle_collision_12" file="/data/robosuite_manipulation/robosuite/robosuite/models/assets/objects/meshes/peg_circle_collision_12.stl"/>
+        <mesh name="PegCircle_peg_circle_collision_13" file="/data/robosuite_manipulation/robosuite/robosuite/models/assets/objects/meshes/peg_circle_collision_13.stl"/>
+        <mesh name="PegCircle_peg_circle_collision_14" file="/data/robosuite_manipulation/robosuite/robosuite/models/assets/objects/meshes/peg_circle_collision_14.stl"/>
+        <mesh name="PegCircle_peg_circle_collision_15" file="/data/robosuite_manipulation/robosuite/robosuite/models/assets/objects/meshes/peg_circle_collision_15.stl"/>
+        <mesh name="PegCircle_peg_circle_collision_16" file="/data/robosuite_manipulation/robosuite/robosuite/models/assets/objects/meshes/peg_circle_collision_16.stl"/>
+        <mesh name="PegCircle_peg_circle_collision_17" file="/data/robosuite_manipulation/robosuite/robosuite/models/assets/objects/meshes/peg_circle_collision_17.stl"/>
+        <mesh name="PegCircle_peg_circle_collision_18" file="/data/robosuite_manipulation/robosuite/robosuite/models/assets/objects/meshes/peg_circle_collision_18.stl"/>
+        <mesh name="PegCircle_peg_circle_collision_19" file="/data/robosuite_manipulation/robosuite/robosuite/models/assets/objects/meshes/peg_circle_collision_19.stl"/>
+        <mesh name="PegCircle_peg_circle_collision_20" file="/data/robosuite_manipulation/robosuite/robosuite/models/assets/objects/meshes/peg_circle_collision_20.stl"/>
+        <mesh name="PegCircle_peg_circle_collision_21" file="/data/robosuite_manipulation/robosuite/robosuite/models/assets/objects/meshes/peg_circle_collision_21.stl"/>
+        <mesh name="PegCircle_peg_circle_collision_22" file="/data/robosuite_manipulation/robosuite/robosuite/models/assets/objects/meshes/peg_circle_collision_22.stl"/>
+        <mesh name="PegCircle_peg_circle_collision_23" file="/data/robosuite_manipulation/robosuite/robosuite/models/assets/objects/meshes/peg_circle_collision_23.stl"/>
+        <mesh name="PegCircle_peg_circle_collision_24" file="/data/robosuite_manipulation/robosuite/robosuite/models/assets/objects/meshes/peg_circle_collision_24.stl"/>
+        <mesh name="PegCircle_peg_circle_collision_25" file="/data/robosuite_manipulation/robosuite/robosuite/models/assets/objects/meshes/peg_circle_collision_25.stl"/>
+        <mesh name="PegCircle_peg_circle_collision_26" file="/data/robosuite_manipulation/robosuite/robosuite/models/assets/objects/meshes/peg_circle_collision_26.stl"/>
+        <mesh name="PegCircle_peg_circle_collision_27" file="/data/robosuite_manipulation/robosuite/robosuite/models/assets/objects/meshes/peg_circle_collision_27.stl"/>
+        <mesh name="PegCircle_peg_circle_collision_28" file="/data/robosuite_manipulation/robosuite/robosuite/models/assets/objects/meshes/peg_circle_collision_28.stl"/>
+        <mesh name="PegCircle_peg_circle_collision_29" file="/data/robosuite_manipulation/robosuite/robosuite/models/assets/objects/meshes/peg_circle_collision_29.stl"/>
+        <mesh name="PegCircle_peg_circle_collision_30" file="/data/robosuite_manipulation/robosuite/robosuite/models/assets/objects/meshes/peg_circle_collision_30.stl"/>
+    </asset>
+    <worldbody>
+        <geom name="floor" size="3 3 0.125" type="plane" material="floorplane" rgba="1 1 1 1"/>
+        <site name="bottom_site" pos="0 0 -0.02" rgba="0 0 0 0"/>
+        <site name="top_site" pos="0 0 0.08" rgba="0 0 0 0"/>
+        <site name="horizontal_radius_site" pos="0.07 0.07 0" rgba="0 0 0 0"/>
+        <camera name="frontview" pos="3 0 2" quat="0.56 0.43 0.43 0.56"/>
+        <camera name="birdview" pos="-0.2 0 3" quat="0.7071 0 0 0.7071"/>
+        <camera name="agentview" pos="0.8 0 1.35" quat="0.653 0.271 0.271 0.653"/>
+        <camera name="sideview" pos="-0.0565177 1.27612 1.48796" quat="0.00990507 0.00687796 0.591223 0.806418"/>
+        <light name="light1" pos="-0.6 -0.6 8" dir="0 -0.14834 -0.988936" castshadow="false" diffuse="0.4 0.4 0.4"/>
+        <body name="table" pos="-0.31 -0.19 0.4" quat="0.707107 0 0 -0.707107">
+            <geom name="table_collision" size="1.3 1 0.4" type="box" rgba="0.5 0.5 0 1"/>
+            <geom name="table_visual" size="1.3 1 0.4" type="box" contype="0" conaffinity="0" group="1" rgba="1 1 1 1"/>
+            <site name="table_top" pos="-0.31 -0.19 0.4" size="0.001" rgba="0 0 0 0"/>
+        </body>
+        <body name="circle" pos="0.456226 0.0159223 0.8">
+            <geom quat="0.707107 0.707107 0 0" type="mesh" contype="0" conaffinity="0" group="1" friction="0.95 0.3 0.9" solref="0.001 1" solimp="0.998 0.998 0.001 0.5 2" rgba="0 1 0 1" mesh="circle_visual"/>
+            <geom quat="0.707107 0.707107 0 0" type="mesh" rgba="0.5 0.5 0 1" mesh="circle_collision_0"/>
+            <geom quat="0.707107 0.707107 0 0" type="mesh" rgba="0.5 0.5 0 1" mesh="circle_collision_1"/>
+            <geom quat="0.707107 0.707107 0 0" type="mesh" rgba="0.5 0.5 0 1" mesh="circle_collision_2"/>
+            <geom quat="0.707107 0.707107 0 0" type="mesh" rgba="0.5 0.5 0 1" mesh="circle_collision_3"/>
+            <geom quat="0.707107 0.707107 0 0" type="mesh" rgba="0.5 0.5 0 1" mesh="circle_collision_4"/>
+            <geom quat="0.707107 0.707107 0 0" type="mesh" rgba="0.5 0.5 0 1" mesh="circle_collision_5"/>
+            <geom quat="0.707107 0.707107 0 0" type="mesh" rgba="0.5 0.5 0 1" mesh="circle_collision_6"/>
+            <geom quat="0.707107 0.707107 0 0" type="mesh" rgba="0.5 0.5 0 1" mesh="circle_collision_7"/>
+            <geom quat="0.707107 0.707107 0 0" type="mesh" rgba="0.5 0.5 0 1" mesh="circle_collision_8"/>
+            <geom quat="0.707107 0.707107 0 0" type="mesh" rgba="0.5 0.5 0 1" mesh="circle_collision_9"/>
+            <geom quat="0.707107 0.707107 0 0" type="mesh" rgba="0.5 0.5 0 1" mesh="circle_collision_10"/>
+            <geom quat="0.707107 0.707107 0 0" type="mesh" rgba="0.5 0.5 0 1" mesh="circle_collision_11"/>
+            <geom quat="0.707107 0.707107 0 0" type="mesh" rgba="0.5 0.5 0 1" mesh="circle_collision_12"/>
+            <geom quat="0.707107 0.707107 0 0" type="mesh" rgba="0.5 0.5 0 1" mesh="circle_collision_13"/>
+            <geom quat="0.707107 0.707107 0 0" type="mesh" rgba="0.5 0.5 0 1" mesh="circle_collision_14"/>
+            <geom quat="0.707107 0.707107 0 0" type="mesh" rgba="0.5 0.5 0 1" mesh="circle_collision_15"/>
+            <geom quat="0.707107 0.707107 0 0" type="mesh" rgba="0.5 0.5 0 1" mesh="circle_collision_16"/>
+            <geom quat="0.707107 0.707107 0 0" type="mesh" rgba="0.5 0.5 0 1" mesh="circle_collision_17"/>
+            <geom quat="0.707107 0.707107 0 0" type="mesh" rgba="0.5 0.5 0 1" mesh="circle_collision_18"/>
+            <geom quat="0.707107 0.707107 0 0" type="mesh" rgba="0.5 0.5 0 1" mesh="circle_collision_19"/>
+            <geom quat="0.707107 0.707107 0 0" type="mesh" rgba="0.5 0.5 0 1" mesh="circle_collision_20"/>
+            <geom quat="0.707107 0.707107 0 0" type="mesh" rgba="0.5 0.5 0 1" mesh="circle_collision_21"/>
+            <geom quat="0.707107 0.707107 0 0" type="mesh" rgba="0.5 0.5 0 1" mesh="circle_collision_22"/>
+            <geom quat="0.707107 0.707107 0 0" type="mesh" rgba="0.5 0.5 0 1" mesh="circle_collision_23"/>
+            <geom quat="0.707107 0.707107 0 0" type="mesh" rgba="0.5 0.5 0 1" mesh="circle_collision_24"/>
+            <geom quat="0.707107 0.707107 0 0" type="mesh" rgba="0.5 0.5 0 1" mesh="circle_collision_25"/>
+            <geom quat="0.707107 0.707107 0 0" type="mesh" rgba="0.5 0.5 0 1" mesh="circle_collision_26"/>
+            <geom quat="0.707107 0.707107 0 0" type="mesh" rgba="0.5 0.5 0 1" mesh="circle_collision_27"/>
+            <geom quat="0.707107 0.707107 0 0" type="mesh" rgba="0.5 0.5 0 1" mesh="circle_collision_28"/>
+            <geom quat="0.707107 0.707107 0 0" type="mesh" rgba="0.5 0.5 0 1" mesh="circle_collision_29"/>
+            <geom quat="0.707107 0.707107 0 0" type="mesh" rgba="0.5 0.5 0 1" mesh="circle_collision_30"/>
+            <geom quat="0.707107 0.707107 0 0" type="mesh" rgba="0.5 0.5 0 1" mesh="circle_collision_31"/>
+        </body>
+        <body name="robot0_base" pos="0 0 0">
+            <geom name="robot0_robot_table_adapter" size="0.1375 0.1375 0.007" pos="0 0 0.8071" type="box" conaffinity="0" group="1" rgba="0.6 0.6 0.6 1"/>
+            <geom name="robot0_base_visual" pos="0 0 0.8142" type="mesh" conaffinity="0" group="1" rgba="1 0.487 0 1" mesh="robot0_arm_base"/>
+            <body name="robot0_lwr_arm_1_link" pos="0 0 0.9242">
+                <joint name="robot0_joint_1" pos="0 0 0" axis="0 0 1" limited="true" range="-2.96706 2.96706" armature="5" damping="0.1" frictionloss="0.1"/>
+                <geom name="robot0_link_1_visual" type="mesh" conaffinity="0" group="1" rgba="1 0.487 0 1" mesh="robot0_arm_segment_a"/>
+                <body name="robot0_lwr_arm_2_link" pos="0 0 0.2" quat="0.707107 -0.707107 0 0">
+                    <joint name="robot0_joint_2" pos="0 0 0" axis="0 0 1" limited="true" range="-2.0944 2.0944" armature="2.5" damping="0.1" frictionloss="10"/>
+                    <geom name="robot0_link_2_visual" pos="0 -0.2 0" quat="0.707107 -0.707107 0 0" type="mesh" conaffinity="0" group="1" rgba="1 0.487 0 1" mesh="robot0_arm_segment_b"/>
+                    <body name="robot0_lwr_arm_3_link" pos="0 -0.2 0" quat="0.707107 0.707107 0 0">
+                        <joint name="robot0_joint_3" pos="0 0 0" axis="0 0 1" limited="true" range="-2.96706 2.96706" armature="1.66667" damping="0.1" frictionloss="0.1"/>
+                        <geom name="robot0_link_3_visual" quat="0 0 0 1" type="mesh" conaffinity="0" group="1" rgba="1 0.487 0 1" mesh="robot0_arm_segment_a"/>
+                        <body name="robot0_lwr_arm_4_link" pos="0 0 0.2" quat="0.707107 0.707107 0 0">
+                            <joint name="robot0_joint_4" pos="0 0 0" axis="0 0 1" limited="true" range="-2.0944 2.0944" armature="1.25" damping="0.1" frictionloss="0.1"/>
+                            <geom name="robot0_link_4_visual" pos="0 0.2 0" quat="0 0 0.707107 -0.707107" type="mesh" conaffinity="0" group="1" rgba="1 0.487 0 1" mesh="robot0_arm_segment_b"/>
+                            <body name="robot0_lwr_arm_5_link" pos="0 0.2 0" quat="0.707107 -0.707107 0 0">
+                                <joint name="robot0_joint_5" pos="0 0 0" axis="0 0 1" limited="true" range="-2.96706 2.96706" armature="1" damping="0.1" frictionloss="0.1"/>
+                                <geom name="robot0_link_5_visual" type="mesh" conaffinity="0" group="1" rgba="1 0.487 0 1" mesh="robot0_arm_segment_last"/>
+                                <body name="robot0_lwr_arm_6_link" pos="0 0 0.19" quat="0.707107 -0.707107 0 0">
+                                    <joint name="robot0_joint_6" pos="0 0 0" axis="0 0 1" limited="true" range="-2.0944 2.0944" armature="0.833333" damping="0.1" frictionloss="0.1"/>
+                                    <geom name="robot0_link_6_visual" quat="0.707107 0.707107 0 0" type="mesh" conaffinity="0" group="1" rgba="0.3 0.3 0.3 1" mesh="robot0_arm_wrist"/>
+                                    <body name="robot0_lwr_arm_7_link" pos="0 -0.078 0" quat="0.707107 0.707107 0 0">
+                                        <joint name="robot0_joint_7" pos="0 0 0" axis="0 0 1" limited="true" range="-2.96706 2.96706" armature="0.714286" damping="0.1" frictionloss="0.1"/>
+                                        <geom name="robot0_link_7_visual" size="0.0315 0.01" pos="0 0 -0.01" quat="0.92388 0 0 -0.382683" type="cylinder" conaffinity="0" group="1" rgba="0.3 0.3 0.3 1"/>
+                                        <geom name="robot0_robot_top_cylinder" size="0.0315 0.005" pos="0 0 0.005" type="cylinder" conaffinity="0" group="1" rgba="0 0 0 1"/>
+                                        <body name="robot0_eef_gripper" pos="0 0 0">
+                                            <geom name="robot0_robot_gripper_adapter" size="0.06 0.03 0.0025" pos="0 0 0.0125" quat="0.707107 0 0 -0.707107" type="box" conaffinity="0" group="1" rgba="0.6 0.6 0.6 1"/>
+                                            <geom name="robot0_gripper_palm" pos="9.1e-05 -0.008086 0.015" quat="0.707107 0 0 -0.707107" type="mesh" conaffinity="0" group="1" mesh="robot0_WSG50_110"/>
+                                            <site name="robot0_ft_frame" pos="0 0 0" size="0.01" group="1" rgba="1 0 0 1"/>
+                                            <body name="robot0_eef" pos="0 -0.01 0.15" quat="0 1 0 0">
+                                                <site name="robot0_grip_site" pos="0 0 0" size="0.01" group="1" rgba="1 0 0 0.5"/>
+                                                <site name="robot0_ee_x" pos="0.1 0 0" quat="0.707105 0 0.707108 0" size="0.005 0.1" group="1" type="cylinder" rgba="1 0 0 0"/>
+                                                <site name="robot0_ee_y" pos="0 0.1 0" quat="0.707105 0.707108 0 0" size="0.005 0.1" group="1" type="cylinder" rgba="0 1 0 0"/>
+                                                <site name="robot0_ee_z" pos="0 0 0.1" size="0.005 0.1" group="1" type="cylinder" rgba="0 0 1 0"/>
+                                                <site name="robot0_grip_site_cylinder" pos="0 0 0" size="0.005 10" group="1" type="cylinder" rgba="0 1 0 0.3"/>
+                                            </body>
+                                            <body name="robot0_gripper_left" pos="9.1e-05 -0.008086 0.015" quat="0.707107 0 0 -0.707107">
+                                                <joint name="robot0_finger_joint1" pos="0 0 0" axis="1 0 0" type="slide" limited="true" range="-0.055 -0.0027" damping="100" frictionloss="100"/>
+                                                <geom name="robot0_left_finger_collision" type="mesh" conaffinity="0" group="1" rgba="0 0 0 1" mesh="robot0_GUIDE_WSG50_110"/>
+                                                <geom name="robot0_left_finger_pad" pos="-0.009 0 0.0816" type="mesh" conaffinity="0" group="1" rgba="0 0 0 1" mesh="robot0_WSG-DSA"/>
+                                            </body>
+                                            <body name="robot0_gripper_right" pos="9.1e-05 -0.008086 0.015" quat="0.707107 0 0 0.707107">
+                                                <joint name="robot0_finger_joint2" pos="0 0 0" axis="-1 0 0" type="slide" limited="true" range="0.0027 0.055" damping="100" frictionloss="100"/>
+                                                <geom name="robot0_right_finger_collision" type="mesh" conaffinity="0" group="1" rgba="0 0 0 1" mesh="robot0_GUIDE_WSG50_110"/>
+                                                <geom name="robot0_right_finger_pad" pos="-0.009 0 0.0816" type="mesh" conaffinity="0" group="1" rgba="0 0 0 1" mesh="robot0_WSG-DSA"/>
+                                            </body>
+                                        </body>
+                                    </body>
+                                </body>
+                            </body>
+                        </body>
+                    </body>
+                </body>
+            </body>
+        </body>
+        <body name="PegCircle_main" pos="0 0 0">
+            <joint name="PegCircle_joint0" type="free" damping="0.0005"/>
+            <geom name="PegCircle_g0" quat="0.707107 0.707107 0 0" type="mesh" contype="0" conaffinity="0" group="1" friction="0.95 0.3 0.9" solref="0.001 1" solimp="0.998 0.998 0.001 0.5 2" mesh="PegCircle_peg_circle_visual"/>
+            <geom name="PegCircle_g1" quat="0.707107 0.707107 0 0" type="mesh" rgba="0.5 0 0 1" mesh="PegCircle_peg_circle_collision_0"/>
+            <geom name="PegCircle_g2" quat="0.707107 0.707107 0 0" type="mesh" rgba="0.5 0 0 1" mesh="PegCircle_peg_circle_collision_1"/>
+            <geom name="PegCircle_g3" quat="0.707107 0.707107 0 0" type="mesh" rgba="0.5 0 0 1" mesh="PegCircle_peg_circle_collision_2"/>
+            <geom name="PegCircle_g4" quat="0.707107 0.707107 0 0" type="mesh" rgba="0.5 0 0 1" mesh="PegCircle_peg_circle_collision_3"/>
+            <geom name="PegCircle_g5" quat="0.707107 0.707107 0 0" type="mesh" rgba="0.5 0 0 1" mesh="PegCircle_peg_circle_collision_4"/>
+            <geom name="PegCircle_g6" quat="0.707107 0.707107 0 0" type="mesh" rgba="0.5 0 0 1" mesh="PegCircle_peg_circle_collision_5"/>
+            <geom name="PegCircle_g7" quat="0.707107 0.707107 0 0" type="mesh" rgba="0.5 0 0 1" mesh="PegCircle_peg_circle_collision_6"/>
+            <geom name="PegCircle_g8" quat="0.707107 0.707107 0 0" type="mesh" rgba="0.5 0 0 1" mesh="PegCircle_peg_circle_collision_7"/>
+            <geom name="PegCircle_g9" quat="0.707107 0.707107 0 0" type="mesh" rgba="0.5 0 0 1" mesh="PegCircle_peg_circle_collision_8"/>
+            <geom name="PegCircle_g10" quat="0.707107 0.707107 0 0" type="mesh" rgba="0.5 0 0 1" mesh="PegCircle_peg_circle_collision_9"/>
+            <geom name="PegCircle_g11" quat="0.707107 0.707107 0 0" type="mesh" rgba="0.5 0 0 1" mesh="PegCircle_peg_circle_collision_10"/>
+            <geom name="PegCircle_g12" quat="0.707107 0.707107 0 0" type="mesh" rgba="0.5 0 0 1" mesh="PegCircle_peg_circle_collision_11"/>
+            <geom name="PegCircle_g13" quat="0.707107 0.707107 0 0" type="mesh" rgba="0.5 0 0 1" mesh="PegCircle_peg_circle_collision_12"/>
+            <geom name="PegCircle_g14" quat="0.707107 0.707107 0 0" type="mesh" rgba="0.5 0 0 1" mesh="PegCircle_peg_circle_collision_13"/>
+            <geom name="PegCircle_g15" quat="0.707107 0.707107 0 0" type="mesh" rgba="0.5 0 0 1" mesh="PegCircle_peg_circle_collision_14"/>
+            <geom name="PegCircle_g16" quat="0.707107 0.707107 0 0" type="mesh" rgba="0.5 0 0 1" mesh="PegCircle_peg_circle_collision_15"/>
+            <geom name="PegCircle_g17" quat="0.707107 0.707107 0 0" type="mesh" rgba="0.5 0 0 1" mesh="PegCircle_peg_circle_collision_16"/>
+            <geom name="PegCircle_g18" quat="0.707107 0.707107 0 0" type="mesh" rgba="0.5 0 0 1" mesh="PegCircle_peg_circle_collision_17"/>
+            <geom name="PegCircle_g19" quat="0.707107 0.707107 0 0" type="mesh" rgba="0.5 0 0 1" mesh="PegCircle_peg_circle_collision_18"/>
+            <geom name="PegCircle_g20" quat="0.707107 0.707107 0 0" type="mesh" rgba="0.5 0 0 1" mesh="PegCircle_peg_circle_collision_19"/>
+            <geom name="PegCircle_g21" quat="0.707107 0.707107 0 0" type="mesh" rgba="0.5 0 0 1" mesh="PegCircle_peg_circle_collision_20"/>
+            <geom name="PegCircle_g22" quat="0.707107 0.707107 0 0" type="mesh" rgba="0.5 0 0 1" mesh="PegCircle_peg_circle_collision_21"/>
+            <geom name="PegCircle_g23" quat="0.707107 0.707107 0 0" type="mesh" rgba="0.5 0 0 1" mesh="PegCircle_peg_circle_collision_22"/>
+            <geom name="PegCircle_g24" quat="0.707107 0.707107 0 0" type="mesh" rgba="0.5 0 0 1" mesh="PegCircle_peg_circle_collision_23"/>
+            <geom name="PegCircle_g25" quat="0.707107 0.707107 0 0" type="mesh" rgba="0.5 0 0 1" mesh="PegCircle_peg_circle_collision_24"/>
+            <geom name="PegCircle_g26" quat="0.707107 0.707107 0 0" type="mesh" rgba="0.5 0 0 1" mesh="PegCircle_peg_circle_collision_25"/>
+            <geom name="PegCircle_g27" quat="0.707107 0.707107 0 0" type="mesh" rgba="0.5 0 0 1" mesh="PegCircle_peg_circle_collision_26"/>
+            <geom name="PegCircle_g28" quat="0.707107 0.707107 0 0" type="mesh" rgba="0.5 0 0 1" mesh="PegCircle_peg_circle_collision_27"/>
+            <geom name="PegCircle_g29" quat="0.707107 0.707107 0 0" type="mesh" rgba="0.5 0 0 1" mesh="PegCircle_peg_circle_collision_28"/>
+            <geom name="PegCircle_g30" quat="0.707107 0.707107 0 0" type="mesh" rgba="0.5 0 0 1" mesh="PegCircle_peg_circle_collision_29"/>
+            <geom name="PegCircle_g31" quat="0.707107 0.707107 0 0" type="mesh" rgba="0.5 0 0 1" mesh="PegCircle_peg_circle_collision_30"/>
+            <geom name="PegCircle_g1_visual" quat="0.707107 0.707107 0 0" type="mesh" contype="0" conaffinity="0" group="1" mesh="PegCircle_peg_circle_collision_0"/>
+            <geom name="PegCircle_g2_visual" quat="0.707107 0.707107 0 0" type="mesh" contype="0" conaffinity="0" group="1" mesh="PegCircle_peg_circle_collision_1"/>
+            <geom name="PegCircle_g3_visual" quat="0.707107 0.707107 0 0" type="mesh" contype="0" conaffinity="0" group="1" mesh="PegCircle_peg_circle_collision_2"/>
+            <geom name="PegCircle_g4_visual" quat="0.707107 0.707107 0 0" type="mesh" contype="0" conaffinity="0" group="1" mesh="PegCircle_peg_circle_collision_3"/>
+            <geom name="PegCircle_g5_visual" quat="0.707107 0.707107 0 0" type="mesh" contype="0" conaffinity="0" group="1" mesh="PegCircle_peg_circle_collision_4"/>
+            <geom name="PegCircle_g6_visual" quat="0.707107 0.707107 0 0" type="mesh" contype="0" conaffinity="0" group="1" mesh="PegCircle_peg_circle_collision_5"/>
+            <geom name="PegCircle_g7_visual" quat="0.707107 0.707107 0 0" type="mesh" contype="0" conaffinity="0" group="1" mesh="PegCircle_peg_circle_collision_6"/>
+            <geom name="PegCircle_g8_visual" quat="0.707107 0.707107 0 0" type="mesh" contype="0" conaffinity="0" group="1" mesh="PegCircle_peg_circle_collision_7"/>
+            <geom name="PegCircle_g9_visual" quat="0.707107 0.707107 0 0" type="mesh" contype="0" conaffinity="0" group="1" mesh="PegCircle_peg_circle_collision_8"/>
+            <geom name="PegCircle_g10_visual" quat="0.707107 0.707107 0 0" type="mesh" contype="0" conaffinity="0" group="1" mesh="PegCircle_peg_circle_collision_9"/>
+            <geom name="PegCircle_g11_visual" quat="0.707107 0.707107 0 0" type="mesh" contype="0" conaffinity="0" group="1" mesh="PegCircle_peg_circle_collision_10"/>
+            <geom name="PegCircle_g12_visual" quat="0.707107 0.707107 0 0" type="mesh" contype="0" conaffinity="0" group="1" mesh="PegCircle_peg_circle_collision_11"/>
+            <geom name="PegCircle_g13_visual" quat="0.707107 0.707107 0 0" type="mesh" contype="0" conaffinity="0" group="1" mesh="PegCircle_peg_circle_collision_12"/>
+            <geom name="PegCircle_g14_visual" quat="0.707107 0.707107 0 0" type="mesh" contype="0" conaffinity="0" group="1" mesh="PegCircle_peg_circle_collision_13"/>
+            <geom name="PegCircle_g15_visual" quat="0.707107 0.707107 0 0" type="mesh" contype="0" conaffinity="0" group="1" mesh="PegCircle_peg_circle_collision_14"/>
+            <geom name="PegCircle_g16_visual" quat="0.707107 0.707107 0 0" type="mesh" contype="0" conaffinity="0" group="1" mesh="PegCircle_peg_circle_collision_15"/>
+            <geom name="PegCircle_g17_visual" quat="0.707107 0.707107 0 0" type="mesh" contype="0" conaffinity="0" group="1" mesh="PegCircle_peg_circle_collision_16"/>
+            <geom name="PegCircle_g18_visual" quat="0.707107 0.707107 0 0" type="mesh" contype="0" conaffinity="0" group="1" mesh="PegCircle_peg_circle_collision_17"/>
+            <geom name="PegCircle_g19_visual" quat="0.707107 0.707107 0 0" type="mesh" contype="0" conaffinity="0" group="1" mesh="PegCircle_peg_circle_collision_18"/>
+            <geom name="PegCircle_g20_visual" quat="0.707107 0.707107 0 0" type="mesh" contype="0" conaffinity="0" group="1" mesh="PegCircle_peg_circle_collision_19"/>
+            <geom name="PegCircle_g21_visual" quat="0.707107 0.707107 0 0" type="mesh" contype="0" conaffinity="0" group="1" mesh="PegCircle_peg_circle_collision_20"/>
+            <geom name="PegCircle_g22_visual" quat="0.707107 0.707107 0 0" type="mesh" contype="0" conaffinity="0" group="1" mesh="PegCircle_peg_circle_collision_21"/>
+            <geom name="PegCircle_g23_visual" quat="0.707107 0.707107 0 0" type="mesh" contype="0" conaffinity="0" group="1" mesh="PegCircle_peg_circle_collision_22"/>
+            <geom name="PegCircle_g24_visual" quat="0.707107 0.707107 0 0" type="mesh" contype="0" conaffinity="0" group="1" mesh="PegCircle_peg_circle_collision_23"/>
+            <geom name="PegCircle_g25_visual" quat="0.707107 0.707107 0 0" type="mesh" contype="0" conaffinity="0" group="1" mesh="PegCircle_peg_circle_collision_24"/>
+            <geom name="PegCircle_g26_visual" quat="0.707107 0.707107 0 0" type="mesh" contype="0" conaffinity="0" group="1" mesh="PegCircle_peg_circle_collision_25"/>
+            <geom name="PegCircle_g27_visual" quat="0.707107 0.707107 0 0" type="mesh" contype="0" conaffinity="0" group="1" mesh="PegCircle_peg_circle_collision_26"/>
+            <geom name="PegCircle_g28_visual" quat="0.707107 0.707107 0 0" type="mesh" contype="0" conaffinity="0" group="1" mesh="PegCircle_peg_circle_collision_27"/>
+            <geom name="PegCircle_g29_visual" quat="0.707107 0.707107 0 0" type="mesh" contype="0" conaffinity="0" group="1" mesh="PegCircle_peg_circle_collision_28"/>
+            <geom name="PegCircle_g30_visual" quat="0.707107 0.707107 0 0" type="mesh" contype="0" conaffinity="0" group="1" mesh="PegCircle_peg_circle_collision_29"/>
+            <geom name="PegCircle_g31_visual" quat="0.707107 0.707107 0 0" type="mesh" contype="0" conaffinity="0" group="1" mesh="PegCircle_peg_circle_collision_30"/>
+            <site name="PegCircle_handle1_site" pos="0.03 0 0" rgba="1 0 0 1"/>
+            <site name="PegCircle_handle2_site" pos="-0.03 0 0" rgba="1 0 0 1"/>
+            <site name="PegCircle_default_site" pos="0 0 0" size="0.002" rgba="1 0 0 0"/>
+        </body>
+    </worldbody>
+    <actuator>
+        <general name="robot0_torq_j1" joint="robot0_joint_1" ctrllimited="true" ctrlrange="-176 176"/>
+        <general name="robot0_torq_j2" joint="robot0_joint_2" ctrllimited="true" ctrlrange="-176 176"/>
+        <general name="robot0_torq_j3" joint="robot0_joint_3" ctrllimited="true" ctrlrange="-110 110"/>
+        <general name="robot0_torq_j4" joint="robot0_joint_4" ctrllimited="true" ctrlrange="-110 110"/>
+        <general name="robot0_torq_j5" joint="robot0_joint_5" ctrllimited="true" ctrlrange="-110 110"/>
+        <general name="robot0_torq_j6" joint="robot0_joint_6" ctrllimited="true" ctrlrange="-40 40"/>
+        <general name="robot0_torq_j7" joint="robot0_joint_7" ctrllimited="true" ctrlrange="-40 40"/>
+        <general name="robot0_finger_j1" joint="robot0_finger_joint1" ctrllimited="true" forcelimited="true" ctrlrange="-0.05 0" forcerange="-20 20" biastype="affine" gainprm="1000 0 0 0 0 0 0 0 0 0" biasprm="0 -1000 0 0 0 0 0 0 0 0"/>
+        <general name="robot0_finger_j2" joint="robot0_finger_joint2" ctrllimited="true" forcelimited="true" ctrlrange="0 0.05" forcerange="-20 20" biastype="affine" gainprm="1000 0 0 0 0 0 0 0 0 0" biasprm="0 -1000 0 0 0 0 0 0 0 0"/>
+    </actuator>
+    <sensor>
+        <force site="robot0_ft_frame" name="robot0_force_ee"/>
+        <torque site="robot0_ft_frame" name="robot0_torque_ee"/>
+    </sensor>
+    <keyframe>
+        <key time="0.0" qpos="0.03742039571913042 0.4253613255375974 0.01634244941415452 -1.8712339575332848 0.007150879694813192 0.8464388244461815 -0.003380202898551264 -0.025 0.025 0.4562262763619374 0.015922269806603148 0.9316163738563354 0.0 0.0 0.0 1.0" qvel="0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0"/>
+    </keyframe>
+</mujoco>
