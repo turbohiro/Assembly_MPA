@@ -1,4 +1,4 @@
-# Bi-DexHands: Bimanual Dexterous Manipulation via Reinforcement Learning
+# Multi-Modality Driven Impedance-Based Sim2Real Transfer Learning for Robotic Multiple Peg-in-Hole Assembly
 <img src="assets/image_folder/cover.png" width="1000" border="1"/>
 
 
