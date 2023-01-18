@@ -4,6 +4,4 @@
 
 - **Quick Demos**
 
-<div align=center>
-<video src="assets/image_folder/video_assembly.mp4" align="center" width="600"></video>
-</div>
+https://user-images.githubusercontent.com/42525310/213158994-87d3be1c-2106-4f7b-859c-4e609fed3c9a.mp4
