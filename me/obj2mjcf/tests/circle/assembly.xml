@@ -1,4 +1,0 @@
-<mujoco model="assembly">
-  <include file="peg_circle.xml"/> 
-  <include file="circle.xml"/>
-</mujoco>
