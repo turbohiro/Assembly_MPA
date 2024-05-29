@@ -13,3 +13,7 @@ https://user-images.githubusercontent.com/42525310/213158994-87d3be1c-2106-4f7b-
 * Install [MuJoCo](https://mujoco.org/) using these [instructions](https://github.com/hietalajulius/mujoco-py/tree/8131d34070e684705990ef25e5b3f211e218e2e4#install-mujoco) (i.e. extract the downloaded `mujoco210` directory into ~/.mujoco/mujoco210)
 * Use [obj2mjcf](https://github.com/kevinzakka/obj2mjcf) to process original robot urdf file  and assembly-related object file into XML file for the use in [MuJoCo](https://mujoco.org/).
 * Run `cd dynamic-assembly && ./install-dependencies.sh` to install all required dependencies.
+
+## Training a Pretrained Vision model
+* Collect a dataset from different hole/peg shapes during raw policy learning based on the [ShuffleNet-v2](https://arxiv.org/abs/1807.11164) perception. An example dataset of circle shape can be obtained `https://drive.google.com/drive/folders/181-17Ub87fH-swqxKHRSpU4iK7TywIp7?usp=drive_link`.
+* The pretarining framework is designed from simple [VAE models](https://github.com/AntixK/PyTorch-VAE). You can test the collected dataset based on these models. 
