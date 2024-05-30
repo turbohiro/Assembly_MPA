@@ -1,0 +1,115 @@
+<mujoco model="assembly_arena">
+  <!-- <include file="meshes/mesh_three_circle/circle.xml"/> -->
+  <asset>
+    <texture builtin="gradient" height="256" rgb1=".9 .9 1." rgb2=".2 .3 .4" type="skybox" width="256"/>
+    <texture file="../textures/wood-tiles.png" type="2d" name="texplane"/>
+    <material name="floorplane" reflectance="0.01" shininess="0.0" specular="0.0" texrepeat="2 2" texture="texplane" texuniform="true"/>
+    <!-- ceramic table texture and material-->
+    <!-- added table texture and material for domain randomization -->
+    <texture  name="textable" builtin="flat" height="512" width="512" rgb1="0.5 0.5 0.5" rgb2="0.5 0.5 0.5"/>
+    <material name="table_mat" texture="textable" />
+    <texture file="../textures/red-wood.png" type="cube" name="red-wood" />
+    <material name="plate_mat" texture="red-wood" texrepeat="3 3" specular="0.4" shininess="0.1" />
+    <texture file="../textures/steel-scratched.png" type="cube" name="steel-metal"/>
+    <material name="smetal" reflectance="1.0" shininess="1.0" specular="1.0" texrepeat="1 1" texture="steel-metal" texuniform="true"/>
+
+    <mesh name="circle36_three_visual" file="meshes/mesh_three_circle/circle36_three.stl"/>
+    <mesh name="circle36_three_collision_0" file="meshes/mesh_three_circle/circle36_three_collision_0.stl"/>
+    <mesh name="circle36_three_collision_1" file="meshes/mesh_three_circle/circle36_three_collision_1.stl"/>
+    <mesh name="circle36_three_collision_2" file="meshes/mesh_three_circle/circle36_three_collision_2.stl"/>
+    <mesh name="circle36_three_collision_3" file="meshes/mesh_three_circle/circle36_three_collision_3.stl"/>
+    <mesh name="circle36_three_collision_4" file="meshes/mesh_three_circle/circle36_three_collision_4.stl"/>
+    <mesh name="circle36_three_collision_5" file="meshes/mesh_three_circle/circle36_three_collision_5.stl"/>
+    <mesh name="circle36_three_collision_6" file="meshes/mesh_three_circle/circle36_three_collision_6.stl"/>
+    <mesh name="circle36_three_collision_7" file="meshes/mesh_three_circle/circle36_three_collision_7.stl"/>
+    <mesh name="circle36_three_collision_8" file="meshes/mesh_three_circle/circle36_three_collision_8.stl"/>
+    <mesh name="circle36_three_collision_9" file="meshes/mesh_three_circle/circle36_three_collision_9.stl"/>
+    <mesh name="circle36_three_collision_10" file="meshes/mesh_three_circle/circle36_three_collision_10.stl"/>
+    <mesh name="circle36_three_collision_11" file="meshes/mesh_three_circle/circle36_three_collision_11.stl"/>
+    <mesh name="circle36_three_collision_12" file="meshes/mesh_three_circle/circle36_three_collision_12.stl"/>
+    <mesh name="circle36_three_collision_13" file="meshes/mesh_three_circle/circle36_three_collision_13.stl"/>
+    <mesh name="circle36_three_collision_14" file="meshes/mesh_three_circle/circle36_three_collision_14.stl"/>
+    <mesh name="circle36_three_collision_15" file="meshes/mesh_three_circle/circle36_three_collision_15.stl"/>
+    <mesh name="circle36_three_collision_16" file="meshes/mesh_three_circle/circle36_three_collision_16.stl"/>
+    <mesh name="circle36_three_collision_17" file="meshes/mesh_three_circle/circle36_three_collision_17.stl"/>
+    <mesh name="circle36_three_collision_18" file="meshes/mesh_three_circle/circle36_three_collision_18.stl"/>
+    <mesh name="circle36_three_collision_19" file="meshes/mesh_three_circle/circle36_three_collision_19.stl"/>
+    <mesh name="circle36_three_collision_20" file="meshes/mesh_three_circle/circle36_three_collision_20.stl"/>
+    <mesh name="circle36_three_collision_21" file="meshes/mesh_three_circle/circle36_three_collision_21.stl"/>
+    <mesh name="circle36_three_collision_22" file="meshes/mesh_three_circle/circle36_three_collision_22.stl"/>
+    <mesh name="circle36_three_collision_23" file="meshes/mesh_three_circle/circle36_three_collision_23.stl"/>
+    <mesh name="circle36_three_collision_24" file="meshes/mesh_three_circle/circle36_three_collision_24.stl"/>
+    <mesh name="circle36_three_collision_25" file="meshes/mesh_three_circle/circle36_three_collision_25.stl"/>
+    <mesh name="circle36_three_collision_26" file="meshes/mesh_three_circle/circle36_three_collision_26.stl"/>
+    <mesh name="circle36_three_collision_27" file="meshes/mesh_three_circle/circle36_three_collision_27.stl"/>
+    <mesh name="circle36_three_collision_28" file="meshes/mesh_three_circle/circle36_three_collision_28.stl"/>
+    <mesh name="circle36_three_collision_29" file="meshes/mesh_three_circle/circle36_three_collision_29.stl"/>
+    <mesh name="circle36_three_collision_30" file="meshes/mesh_three_circle/circle36_three_collision_30.stl"/>
+    <mesh name="circle36_three_collision_31" file="meshes/mesh_three_circle/circle36_three_collision_31.stl"/>
+  </asset>
+  <worldbody>
+    <!-- Floor -->
+    <geom condim="3" material="floorplane" name="floor" pos="0 0 0" size="3 3 .125" rgba="1 1 1 1" type="plane"/>
+    <!-- Table body -->
+    <body name="table" pos="-0.31 -0.19 0.4" quat="0.707107 0 0 -0.707107" >
+      <geom pos="0 0 0" size="1.3 1 0.4" type="box" group="0" name="table_collision" friction="1 0.005 0.0001"/>
+      <geom pos="0 0 0" size="1.3 1 0.4" type="box" conaffinity="0" contype="0" group="1" rgba="1 1 1 1" name="table_visual" />
+      <site pos="-0.31 -0.19 0.4" name="table_top" size="0.001 0.001 0.001" rgba="0 0 0 0"/>
+    </body>
+    <!-- <body name="circle" > -->
+    <body name="circle"  pos="0.46 0 0.8" quat="0.707107 0.707107 0 0">
+
+        <geom mesh="circle36_three_visual" type="mesh" contype="0" conaffinity="0"  density="100" friction="0.99 0.005 0.0001" group="1" material="smetal" />
+        <geom mesh="circle36_three_collision_0" type="mesh"  friction="0.99 0.005 0.0001" group="0" material="smetal"/>
+        <geom mesh="circle36_three_collision_1" type="mesh"  friction="0.99 0.005 0.0001" group="0" material="smetal"/>
+        <geom mesh="circle36_three_collision_2" type="mesh"  friction="0.99 0.005 0.0001" group="0" material="smetal"/>
+        <geom mesh="circle36_three_collision_3" type="mesh" friction="0.99 0.005 0.0001" group="0" material="smetal"/>
+        <geom mesh="circle36_three_collision_4" type="mesh"  friction="0.99 0.005 0.0001" group="0" material="smetal"/>
+        <geom mesh="circle36_three_collision_5" type="mesh"  friction="0.99 0.005 0.0001" group="0" material="smetal"/>
+        <geom mesh="circle36_three_collision_6" type="mesh"  friction="0.99 0.005 0.0001" group="0" material="smetal"/>
+        <geom mesh="circle36_three_collision_7" type="mesh"  friction="0.99 0.005 0.0001" group="0" material="smetal"/>
+        <geom mesh="circle36_three_collision_8" type="mesh"  friction="0.99 0.005 0.0001" group="0" material="smetal"/>
+        <geom mesh="circle36_three_collision_9" type="mesh"  friction="0.99 0.005 0.0001" group="0" material="smetal"/>
+        <geom mesh="circle36_three_collision_10" type="mesh"  friction="0.99 0.005 0.0001" group="0" material="smetal"/>
+        <geom mesh="circle36_three_collision_11" type="mesh"  friction="0.99 0.005 0.0001"  group="0" material="smetal"/>
+        <geom mesh="circle36_three_collision_12" type="mesh"  friction="0.99 0.005 0.0001" group="0" material="smetal"/>
+        <geom mesh="circle36_three_collision_13" type="mesh"  friction="0.99 0.005 0.0001" group="0" material="smetal"/>
+        <geom mesh="circle36_three_collision_14" type="mesh"  friction="0.99 0.005 0.0001" group="0" material="smetal"/>
+        <geom mesh="circle36_three_collision_15" type="mesh"  friction="0.99 0.005 0.0001" group="0" material="smetal"/>
+        <geom mesh="circle36_three_collision_16" type="mesh"  friction="0.99 0.005 0.0001" group="0" material="smetal"/>
+        <geom mesh="circle36_three_collision_17" type="mesh"  friction="0.99 0.005 0.0001" group="0" material="smetal"/>
+        <geom mesh="circle36_three_collision_18" type="mesh"  friction="0.99 0.005 0.0001" group="0" material="smetal"/>
+        <geom mesh="circle36_three_collision_19" type="mesh"  friction="0.99 0.005 0.0001" group="0" material="smetal"/>
+        <geom mesh="circle36_three_collision_20" type="mesh"  friction="0.99 0.005 0.0001" group="0" material="smetal"/>
+        <geom mesh="circle36_three_collision_21" type="mesh"  friction="0.99 0.005 0.0001" group="0" material="smetal"/>
+        <geom mesh="circle36_three_collision_22" type="mesh"  friction="0.99 0.005 0.0001" group="0" material="smetal"/>
+        <geom mesh="circle36_three_collision_23" type="mesh"  friction="0.99 0.005 0.0001" group="0" material="smetal"/>
+        <geom mesh="circle36_three_collision_24" type="mesh"  friction="0.99 0.005 0.0001" group="0" material="smetal"/>
+        <geom mesh="circle36_three_collision_25" type="mesh"  friction="0.99 0.005 0.0001" group="0" material="smetal"/>
+        <geom mesh="circle36_three_collision_26" type="mesh"  friction="0.99 0.005 0.0001" group="0" material="smetal"/>
+        <geom mesh="circle36_three_collision_27" type="mesh"  friction="0.99 0.005 0.0001" group="0" material="smetal"/>
+        <geom mesh="circle36_three_collision_28" type="mesh"  friction="0.99 0.005 0.0001" group="0" material="smetal"/>
+        <geom mesh="circle36_three_collision_29" type="mesh"  friction="0.99 0.005 0.0001" group="0" material="smetal"/>
+        <geom mesh="circle36_three_collision_30" type="mesh"  friction="0.99 0.005 0.0001" group="0" material="smetal"/>
+        <geom mesh="circle36_three_collision_31" type="mesh"  friction="0.99 0.005 0.0001" group="0" material="smetal"/>
+
+        <site rgba="1 0 0 1" size="0.005" pos="0.03 0 0" name="hole_right_site"/>
+        <site rgba="1 0 0 1" size="0.005" pos="-0.03 0 0" name="hole_left_site"/>
+        <site rgba="0 0 0 0" size="0.005" pos="0 0 0.08" name="hole_top_site"/>
+      </body>
+      <!-- <geom pos="0 0 0"  quat="0.707107 0.707107 0 0" mesh="circle_mesh" type="mesh" group="0" name="circle_collision" friction="1 0.005 0.0001"/>
+      <geom pos="0 0 0"  quat="0.707107 0.707107 0 0" mesh="circle_mesh" type="mesh" conaffinity="0" contype="0" group="1" material="smetal" name="circle_visual"/>   -->
+    <!-- </body>   -->
+   <light name="light1" diffuse=".3 .3 .3" dir="0 -.15 -1" directional="false" pos="-0.6 -2.0 8.0"  castshadow="false"/>
+    <light name="light2" diffuse=".3 .3 .3" dir="0 -.15 -1" directional="false" pos="-0.6 2.0 8.0"  castshadow="false"/>
+    <!-- front view 1.3 0 1.35  all default camera FOV (y, degrees): 45.0-->
+    <camera mode="fixed" name="frontview" pos="3 0 2.0" quat="0.56 0.43 0.43 0.56"/>   
+    <!-- bird view -->
+    <camera mode="fixed" name="birdview" pos="-0.2 0 3.0" quat="0.7071 0 0 0.7071"/>
+    <!-- agent view -->
+    <!-- <camera mode="fixed" name="agentview" fovy="54.67" pos="0.89281 0.079539 1.4382" quat=" -0.24714 0.64067 0.67587  -0.26768 "/> 0.653 0.271 0.271 0.653-->
+    <camera mode="fixed" name="agentview" fovy="54.67" pos="0.89281 0.079539 1.4382" quat=" 0.653 0.271 0.271 0.653  "/>
+    <!-- side view -->
+    <camera mode="fixed" name="sideview" pos="-0.05651774593317116 1.2761224129427358 1.4879572214102434" quat="0.009905065491771751 0.006877963156909582 0.5912228352893879 0.806418094001364" />
+  </worldbody>
+</mujoco>

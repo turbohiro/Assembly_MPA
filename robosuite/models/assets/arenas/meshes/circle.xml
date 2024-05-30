@@ -1,0 +1,80 @@
+<mujoco model="circle">
+  <asset>
+    <mesh name="circle_visual" file="meshes/circle.stl"/>
+    <mesh name="circle_collision_0" file="meshes/circle_collision_0.stl"/>
+    <mesh name="circle_collision_1" file="meshes/circle_collision_1.stl"/>
+    <mesh name="circle_collision_2" file="meshes/circle_collision_2.stl"/>
+    <mesh name="circle_collision_3" file="meshes/circle_collision_3.stl"/>
+    <mesh name="circle_collision_4" file="meshes/circle_collision_4.stl"/>
+    <mesh name="circle_collision_5" file="meshes/circle_collision_5.stl"/>
+    <mesh name="circle_collision_6" file="meshes/circle_collision_6.stl"/>
+    <mesh name="circle_collision_7" file="meshes/circle_collision_7.stl"/>
+    <mesh name="circle_collision_8" file="meshes/circle_collision_8.stl"/>
+    <mesh name="circle_collision_9" file="meshes/circle_collision_9.stl"/>
+    <mesh name="circle_collision_10" file="meshes/circle_collision_10.stl"/>
+    <mesh name="circle_collision_11" file="meshes/circle_collision_11.stl"/>
+    <mesh name="circle_collision_12" file="meshes/circle_collision_12.stl"/>
+    <mesh name="circle_collision_13" file="meshes/circle_collision_13.stl"/>
+    <mesh name="circle_collision_14" file="meshes/circle_collision_14.stl"/>
+    <mesh name="circle_collision_15" file="meshes/circle_collision_15.stl"/>
+    <mesh name="circle_collision_16" file="meshes/circle_collision_16.stl"/>
+    <mesh name="circle_collision_17" file="meshes/circle_collision_17.stl"/>
+    <mesh name="circle_collision_18" file="meshes/circle_collision_18.stl"/>
+    <mesh name="circle_collision_19" file="meshes/circle_collision_19.stl"/>
+    <mesh name="circle_collision_20" file="meshes/circle_collision_20.stl"/>
+    <mesh name="circle_collision_21" file="meshes/circle_collision_21.stl"/>
+    <mesh name="circle_collision_22" file="meshes/circle_collision_22.stl"/>
+    <mesh name="circle_collision_23" file="meshes/circle_collision_23.stl"/>
+    <mesh name="circle_collision_24" file="meshes/circle_collision_24.stl"/>
+    <mesh name="circle_collision_25" file="meshes/circle_collision_25.stl"/>
+    <mesh name="circle_collision_26" file="meshes/circle_collision_26.stl"/>
+    <mesh name="circle_collision_27" file="meshes/circle_collision_27.stl"/>
+    <mesh name="circle_collision_28" file="meshes/circle_collision_28.stl"/>
+    <mesh name="circle_collision_29" file="meshes/circle_collision_29.stl"/>
+    <mesh name="circle_collision_30" file="meshes/circle_collision_30.stl"/>
+    <mesh name="circle_collision_31" file="meshes/circle_collision_31.stl"/>
+  </asset>
+  <worldbody>
+    
+      <body name="circle"  pos="0.46 0 0.8">
+        <geom quat="0.707107 0.707107 0 0" mesh="circle_visual" type="mesh" contype="0" conaffinity="0" solimp="0.998 0.998 0.001" solref="0.001 1" density="100" friction="0.95 0.3 0.9" group="2" rgba='0 1 0 1'/>
+        <geom quat="0.707107 0.707107 0 0" mesh="circle_collision_0" type="mesh" group="3"/>
+        <geom quat="0.707107 0.707107 0 0" mesh="circle_collision_1" type="mesh" group="3"/>
+        <geom quat="0.707107 0.707107 0 0" mesh="circle_collision_2" type="mesh" group="3"/>
+        <geom quat="0.707107 0.707107 0 0" mesh="circle_collision_3" type="mesh" group="3"/>
+        <geom quat="0.707107 0.707107 0 0" mesh="circle_collision_4" type="mesh" group="3"/>
+        <geom quat="0.707107 0.707107 0 0" mesh="circle_collision_5" type="mesh" group="3"/>
+        <geom quat="0.707107 0.707107 0 0" mesh="circle_collision_6" type="mesh" group="3"/>
+        <geom quat="0.707107 0.707107 0 0" mesh="circle_collision_7" type="mesh" group="3"/>
+        <geom quat="0.707107 0.707107 0 0" mesh="circle_collision_8" type="mesh" group="3"/>
+        <geom quat="0.707107 0.707107 0 0" mesh="circle_collision_9" type="mesh" group="3"/>
+        <geom quat="0.707107 0.707107 0 0" mesh="circle_collision_10" type="mesh" group="3"/>
+        <geom quat="0.707107 0.707107 0 0" mesh="circle_collision_11" type="mesh" group="3"/>
+        <geom quat="0.707107 0.707107 0 0" mesh="circle_collision_12" type="mesh" group="3"/>
+        <geom quat="0.707107 0.707107 0 0" mesh="circle_collision_13" type="mesh" group="3"/>
+        <geom quat="0.707107 0.707107 0 0" mesh="circle_collision_14" type="mesh" group="3"/>
+        <geom quat="0.707107 0.707107 0 0" mesh="circle_collision_15" type="mesh" group="3"/>
+        <geom quat="0.707107 0.707107 0 0" mesh="circle_collision_16" type="mesh" group="3"/>
+        <geom quat="0.707107 0.707107 0 0" mesh="circle_collision_17" type="mesh" group="3"/>
+        <geom quat="0.707107 0.707107 0 0" mesh="circle_collision_18" type="mesh" group="3"/>
+        <geom quat="0.707107 0.707107 0 0" mesh="circle_collision_19" type="mesh" group="3"/>
+        <geom quat="0.707107 0.707107 0 0" mesh="circle_collision_20" type="mesh" group="3"/>
+        <geom quat="0.707107 0.707107 0 0" mesh="circle_collision_21" type="mesh" group="3"/>
+        <geom quat="0.707107 0.707107 0 0" mesh="circle_collision_22" type="mesh" group="3"/>
+        <geom quat="0.707107 0.707107 0 0" mesh="circle_collision_23" type="mesh" group="3"/>
+        <geom quat="0.707107 0.707107 0 0" mesh="circle_collision_24" type="mesh" group="3"/>
+        <geom quat="0.707107 0.707107 0 0" mesh="circle_collision_25" type="mesh" group="3"/>
+        <geom quat="0.707107 0.707107 0 0" mesh="circle_collision_26" type="mesh" group="3"/>
+        <geom quat="0.707107 0.707107 0 0" mesh="circle_collision_27" type="mesh" group="3"/>
+        <geom quat="0.707107 0.707107 0 0" mesh="circle_collision_28" type="mesh" group="3"/>
+        <geom quat="0.707107 0.707107 0 0" mesh="circle_collision_29" type="mesh" group="3"/>
+        <geom quat="0.707107 0.707107 0 0" mesh="circle_collision_30" type="mesh" group="3"/>
+        <geom quat="0.707107 0.707107 0 0" mesh="circle_collision_31" type="mesh" group="3"/>
+      </body>
+        <site rgba="0 0 0 0" size="0.005" pos="0 0 -0.02" name="bottom_site"/>
+        <site rgba="0 0 0 0" size="0.005" pos="0 0 0.08" name="top_site"/>
+        <site rgba="0 0 0 0" size="0.005" pos="0.07 0.07 0" name="horizontal_radius_site"/>
+    
+   
+  </worldbody>
+</mujoco>

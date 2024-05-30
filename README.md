@@ -17,4 +17,7 @@ https://user-images.githubusercontent.com/42525310/213158994-87d3be1c-2106-4f7b-
 ## Training a Pretrained Vision model
 * Collect a dataset from different hole/peg shapes during raw policy learning based on the [ShuffleNet-v2](https://arxiv.org/abs/1807.11164) perception. An example dataset of circle shape can be obtained `https://drive.google.com/drive/folders/181-17Ub87fH-swqxKHRSpU4iK7TywIp7?usp=drive_link`.
 * The pretarining framework is designed from simple [VAE models](https://github.com/AntixK/PyTorch-VAE). You can test the collected dataset based on these models. 
-## Updating...
+
+## Construction of Simulation Environment
+* Based on the [robosuite](https://robosuite.ai/docs/overview.html), we use our own Kuka_iiwa robot and self-designed peg/hole objects to execute the assembly task. Model files are in `robosuite/models` and the assembly enviroment settings in  `robosuite/enviroments`.
+* The manipulation of robot model and robot controllers are based on the [MujocoPy](https://github.com/openai/mujoco-py).
