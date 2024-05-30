@@ -19,7 +19,7 @@ https://user-images.githubusercontent.com/42525310/213158994-87d3be1c-2106-4f7b-
 * The pretarining framework is designed from simple [VAE models](https://github.com/AntixK/PyTorch-VAE). You can test the collected dataset based on these models. 
 
 ## Construction of Simulation Environment
-* Based on the [robosuite](https://robosuite.ai/docs/overview.html), we use our own Kuka_iiwa robot and self-designed peg/hole objects to execute the assembly task. Model files are in `robosuite/models` and the assembly enviroment settings in  `robosuite/enviroments`.
+* Modified from the [robosuite](https://robosuite.ai/docs/overview.html), we use our own Kuka_iiwa robot and self-designed peg/hole objects to execute the assembly task. Model files are in `robosuite/models` and the assembly enviroment settings in  `robosuite/enviroments`.
 * The manipulation of robot model and robot controllers are based on the [MujocoPy](https://github.com/openai/mujoco-py).
   
 ## Upgrating...
