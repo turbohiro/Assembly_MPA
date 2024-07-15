@@ -1,0 +1,17 @@
+<mujoco model="bread">
+  <asset>
+    <mesh file="meshes/circle_50.stl" name="circle_mesh" scale="1 1 1"/>
+    <texture file="../textures/steel-scratched.png" type="cube" name="steel-metal"/>
+    <material name="smetal" reflectance="1.0" shininess="1.0" specular="1.0" texrepeat="1 1" texture="steel-metal" texuniform="true"/>
+  </asset>
+  <worldbody>
+    <body>
+      <body name="object">
+        <geom pos="0 0 0"  quat="0.707107 0.707107 0 0" mesh="circle_mesh" type="mesh" solimp="0.998 0.998 0.001" solref="0.001 1" density="100" friction="0.95 0.3 0.9"  condim="4" group = '0' rgba = '1 0 0 1' material='smetal'/>
+      </body>
+      <site rgba="0 0 0 0" size="0.005" pos="0 0 -0.02" name="bottom_site"/>
+      <site rgba="0 0 0 0" size="0.005" pos="0 0 0.08" name="top_site"/>
+      <site rgba="0 0 0 0" size="0.005" pos="0.07 0.07 0" name="horizontal_radius_site"/> 
+    </body>
+  </worldbody>
+</mujoco>
